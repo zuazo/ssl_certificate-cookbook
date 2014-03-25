@@ -139,7 +139,7 @@ module Chef::SSL
       key = OpenSSL::PKey::RSA.new(key)
       cert = OpenSSL::X509::Certificate.new
       cert.version = 2
-      cert.serial = 1
+      cert.serial = OpenSSL::BN.rand(160)
       cert.subject = OpenSSL::X509::Name.parse("/CN=#{hostname}")
       cert.issuer = cert.subject # self-signed
       cert.public_key = key.public_key
