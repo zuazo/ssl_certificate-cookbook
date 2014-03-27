@@ -417,7 +417,6 @@ class Chef
       def default_key_source
         lazy do
           read_namespace(['ssl_key', 'source']) or
-          read_namespace('source')
         end
       end
 
@@ -513,7 +512,6 @@ class Chef
       def default_cert_source
         lazy do
           read_namespace(['ssl_cert', 'source']) or
-          read_namespace('source')
         end
       end
 
