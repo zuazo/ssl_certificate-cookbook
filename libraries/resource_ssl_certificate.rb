@@ -15,8 +15,14 @@ class Chef
         # default values
         namespace(name)
         %w{
-          key_path
           server_name
+          country
+          city
+          state
+          organization
+          department
+          email
+          key_path
           key_name
           key_dir
           key_source
@@ -91,8 +97,6 @@ class Chef
       alias :common_name :server_name
       alias :domain :server_name
 
-      # some common (key + cert) public methods
-
       def country(arg=nil)
         set_or_return(
           :country,
@@ -149,6 +153,8 @@ class Chef
           :default => 10 * 365 * 24 * 60 * 60
         )
       end
+
+      # some common (key + cert) public methods
 
       def years(arg)
         unless [ Fixnum, String ].inject(false) { |p, v| p ||= arg.kind_of?(v) }
@@ -367,6 +373,30 @@ class Chef
 
       def default_server_name
         lazy { read_namespace('server_name') || node['fqdn'] }
+      end
+
+      def default_country
+        lazy { read_namespace('country') }
+      end
+
+      def default_city
+        lazy { read_namespace('city') }
+      end
+
+      def default_state
+        lazy { read_namespace('state') }
+      end
+
+      def default_organization
+        lazy { read_namespace('organization') }
+      end
+
+      def default_department
+        lazy { read_namespace('department') }
+      end
+
+      def default_email
+        lazy { read_namespace('email') }
       end
 
       def default_key_name
