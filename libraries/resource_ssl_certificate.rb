@@ -13,7 +13,7 @@ class Chef
         @provider = Chef::Provider::SslCertificate
 
         # default values
-        namespace(name)
+        @namespace = Mash.new
         %w{
           server_name
           country
@@ -227,8 +227,7 @@ class Chef
         set_or_return(
           :key_source,
           arg,
-          :kind_of => String,
-          :required => true
+          :kind_of => String
         )
       end
 
@@ -312,8 +311,7 @@ class Chef
         set_or_return(
           :cert_source,
           arg,
-          :kind_of => String,
-          :required => true
+          :kind_of => String
         )
       end
 
@@ -477,7 +475,7 @@ class Chef
             when 'file'
               read_from_path(key_path) or
                 Chef::Application.fatal!("Cannot read SSL key from path: #{key_path}")
-            when 'self-signed'
+            when 'self-signed', nil
               content = read_from_path(key_path)
               unless content
                 content = generate_key
@@ -485,7 +483,7 @@ class Chef
               end
               content
             else
-              Chef::Application.fatal!("Cannot read SSL key, unknown source: #{ssl_key_source}")
+              Chef::Application.fatal!("Cannot read SSL key, unknown source: #{key_source}")
             end
           end # @default_key_content ||=
         end # lazy
@@ -584,7 +582,7 @@ class Chef
             when 'file'
               read_from_path(cert_path) or
                 Chef::Application.fatal!("Cannot read SSL certificate from path: #{cert_path}")
-            when 'self-signed'
+            when 'self-signed', nil
               content = read_from_path(cert_path)
               unless content and verify_self_signed_cert(key_content, content, cert_subject)
                 Chef::Log.debug("Generating new self-signed certificate: #{name}.")
@@ -593,7 +591,7 @@ class Chef
               end
               content
             else
-              Chef::Application.fatal!("Cannot read SSL cert, unknown source: #{ssl_key_source}")
+              Chef::Application.fatal!("Cannot read SSL cert, unknown source: #{cert_source}")
             end
           end # @default_cert_content ||=
         end # lazy
