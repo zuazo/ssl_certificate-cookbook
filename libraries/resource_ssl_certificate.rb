@@ -495,7 +495,7 @@ class Chef
           end
         end
       end
-          
+
       def read_from_path(path)
         if ::File.exists?(path)
           ::IO.read(path)
