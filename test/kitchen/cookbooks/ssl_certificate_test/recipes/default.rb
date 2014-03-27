@@ -26,3 +26,8 @@ ssl_certificate 'dummy2' do
   key_source 'self-signed'
   cert_source 'self-signed'
 end
+
+ssl_certificate 'dummy3' do
+  source 'self-signed'
+  years 5
+end

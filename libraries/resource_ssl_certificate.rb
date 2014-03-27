@@ -93,6 +93,22 @@ class Chef
 
       # some common (key + cert) public methods
 
+      def time(arg=nil)
+        set_or_return(
+          :time,
+          arg,
+          :kind_of => [ Fixnum, String, Time ],
+          :default => 10 * 365 * 24 * 60 * 60
+        )
+      end
+
+      def years(arg)
+        unless [ Fixnum, String ].inject(false) { |p, v| p ||= arg.kind_of?(v) }
+          raise Exceptions::ValidationFailed, "Option years must be a kind of #{to_be}! You passed #{arg.inspect}."
+        end
+        time(arg.to_i * 365 * 24 * 60 * 60)
+      end
+
       def dir(arg)
         key_dir(arg)
         cert_dir(arg)
@@ -474,7 +490,7 @@ class Chef
             when 'self-signed'
               content = read_from_path(cert_path)
               unless content and verify_self_signed_cert(key_content, content, server_name)
-              content = generate_self_signed_cert(key_content, server_name)
+              content = generate_self_signed_cert(key_content, server_name, time)
               end
               content
             else
@@ -532,7 +548,7 @@ class Chef
         OpenSSL::PKey::RSA.new(2048).to_pem
       end
 
-      def generate_self_signed_cert(key, hostname)
+      def generate_self_signed_cert(key, hostname, time)
         # based on https://gist.github.com/nickyp/886884
         key = OpenSSL::PKey::RSA.new(key)
         cert = OpenSSL::X509::Certificate.new
@@ -542,7 +558,11 @@ class Chef
         cert.issuer = cert.subject # self-signed
         cert.public_key = key.public_key
         cert.not_before = Time.now
-        cert.not_after = cert.not_before + 10 * 365 * 24 * 60 * 60 # 10 years validity
+        if time.kind_of?(Time)
+          cert.not_after = time
+        else
+          cert.not_after = cert.not_before + time.to_i
+        end
         ef = OpenSSL::X509::ExtensionFactory.new
         ef.subject_certificate = cert
         ef.issuer_certificate = cert
