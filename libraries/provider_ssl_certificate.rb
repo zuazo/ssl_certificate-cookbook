@@ -11,8 +11,8 @@ class Chef
       end
 
       def action_create
-        updated_by_last_action = false
         main_resource = @new_resource
+        updated_by_last_action = main_resource.updated_by_last_action?
 
         # install needed dependencies
         if @new_resource.depends_chef_vault?

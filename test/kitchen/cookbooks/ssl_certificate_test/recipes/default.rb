@@ -31,3 +31,8 @@ ssl_certificate 'dummy3' do
   source 'self-signed'
   years 5
 end
+
+ssl_certificate 'dummy4' do
+  source 'self-signed'
+  country 'Bilbao'
+end

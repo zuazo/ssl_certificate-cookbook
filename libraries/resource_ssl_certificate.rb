@@ -88,10 +88,58 @@ class Chef
         )
       end
 
-      alias :canonical_name :server_name
+      alias :common_name :server_name
       alias :domain :server_name
 
       # some common (key + cert) public methods
+
+      def country(arg=nil)
+        set_or_return(
+          :country,
+          arg,
+          :kind_of => [ String ]
+        )
+      end
+
+      def city(arg=nil)
+        set_or_return(
+          :city,
+          arg,
+          :kind_of => [ String ]
+        )
+      end
+
+      def state(arg=nil)
+        set_or_return(
+          :state,
+          arg,
+          :kind_of => [ String ]
+        )
+      end
+
+      def organization(arg=nil)
+        set_or_return(
+          :organization,
+          arg,
+          :kind_of => [ String ]
+        )
+      end
+
+      def department(arg=nil)
+        set_or_return(
+          :department,
+          arg,
+          :kind_of => [ String ]
+        )
+      end
+
+      def email(arg=nil)
+        set_or_return(
+          :email,
+          arg,
+          :kind_of => [ String ]
+        )
+      end
 
       def time(arg=nil)
         set_or_return(
@@ -398,7 +446,12 @@ class Chef
               read_from_path(key_path) or
                 Chef::Application.fatal!("Cannot read SSL key from path: #{key_path}")
             when 'self-signed'
-              read_from_path(key_path) or generate_key
+              content = read_from_path(key_path)
+              unless content
+                content = generate_key
+                updated_by_last_action(true)
+              end
+              content
             else
               Chef::Application.fatal!("Cannot read SSL key, unknown source: #{ssl_key_source}")
             end
@@ -467,6 +520,18 @@ class Chef
         end
       end
 
+      def cert_subject
+        s = {}
+        s['common_name'] = email unless common_name.nil?
+        s['country'] = country unless country.nil?
+        s['city'] = city unless city.nil?
+        s['state'] = state unless state.nil?
+        s['organization'] = organization unless organization.nil?
+        s['department'] = department unless department.nil?
+        s['email'] = email unless email.nil?
+        s
+      end
+
       def default_cert_content
         lazy do
           @default_cert_content ||= begin
@@ -489,8 +554,9 @@ class Chef
                 Chef::Application.fatal!("Cannot read SSL certificate from path: #{cert_path}")
             when 'self-signed'
               content = read_from_path(cert_path)
-              unless content and verify_self_signed_cert(key_content, content, server_name)
-              content = generate_self_signed_cert(key_content, server_name, time)
+              unless content and verify_self_signed_cert(key_content, content, cert_subject)
+                content = generate_self_signed_cert(key_content, cert_subject, time)
+                updated_by_last_action(true)
               end
               content
             else
@@ -548,13 +614,30 @@ class Chef
         OpenSSL::PKey::RSA.new(2048).to_pem
       end
 
-      def generate_self_signed_cert(key, hostname, time)
+      def generate_cert_subject(s)
+        name = if s.kind_of?(Hash)
+          n = []
+          n.push([ 'C', s[:country].to_s, OpenSSL::ASN1::PRINTABLESTRING ]) unless s[:country].nil?
+          n.push([ 'ST', s[:state].to_s, OpenSSL::ASN1::PRINTABLESTRING ]) unless s[:state].nil?
+          n.push([ 'L', s[:city].to_s, OpenSSL::ASN1::PRINTABLESTRING ]) unless s[:city].nil?
+          n.push([ 'O', s[:organization].to_s, OpenSSL::ASN1::UTF8STRING ]) unless s[:organization].nil?
+          n.push([ 'OU', s[:department].to_s, OpenSSL::ASN1::UTF8STRING ]) unless s[:department].nil?
+          n.push([ 'CN', s[:common_name].to_s, OpenSSL::ASN1::UTF8STRING ]) unless s[:common_name].nil?
+          n.push([ 'emailAddress', s[:email].to_s, OpenSSL::ASN1::UTF8STRING ]) unless s[:email].nil?
+          n
+        else
+          [[ 'CN', s.to_s, OpenSSL::ASN1::UTF8STRING ]]
+        end
+        OpenSSL::X509::Name.new(name)
+      end
+
+      def generate_self_signed_cert(key, subject, time)
         # based on https://gist.github.com/nickyp/886884
         key = OpenSSL::PKey::RSA.new(key)
         cert = OpenSSL::X509::Certificate.new
         cert.version = 2
         cert.serial = OpenSSL::BN.rand(160)
-        cert.subject = OpenSSL::X509::Name.parse("/CN=#{hostname}")
+        cert.subject = generate_cert_subject(subject)
         cert.issuer = cert.subject # self-signed
         cert.public_key = key.public_key
         cert.not_before = Time.now
@@ -576,7 +659,7 @@ class Chef
       def verify_self_signed_cert(key, cert, hostname)
         key = OpenSSL::PKey::RSA.new(key)
         cert = OpenSSL::X509::Certificate.new(cert)
-        subject = OpenSSL::X509::Name.parse("/CN=#{hostname}")
+        subject = OpenSSL::X509::Name.parse(subject)
         key.params['n'] == cert.public_key.params['n'] && cert.subject == subject && cert.issuer == subject
       end
 
