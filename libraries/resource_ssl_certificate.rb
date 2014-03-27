@@ -66,6 +66,8 @@ class Chef
       def ==(o)
         key_path == o.key_path and
         cert_path == o.cert_path and
+        key_content == o.key_content and
+        cert_content == o.cert_content and
         server_name == o.server_name
       end
 
@@ -552,7 +554,7 @@ class Chef
 
       def cert_subject
         s = {}
-        s['common_name'] = email unless common_name.nil?
+        s['common_name'] = common_name unless common_name.nil?
         s['country'] = country unless country.nil?
         s['city'] = city unless city.nil?
         s['state'] = state unless state.nil?
@@ -585,6 +587,7 @@ class Chef
             when 'self-signed'
               content = read_from_path(cert_path)
               unless content and verify_self_signed_cert(key_content, content, cert_subject)
+                Chef::Log.debug("Generating new self-signed certificate: #{name}.")
                 content = generate_self_signed_cert(key_content, cert_subject, time)
                 updated_by_last_action(true)
               end
@@ -647,13 +650,13 @@ class Chef
       def generate_cert_subject(s)
         name = if s.kind_of?(Hash)
           n = []
-          n.push([ 'C', s[:country].to_s, OpenSSL::ASN1::PRINTABLESTRING ]) unless s[:country].nil?
-          n.push([ 'ST', s[:state].to_s, OpenSSL::ASN1::PRINTABLESTRING ]) unless s[:state].nil?
-          n.push([ 'L', s[:city].to_s, OpenSSL::ASN1::PRINTABLESTRING ]) unless s[:city].nil?
-          n.push([ 'O', s[:organization].to_s, OpenSSL::ASN1::UTF8STRING ]) unless s[:organization].nil?
-          n.push([ 'OU', s[:department].to_s, OpenSSL::ASN1::UTF8STRING ]) unless s[:department].nil?
-          n.push([ 'CN', s[:common_name].to_s, OpenSSL::ASN1::UTF8STRING ]) unless s[:common_name].nil?
-          n.push([ 'emailAddress', s[:email].to_s, OpenSSL::ASN1::UTF8STRING ]) unless s[:email].nil?
+          n.push([ 'C', s['country'].to_s, OpenSSL::ASN1::PRINTABLESTRING ]) unless s['country'].nil?
+          n.push([ 'ST', s['state'].to_s, OpenSSL::ASN1::PRINTABLESTRING ]) unless s['state'].nil?
+          n.push([ 'L', s['city'].to_s, OpenSSL::ASN1::PRINTABLESTRING ]) unless s['city'].nil?
+          n.push([ 'O', s['organization'].to_s, OpenSSL::ASN1::UTF8STRING ]) unless s['organization'].nil?
+          n.push([ 'OU', s['department'].to_s, OpenSSL::ASN1::UTF8STRING ]) unless s['department'].nil?
+          n.push([ 'CN', s['common_name'].to_s, OpenSSL::ASN1::UTF8STRING ]) unless s['common_name'].nil?
+          n.push([ 'emailAddress', s['email'].to_s, OpenSSL::ASN1::UTF8STRING ]) unless s['email'].nil?
           n
         else
           [[ 'CN', s.to_s, OpenSSL::ASN1::UTF8STRING ]]
@@ -689,8 +692,11 @@ class Chef
       def verify_self_signed_cert(key, cert, hostname)
         key = OpenSSL::PKey::RSA.new(key)
         cert = OpenSSL::X509::Certificate.new(cert)
-        subject = OpenSSL::X509::Name.parse(subject)
-        key.params['n'] == cert.public_key.params['n'] && cert.subject == subject && cert.issuer == subject
+        cur_subject = cert.subject
+        new_subject = generate_cert_subject(cert_subject)
+        Chef::Log.debug("Self-signed SSL cert current subject: #{cur_subject.to_s}")
+        Chef::Log.debug("Self-signed SSL cert new subject: #{new_subject.to_s}")
+        key.params['n'] == cert.public_key.params['n'] && cur_subject.cmp(new_subject) == 0 && cert.issuer.cmp(cur_subject) == 0
       end
 
     end

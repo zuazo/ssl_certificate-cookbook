@@ -20,7 +20,8 @@ class Chef
           updated_by_last_action ||= r.updated_by_last_action?
         end
 
-        unless @current_resource.exists? and @current_resource == @new_resource
+        unless @current_resource.exists? and @current_resource == @new_resource and
+          main_resource.updated_by_last_action? == false
 
           # Create ssl certificate key
           r = file "#{main_resource.name} SSL certificate key" do
