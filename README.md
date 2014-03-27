@@ -15,7 +15,7 @@ Resources
 
 ## ssl_certificate
 
-Creates a SSL certificate. The certificate can be read form multiple places: attributes, data bags, chef vault, ...
+Creates a SSL certificate. The certificate can be read form multiple places: attributes, data bags and chef vaults.
 
 ### ssl_certificate actions
 
@@ -86,7 +86,7 @@ Creates a SSL certificate. The certificate can be read form multiple places: att
   </tr>
   <tr>
     <td>source</td>
-    <td>Write only attribute for setting certificate source and key source (both) to a value (<code>key_source</code> and <code>cert_source</code>). Can be <code>"self-signed"</code>, <code>"data-bag"</code>, <code>"chef-vault"</code> or <code>"file"</code>.</td>
+    <td>Write only attribute for setting certificate source and key source (both) to a value (<code>key_source</code> and <code>cert_source</code>). Can be <code>"self-signed"</code>, <code>"attribute"</code>, <code>"data-bag"</code>, <code>"chef-vault"</code> or <code>"file"</code>.</td>
     <td><code>nil</code></td>
   </tr>
   <tr>
@@ -126,7 +126,7 @@ Creates a SSL certificate. The certificate can be read form multiple places: att
   </tr>
   <tr>
     <td>key_source</td>
-    <td>Source type to get the SSL key from. Can be <code>"self-signed"</code>, <code>"data-bag"</code>, <code>"chef-vault"</code> or <code>"file"</code>.</td>
+    <td>Source type to get the SSL key from. Can be <code>"self-signed"</code>, <code>"attribute"</code>, <code>"data-bag"</code>, <code>"chef-vault"</code> or <code>"file"</code>.</td>
     <td><code>"self-signed"</code></td>
   </tr>
   <tr>
@@ -176,7 +176,7 @@ Creates a SSL certificate. The certificate can be read form multiple places: att
   </tr>
   <tr>
     <td>cert_source</td>
-    <td>Source type to get the SSL cert from. Can be <code>"self-signed"</code>, <code>"data-bag"</code>, <code>"chef-vault"</code> or <code>"file"</code>.</td>
+    <td>Source type to get the SSL cert from. Can be <code>"self-signed"</code>, <code>"attribute"</code>, <code>"data-bag"</code>, <code>"chef-vault"</code> or <code>"file"</code>.</td>
     <td><code>"self-signed"</code></td>
   </tr>
   <tr>
@@ -315,7 +315,7 @@ When a namespace is set in the resource, it will try to read the following attri
   </tr>
   <tr>
     <td><code>namespace["ssl_key"]["source"]</code></td>
-    <td>Source type to get the SSL key from. Can be <code>"self-signed"</code>, <code>"data-bag"</code>, <code>"chef-vault"</code> or <code>"file"</code>.</td>
+    <td>Source type to get the SSL key from. Can be <code>"self-signed"</code>, <code>"attribute"</code>, <code>"data-bag"</code>, <code>"chef-vault"</code> or <code>"file"</code>.</td>
   </tr>
   <tr>
     <td><code>namespace["ssl_key"]["bag"]</code></td>
@@ -339,7 +339,7 @@ When a namespace is set in the resource, it will try to read the following attri
   </tr>
   <tr>
     <td><code>namespace["ssl_cert"]["source"]</code></td>
-    <td>Source type to get the SSL cert from. Can be <code>"self-signed"</code>, <code>"data-bag"</code>, <code>"chef-vault"</code> or <code>"file"</code>.</td>
+    <td>Source type to get the SSL cert from. Can be <code>"self-signed"</code>, <code>"attribute"</code>, <code>"data-bag"</code>, <code>"chef-vault"</code> or <code>"file"</code>.</td>
   </tr>
   <tr>
     <td><code>namespace["ssl_cert"]["bag"]</code></td>

@@ -458,13 +458,13 @@ class Chef
         lazy do
           @default_key_content ||= begin
             case key_source
-            # TODO attribute source has sense?
-            # when 'attribute'
-            #   if @ssl_key.attribute?('content') and @ssl_key['content'].kind_of?(String)
-            #     @ssl_key['content']
-            #   else
-            #     Chef::Application.fatal!('Cannot read SSL key from content key value')
-            #   end
+            when 'attribute'
+              content = read_namespace(['key', 'content'])
+              if content.kind_of?(String)
+                content
+              else
+                Chef::Application.fatal!('Cannot read SSL key from content key value')
+              end
             when 'data-bag'
               read_from_data_bag(key_bag, key_item, key_item_key, key_encrypted, key_secret_file) or
                 Chef::Application.fatal!("Cannot read SSL key from data bag: #{key_bag}.#{key_item}->#{key_item_key}")
@@ -564,13 +564,13 @@ class Chef
         lazy do
           @default_cert_content ||= begin
             case cert_source
-            # TODO attribute source has sense?
-            # when 'attribute'
-            #   if @ssl_cert.attribute?('content') and @ssl_cert['content'].kind_of?(String)
-            #     @ssl_cert['content']
-            #   else
-            #     Chef::Application.fatal!('Cannot read SSL certificate from content key value')
-            #   end
+            when 'attribute'
+              content = read_namespace(['cert', 'content'])
+              if content.kind_of?(String)
+                content
+              else
+                Chef::Application.fatal!('Cannot read SSL key from content key value')
+              end
             when 'data-bag'
               read_from_data_bag(cert_bag, cert_item, cert_item_key, cert_encrypted, cert_secret_file) or
                 Chef::Application.fatal!("Cannot read SSL certificate from data bag: #{cert_bag}.#{cert_item}->#{cert_item_key}")
