@@ -321,15 +321,24 @@ class Chef
       end
 
       def default_key_source
-        lazy { read_namespace(['ssl_key', 'source']) }
+        lazy do
+          read_namespace(['ssl_key', 'source']) or
+          read_namespace('source')
+        end
       end
 
       def default_key_bag
-        lazy { read_namespace(['ssl_key', 'bag']) }
+        lazy do
+          read_namespace(['ssl_key', 'bag']) or
+          read_namespace('bag')
+        end
       end
 
       def default_key_item
-        lazy { read_namespace(['ssl_key', 'item']) }
+        lazy do
+          read_namespace(['ssl_key', 'item']) or
+          read_namespace('item')
+        end
       end
 
       def default_key_item_key
@@ -337,11 +346,18 @@ class Chef
       end
 
       def default_key_encrypted
-        lazy { read_namespace(['ssl_key', 'encrypted']) }
+        lazy do
+          read_namespace(['ssl_key', 'encrypted']) or
+          read_namespace('encrypted')
+        end
       end
 
       def default_key_secret_file
-        lazy { read_namespace(['ssl_key', 'secret_file']) }
+        lazy do
+          read_namespace(['ssl_key', 'secret_file']) or
+          read_namespace('secret_file') or
+          Chef::Config[:encrypted_data_bag_secret]
+        end
       end
 
       def default_key_content
@@ -396,15 +412,24 @@ class Chef
       end
 
       def default_cert_source
-        lazy { read_namespace(['ssl_cert', 'source']) }
+        lazy do
+          read_namespace(['ssl_cert', 'source']) or
+          read_namespace('source')
+        end
       end
 
       def default_cert_bag
-        lazy { read_namespace(['ssl_cert', 'bag']) }
+        lazy do
+          read_namespace(['ssl_cert', 'bag']) or
+          read_namespace('bag')
+        end
       end
 
       def default_cert_item
-        lazy { read_namespace(['ssl_cert', 'item']) }
+        lazy do
+          read_namespace(['ssl_cert', 'item']) or
+          read_namespace('item')
+        end
       end
 
       def default_cert_item_key
@@ -412,11 +437,18 @@ class Chef
       end
 
       def default_cert_encrypted
-        lazy { read_namespace(['ssl_cert', 'encrypted']) }
+        lazy do
+          read_namespace(['ssl_cert', 'encrypted']) or
+          read_namespace('encrypted')
+        end
       end
 
       def default_cert_secret_file
-        lazy { read_namespace(['ssl_cert', 'secret_file']) }
+        lazy do
+          read_namespace(['ssl_cert', 'secret_file']) or
+          read_namespace('secret_file') or
+          Chef::Config[:encrypted_data_bag_secret]
+        end
       end
 
       def default_cert_content
