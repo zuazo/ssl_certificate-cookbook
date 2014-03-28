@@ -11,6 +11,8 @@ platforms:
 
 suites:
   - name: default
+    data_bags_path: "test/kitchen/data_bags"
+    encrypted_data_bag_secret_key_path: "test/kitchen/encrypted_data_bag_secret"
     run_list:
       - recipe[ssl_certificate_test::default]
     attributes:
