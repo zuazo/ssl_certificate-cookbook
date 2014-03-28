@@ -152,7 +152,7 @@ Creates a SSL certificate. The certificate can be read form multiple places: att
   <tr>
     <td>key_secret_file</td>
     <td>Secret file used to decrypt the Data Bag where the SSL key is stored.</td>
-    <td><code>Chef::Config[:encrypted_data_bag_secret]</code></td>
+    <td><code>nil</code></td>
   </tr>
   <tr>
     <td>key_content</td>
@@ -202,7 +202,7 @@ Creates a SSL certificate. The certificate can be read form multiple places: att
   <tr>
     <td>cert_secret_file</td>
     <td>Secret file used to decrypt the Data Bag where the SSL cert is stored.</td>
-    <td><code>Chef::Config[:encrypted_data_bag_secret]</code></td>
+    <td><code>nil</code></td>
   </tr>
   <tr>
     <td>cert_content</td>
@@ -421,7 +421,7 @@ end
 # Create virtualhost for nginx
 template File.join(node["nginx"]["dir"], "sites-available", "my-webapp-ssl") do
   # You need to create a template for nginx to enable SSL support
-  # and read the keys from ssl_key and ssl_cert variables
+  # and read the keys from ssl_key and ssl_cert attributes
   # [...]
   variables(
     # [...]

@@ -283,7 +283,7 @@ class Chef
 
       def cert_name(arg=nil)
         set_or_return(
-          :key_name,
+          :cert_name,
           arg,
           :kind_of => String,
           :required => true
@@ -448,8 +448,7 @@ class Chef
       def default_key_secret_file
         lazy do
           read_namespace(['ssl_key', 'secret_file']) or
-          read_namespace('secret_file') or
-          Chef::Config[:encrypted_data_bag_secret]
+          read_namespace('secret_file')
         end
       end
 
@@ -543,8 +542,7 @@ class Chef
       def default_cert_secret_file
         lazy do
           read_namespace(['ssl_cert', 'secret_file']) or
-          read_namespace('secret_file') or
-          Chef::Config[:encrypted_data_bag_secret]
+          read_namespace('secret_file')
         end
       end
 
@@ -569,7 +567,7 @@ class Chef
               if content.kind_of?(String)
                 content
               else
-                Chef::Application.fatal!('Cannot read SSL key from content key value')
+                Chef::Application.fatal!('Cannot read SSL certificate from content key value')
               end
             when 'data-bag'
               read_from_data_bag(cert_bag, cert_item, cert_item_key, cert_encrypted, cert_secret_file) or
@@ -620,8 +618,10 @@ class Chef
           else
             item = Chef::DataBagItem.load(bag, item)
           end
-          item[item_key]
-        rescue
+          item[item_key.to_s]
+        rescue Exception => e
+          Chef::Log.error(e.message)
+          Chef::Log.error("Backtrace:\n#{e.backtrace.join("\n")}\n")
           nil
         end
       end
@@ -631,8 +631,10 @@ class Chef
 
         begin
           item = ChefVault::Item.load(bag, item)
-          item[item_key]
-        rescue
+          item[item_key.to_s]
+        rescue Exception => e
+          Chef::Log.error(e.message)
+          Chef::Log.error("Backtrace:\n#{e.backtrace.join("\n")}\n")
           nil
         end
       end
