@@ -458,7 +458,7 @@ class Chef
           @default_key_content ||= begin
             case key_source
             when 'attribute'
-              content = read_namespace(['key', 'content'])
+              content = read_namespace(['ssl_key', 'content'])
               if content.kind_of?(String)
                 content
               else
@@ -563,7 +563,7 @@ class Chef
           @default_cert_content ||= begin
             case cert_source
             when 'attribute'
-              content = read_namespace(['cert', 'content'])
+              content = read_namespace(['ssl_cert', 'content'])
               if content.kind_of?(String)
                 content
               else

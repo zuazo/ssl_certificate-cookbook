@@ -338,6 +338,10 @@ When a namespace is set in the resource, it will try to read the following attri
     <td>Secret file used to decrypt the Data Bag where the SSL key is stored.</td>
   </tr>
   <tr>
+    <td><code>namespace["ssl_key"]["content"]</code></td>
+    <td>SSL key content used when reading from attributes.</td>
+  </tr>
+  <tr>
     <td><code>namespace["ssl_cert"]["source"]</code></td>
     <td>Source type to get the SSL cert from. Can be <code>"self-signed"</code>, <code>"attribute"</code>, <code>"data-bag"</code>, <code>"chef-vault"</code> or <code>"file"</code>.</td>
   </tr>
@@ -360,6 +364,10 @@ When a namespace is set in the resource, it will try to read the following attri
   <tr>
     <td><code>namespace["ssl_cert"]["secret_file"]</code></td>
     <td>Secret file used to decrypt the Data Bag where the SSL cert is stored.</td>
+  </tr>
+  <tr>
+    <td><code>namespace["ssl_cert"]["content"]</code></td>
+    <td>SSL cert content used when reading from attributes.</td>
   </tr>
 </table>
 
