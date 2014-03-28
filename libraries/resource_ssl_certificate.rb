@@ -259,7 +259,7 @@ class Chef
         set_or_return(
           :key_encrypted,
           arg,
-          :kind_of => String
+          :kind_of => [ TrueClass, FalseClass ]
         )
       end
 
@@ -343,7 +343,7 @@ class Chef
         set_or_return(
           :cert_encrypted,
           arg,
-          :kind_of => String
+          :kind_of => [ TrueClass, FalseClass ]
         )
       end
 
