@@ -476,7 +476,7 @@ License and Author
 
 |                      |                                          |
 |:---------------------|:-----------------------------------------|
-| **Author:**          | [Raúl Rodríguez](https://github.com/raulr) (<raul@onddo.com>)
+| **Author:**          | [Raul Rodriguez](https://github.com/raulr) (<raul@onddo.com>)
 | **Author:**          | [Xabier de Zuazo](https://github.com/zuazo) (<xabier@onddo.com>)
 | **Copyright:**       | Copyright (c) 2014, Onddo Labs, SL. (www.onddo.com)
 | **License:**         | Apache License, Version 2.0
