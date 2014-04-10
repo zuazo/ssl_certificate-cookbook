@@ -3,7 +3,7 @@ Description
 
 The main purpose of this cookbook is to make it easy for other cookbooks to support SSL. With the resource included, you will be able to manage certificates reading them from attributes, data bags or chef-vaults. Exposing its configuration through node attributes.
 
-Much of the code in this cookbook is heavily based on the SSL implementation from the [owncloud](https://github.com/onddo/owncloud-cookbook) cookbook.
+Much of the code in this cookbook is heavily based on the SSL implementation from the [owncloud](http://community.opscode.com/cookbooks/owncloud) cookbook.
 
 Requirements
 ============
@@ -15,7 +15,15 @@ Resources
 
 ## ssl_certificate
 
-Creates a SSL certificate. The certificate can be read form multiple places: attributes, data bags and chef vaults.
+Creates a SSL certificate.
+
+By default the resource will create a self-signed certificate, but a custom one can also be used. The custom certificate can be read from several sources:
+
+* Attribute
+* Data Bag
+* Encrypted Data Bag
+* Chef Vault
+* File
 
 ### ssl_certificate actions
 
@@ -253,10 +261,21 @@ You can also include the cookbook as a dependency in the metadata of your cookbo
 
 ```ruby
 # metadata.rb
-depends 'ssl_certificate'
+depends "ssl_certificate"
 ```
 
 One of the two is enough. No need to do anything else. Only use the `ssl_certificate` resource to create the certificates you need.
+
+## A Short Example
+
+```ruby
+cert = ssl_certificate "webapp1" do
+  namespace node["webapp1"] # optional but recommended
+end
+# you can now use the #cert_path and #key_path methods to use in your web/mail/ftp service configurations
+log "WebApp1 certificate is here: #{cert.cert_path}"
+log "WebApp1 private key is here: #{cert.key_path}"
+```
 
 ## Namespaces
 
@@ -371,7 +390,9 @@ When a namespace is set in the resource, it will try to read the following attri
   </tr>
 </table>
 
-### Examples
+## Examples
+
+### Apache Examples
 
 Apache `web_app` example using community [apache2](http://community.opscode.com/cookbooks/apache2) cookbook and node attributes:
 
@@ -403,7 +424,7 @@ Using custom paths:
 my_key_path = "/etc/keys/my-webapp.key"
 my_cert_path = "/etc/certs/my-webapp.pem"
 
-# there is no need to save the resource in a variable in this case
+# there is no need to save the resource in a variable in this case because we know the paths
 ssl_certificate "my-webapp" do
   key_path my_key_path
   cert_path my_cert_path
@@ -418,6 +439,8 @@ web_app "my-webapp" do
   ssl_cert my_cert_path
 end
 ```
+
+### Nginx Example
 
 Minimal `nginx` example using community [nginx](http://community.opscode.com/cookbooks/nginx) cookbook:
 
@@ -441,6 +464,195 @@ end
 
 # publish the certificate to an attribute, it may be useful
 node.set["web-app"]["ssl_cert"]["content"] = cert.cert_content
+```
+
+### Reading The Certificate From Attributes
+
+The SSL certificate can be read from an attribute directly:
+
+```ruby
+# Setting the attributes
+node.default["mysite"]["ssl_key"]["content"] = "-----BEGIN PRIVATE KEY-----[...]"
+node.default["mysite"]["ssl_cert"]["content"] = "-----BEGIN CERTIFICATE-----[...]"
+
+# Creating the certificate
+ssl_certificate "mysite" do
+  common_name "cloud.mysite.com"
+  namespace node["mysite"]
+  # this will read the node["mysite"]["ssl_key"]["content"] and node["mysite"]["ssl_cert"]["content"] keys
+  source "attribute"
+end
+```
+
+Alternative example using a namespace and node attributes:
+
+```ruby
+# Setting the attributes
+node.default["mysite"]["server_name"] = "cloud.mysite.com"
+node.default["mysite"]["ssl_key"]["source"] = "attribute"
+node.default["mysite"]["ssl_key"]["content"] = "-----BEGIN PRIVATE KEY-----[...]"
+node.default["mysite"]["ssl_cert"]["source"] = "attribute"
+node.default["mysite"]["ssl_cert"]["content"] = "-----BEGIN CERTIFICATE-----[...]"
+
+# Creating the certificate
+ssl_certificate "mysite" do
+  namespace node["mysite"]
+end
+```
+
+### Reading The Certificate From a Data Bag
+
+```ruby
+ssl_certificate "mysite" do
+  common_name "cloud.mysite.com"
+  source "data-bag"
+  bag "ssl_data_bag"
+  key_item "key" # data bag item
+  key_item_key "content" # data bag item json key
+  cert_item "cert"
+  cert_item_key "content"
+  encrypted true
+  secret_file "/path/to/secret/file" # optional
+end
+```
+
+Alternative example using a namespace and node attributes:
+
+```ruby
+# Setting the attributes
+node.default["mysite"]["server_name"] = "cloud.mysite.com"
+
+node.default["mysite"]["ssl_key"]["source"] = "data-bag"
+node.default["mysite"]["ssl_key"]["bag"] = "ssl_data_bag"
+node.default["mysite"]["ssl_key"]["item"] = "key"
+node.default["mysite"]["ssl_key"]["item_key"] = "content"
+node.default["mysite"]["ssl_key"]["encrypted"] = true
+node.default["mysite"]["ssl_key"]["secret_file"] = "/path/to/secret/file"
+
+node.default["mysite"]["ssl_cert"]["source"] = "data-bag"
+node.default["mysite"]["ssl_cert"]["bag"] = "ssl_data_bag"
+node.default["mysite"]["ssl_cert"]["item"] = "key"
+node.default["mysite"]["ssl_cert"]["item_key"] = "content"
+node.default["mysite"]["ssl_cert"]["encrypted"] = true
+node.default["mysite"]["ssl_cert"]["secret_file"] = "/path/to/secret/file"
+
+# Creating the certificate
+ssl_certificate "mysite" do
+  namespace node["mysite"]
+end
+```
+
+### Reading The Certificate From Chef Vault
+
+```ruby
+ssl_certificate "mysite" do
+  common_name "cloud.mysite.com"
+  source "chef-vault"
+  bag "ssl_vault_bag"
+  key_item "key" # data bag item
+  key_item_key "content" # data bag item json key
+  cert_item "cert"
+  cert_item_key "content"
+end
+```
+
+The same example, using a namespace and node attributes:
+
+```ruby
+# Setting the attributes
+node.default["mysite"]["server_name"] = "cloud.mysite.com"
+
+node.default["mysite"]["ssl_key"]["source"] = "chef-vault"
+node.default["mysite"]["ssl_key"]["bag"] = "ssl_vault_bag"
+node.default["mysite"]["ssl_key"]["item"] = "key"
+node.default["mysite"]["ssl_key"]["item_key"] = "content"
+
+node.default["mysite"]["ssl_cert"]["source"] = "chef-vault"
+node.default["mysite"]["ssl_cert"]["bag"] = "ssl_vault_bag"
+node.default["mysite"]["ssl_cert"]["item"] = "key"
+node.default["mysite"]["ssl_cert"]["item_key"] = "content"
+
+# Creating the certificate
+ssl_certificate "mysite" do
+  namespace node["mysite"]
+end
+```
+
+### Reading The Certificate From Files
+
+```ruby
+ssl_certificate "mysite" do
+  common_name "cloud.mysite.com"
+  source "file"
+  key_path "/path/to/ssl/key"
+  cert_path "/path/to/ssl/cert"
+end
+```
+
+The same example, using a namespace and node attributes:
+
+```
+# Setting the attributes
+node.default["mysite"]["server_name"] = "cloud.mysite.com"
+
+node.default["mysite"]["ssl_key"]["source"] = "file"
+node.default["mysite"]["ssl_key"]["path"] = "/path/to/ssl/key"
+
+node.default["mysite"]["ssl_cert"]["source"] = "file"
+node.default["mysite"]["ssl_cert"]["path"] = "/path/to/ssl/cert"
+
+# Creating the certificate
+ssl_certificate "mysite" do
+  namespace node["mysite"]
+end
+```
+
+### Reading The Certificate From Different Places
+
+You can also read the certificate and the private key from different places each:
+
+```ruby
+ssl_certificate "mysite" do
+  common_name "cloud.mysite.com"
+
+  # Read the private key from chef-vault
+  key_source "chef-vault"
+  key_bag "ssl_vault_bag"
+  key_item "key" # data bag item
+  key_item_key "content" # data bag item json key
+
+  # Read the public cert from a non-encrypted data bag
+  cert_source "data-bag"
+  cert_bag "ssl_data_bag"
+  cert_item "cert"
+  cert_item_key "content"
+  cert_encrypted false
+end
+```
+
+The same example, using a namespace and node attributes:
+
+```ruby
+# Setting the attributes
+node.default["mysite"]["server_name"] = "cloud.mysite.com"
+
+# Read the private key from chef-vault
+node.default["mysite"]["ssl_key"]["source"] = "chef-vault"
+node.default["mysite"]["ssl_key"]["bag"] = "ssl_vault_bag"
+node.default["mysite"]["ssl_key"]["item"] = "key"
+node.default["mysite"]["ssl_key"]["item_key"] = "content"
+
+# Read the public cert from a non-encrypted data bag
+node.default["mysite"]["ssl_cert"]["source"] = "data-bag"
+node.default["mysite"]["ssl_cert"]["bag"] = "ssl_data_bag"
+node.default["mysite"]["ssl_cert"]["item"] = "key"
+node.default["mysite"]["ssl_cert"]["item_key"] = "content"
+node.default["mysite"]["ssl_cert"]["encrypted"] = false
+
+# Creating the certificate
+ssl_certificate "mysite" do
+  namespace node["mysite"]
+end
 ```
 
 Testing
@@ -481,15 +693,14 @@ License and Author
 | **Copyright:**       | Copyright (c) 2014, Onddo Labs, SL. (www.onddo.com)
 | **License:**         | Apache License, Version 2.0
 
-Licensed under the Apache License, Version 2.0 (the "License");
-you may not use this file except in compliance with the License.
-You may obtain a copy of the License at
-
-    http://www.apache.org/licenses/LICENSE-2.0
-
-Unless required by applicable law or agreed to in writing, software
-distributed under the License is distributed on an "AS IS" BASIS,
-WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-See the License for the specific language governing permissions and
-limitations under the License.
-
+    Licensed under the Apache License, Version 2.0 (the "License");
+    you may not use this file except in compliance with the License.
+    You may obtain a copy of the License at
+    
+        http://www.apache.org/licenses/LICENSE-2.0
+    
+    Unless required by applicable law or agreed to in writing, software
+    distributed under the License is distributed on an "AS IS" BASIS,
+    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+    See the License for the specific language governing permissions and
+    limitations under the License.
