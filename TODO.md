@@ -7,3 +7,5 @@ TODO
 * Chained certificate support.
 * Generate a CSR.
 * Manage certificate expiration.
+* Add action :delete.
+* Remove the old library code.
