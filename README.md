@@ -43,9 +43,14 @@ By default the resource will create a self-signed certificate, but a custom one 
     <td><code>{}</code></td>
   </tr>
   <tr>
-    <td>server_name</td>
+    <td>common_name</td>
     <td>Server name or <em>Common Name</em>, used for self-signed certificates.</td>
-    <td><code>namespace["server_name"]</code></td>
+    <td><code>namespace["common_name"]</code></td>
+  </tr>
+  <tr>
+    <td>domain</td>
+    <td><code>common_name</code> method alias.</td>
+    <td><code>namespace["common_name"]</code></td>
   </tr>
   <tr>
     <td>country</td>
@@ -289,7 +294,7 @@ When a namespace is set in the resource, it will try to read the following attri
     <th>Description</th>
   </tr>
   <tr>
-    <td><code>namespace["server_name"]</code></td>
+    <td><code>namespace["common_name"]</code></td>
     <td>Server name or *Common Name*, used for self-signed certificates (uses <code>node["fqdn"]</code> by default).</td>
   </tr>
   <tr>
@@ -397,7 +402,7 @@ When a namespace is set in the resource, it will try to read the following attri
 Apache `web_app` example using community [apache2](http://community.opscode.com/cookbooks/apache2) cookbook and node attributes:
 
 ```ruby
-node.default["my-webapp"]["server_name"] = "onddo.com"
+node.default["my-webapp"]["common_name"] = "onddo.com"
 node.default["my-webapp"]["ssl_cert"]["source"] = "self-signed"
 node.default["my-webapp"]["ssl_key"]["source"] = "self-signed"
 
@@ -413,6 +418,7 @@ web_app "my-webapp" do
   # this cookbook includes a virtualhost template for apache2
   cookbook "ssl_certificate"
   # [...]
+  server_name cert.common_name
   ssl_key cert.key_path
   ssl_cert cert.cert_path
 end
@@ -488,7 +494,7 @@ Alternative example using a namespace and node attributes:
 
 ```ruby
 # Setting the attributes
-node.default["mysite"]["server_name"] = "cloud.mysite.com"
+node.default["mysite"]["common_name"] = "cloud.mysite.com"
 node.default["mysite"]["ssl_key"]["source"] = "attribute"
 node.default["mysite"]["ssl_key"]["content"] = "-----BEGIN PRIVATE KEY-----[...]"
 node.default["mysite"]["ssl_cert"]["source"] = "attribute"
@@ -520,7 +526,7 @@ Alternative example using a namespace and node attributes:
 
 ```ruby
 # Setting the attributes
-node.default["mysite"]["server_name"] = "cloud.mysite.com"
+node.default["mysite"]["common_name"] = "cloud.mysite.com"
 
 node.default["mysite"]["ssl_key"]["source"] = "data-bag"
 node.default["mysite"]["ssl_key"]["bag"] = "ssl_data_bag"
@@ -560,7 +566,7 @@ The same example, using a namespace and node attributes:
 
 ```ruby
 # Setting the attributes
-node.default["mysite"]["server_name"] = "cloud.mysite.com"
+node.default["mysite"]["common_name"] = "cloud.mysite.com"
 
 node.default["mysite"]["ssl_key"]["source"] = "chef-vault"
 node.default["mysite"]["ssl_key"]["bag"] = "ssl_vault_bag"
@@ -593,7 +599,7 @@ The same example, using a namespace and node attributes:
 
 ```
 # Setting the attributes
-node.default["mysite"]["server_name"] = "cloud.mysite.com"
+node.default["mysite"]["common_name"] = "cloud.mysite.com"
 
 node.default["mysite"]["ssl_key"]["source"] = "file"
 node.default["mysite"]["ssl_key"]["path"] = "/path/to/ssl/key"
@@ -634,7 +640,7 @@ The same example, using a namespace and node attributes:
 
 ```ruby
 # Setting the attributes
-node.default["mysite"]["server_name"] = "cloud.mysite.com"
+node.default["mysite"]["common_name"] = "cloud.mysite.com"
 
 # Read the private key from chef-vault
 node.default["mysite"]["ssl_key"]["source"] = "chef-vault"

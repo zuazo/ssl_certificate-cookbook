@@ -15,7 +15,7 @@ class Chef
         # default values
         @namespace = Mash.new
         %w{
-          server_name
+          common_name
           country
           city
           state
@@ -68,7 +68,7 @@ class Chef
         cert_path == o.cert_path and
         key_content == o.key_content and
         cert_content == o.cert_content and
-        server_name == o.server_name
+        common_name == o.common_name
       end
 
       alias :===  :==
@@ -87,17 +87,16 @@ class Chef
         )
       end
 
-      def server_name(arg=nil)
+      def common_name(arg=nil)
         set_or_return(
-          :server_name,
+          :common_name,
           arg,
           :kind_of => String,
           :required => true
         )
       end
 
-      alias :common_name :server_name
-      alias :domain :server_name
+      alias :domain :common_name
 
       def country(arg=nil)
         set_or_return(
@@ -371,8 +370,8 @@ class Chef
         lazy { @default_key_path ||= ::File.join(key_dir, key_name) }
       end
 
-      def default_server_name
-        lazy { read_namespace('server_name') || node['fqdn'] }
+      def default_common_name
+        lazy { read_namespace('common_name') || node['fqdn'] }
       end
 
       def default_country

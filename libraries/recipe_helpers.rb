@@ -2,13 +2,13 @@
 module Chef::SSL
   module RecipeHelpers
 
-    def generate_certificate(namespace, server_name = nil)
+    def generate_certificate(namespace, common_name = nil)
       namespace = [ namespace ].flatten
       attributes = namespace.inject(node) { |n, k| n[k] }
 
       cert = Chef::SSL::Certificate.new({
         :name => namespace.join('-'),
-        :server_name => server_name || attributes['server_name'],
+        :common_name => common_name || attributes['common_name'],
         :ssl_key => attributes['ssl_key'],
         :ssl_cert => attributes['ssl_cert'],
         :platform => node['platform'],

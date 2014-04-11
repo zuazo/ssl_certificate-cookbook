@@ -11,7 +11,7 @@ module Chef::SSL
       @ssl_key = options[:ssl_key] || {}
       @ssl_cert = options[:ssl_cert] || {}
       @platform = options[:platform] # optional
-      @server_name = options[:server_name] || options[:name]
+      @common_name = options[:common_name] || options[:name]
     end
 
     def key_path
@@ -86,8 +86,8 @@ module Chef::SSL
             Chef::Application.fatal!("Cannot read SSL certificate from path: #{@ssl_cert['path']}")
         else # when 'self-signed'
           content = read_from_path(cert_path)
-          unless content and verify_self_signed_cert(key_content, content, @server_name)
-           content = generate_self_signed_cert(key_content, @server_name)
+          unless content and verify_self_signed_cert(key_content, content, @common_name)
+           content = generate_self_signed_cert(key_content, @common_name)
           end
           content
         end
