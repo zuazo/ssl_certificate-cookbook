@@ -235,9 +235,12 @@ cert = ssl_certificate "my-webapp" do
   notifies :restart, "service[apache2]"
 end
 
+include_recipe "apache2"
 include_recipe "apache2::mod_ssl"
 web_app "my-webapp" do
   cookbook "ssl_certificate"
+  server_name cert.common_name
+  docroot # [...]
   # [...]
   ssl_key cert.key_path
   ssl_cert cert.cert_path
@@ -413,12 +416,14 @@ cert = ssl_certificate "my-webapp" do
   notifies :restart, "service[apache2]"
 end
 
+include_recipe "apache2"
 include_recipe "apache2::mod_ssl"
 web_app "my-webapp" do
   # this cookbook includes a virtualhost template for apache2
   cookbook "ssl_certificate"
-  # [...]
   server_name cert.common_name
+  docroot # [...]
+  # [...]
   ssl_key cert.key_path
   ssl_cert cert.cert_path
 end

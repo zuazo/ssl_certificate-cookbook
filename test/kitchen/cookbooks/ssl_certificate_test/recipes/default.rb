@@ -97,3 +97,22 @@ EOC
 ssl_certificate 'dummy6-data-bag' do
   namespace cert6_name
 end
+
+# Apache2 test
+
+cert = ssl_certificate node['fqdn'] do
+  namespace node[ node['fqdn'] ]
+  notifies :restart, 'service[apache2]'
+end
+
+include_recipe 'apache2'
+include_recipe 'apache2::mod_ssl'
+web_app node['fqdn'] do
+  # this cookbook includes a virtualhost template for apache2
+  cookbook 'ssl_certificate'
+  # [...]
+  docroot node['apache']['docroot_dir']
+  server_name cert.common_name
+  ssl_key cert.key_path
+  ssl_cert cert.cert_path
+end
