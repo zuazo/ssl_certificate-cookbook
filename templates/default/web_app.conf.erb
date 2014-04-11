@@ -67,4 +67,11 @@
 
   # Accept strong encryption only
   SSLCipherSuite ALL:!aNULL:!ADH:!eNULL:!LOW:!EXP:RC4+RSA:+HIGH:+MEDIUM
+
+<% if @params[:extra_directives].kind_of?(Hash)
+     @params[:extra_directives].each do |name, value|
+-%>
+  <%= name.to_s %> <%= value.to_s %>
+<%   end
+   end -%>
 </VirtualHost>

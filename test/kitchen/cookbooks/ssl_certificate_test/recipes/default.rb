@@ -115,4 +115,5 @@ web_app node['fqdn'] do
   server_name cert.common_name
   ssl_key cert.key_path
   ssl_cert cert.cert_path
+  extra_directives ({ :EnableSendfile => 'On' })
 end
