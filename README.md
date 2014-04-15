@@ -602,7 +602,7 @@ end
 
 The same example, using a namespace and node attributes:
 
-```
+```ruby
 # Setting the attributes
 node.default["mysite"]["common_name"] = "cloud.mysite.com"
 
