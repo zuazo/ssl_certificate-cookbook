@@ -64,6 +64,7 @@ class Chef
       end
 
       def ==(o)
+        o.is_a?(self.class) and
         key_path == o.key_path and
         cert_path == o.cert_path and
         key_content == o.key_content and
