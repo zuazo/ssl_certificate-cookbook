@@ -684,6 +684,16 @@ $ kitchen verify
 [...]
 ```
 
+## ChefSpec matchers
+
+### create_ssl_certificate(name)
+
+Assert that the Chef run creates ssl_certificate.
+
+```ruby
+expect(chef_run).to create_ssl_certificate("cloud.mysite.com")
+```
+
 Contributing
 ============
 
