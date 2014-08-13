@@ -1,5 +1,6 @@
 Description
 ===========
+[![Cookbook Version](https://img.shields.io/cookbook/v/ssl_certificate.svg?style=flat)](https://supermarket.getchef.com/cookbooks/ssl_certificate)
 
 The main purpose of this cookbook is to make it easy for other cookbooks to support SSL. With the resource included, you will be able to manage certificates reading them from attributes, data bags or chef-vaults. Exposing its configuration through node attributes.
 
