@@ -9,7 +9,7 @@ Much of the code in this cookbook is heavily based on the SSL implementation fro
 Requirements
 ============
 
-Works on any platform with OpenSSL Ruby bindings installed, which are a requirement for Chef anyway.
+* Chef `>= 11.14.2`
 
 Resources
 =========
