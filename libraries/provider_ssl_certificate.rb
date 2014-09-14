@@ -24,25 +24,29 @@ class Chef
           main_resource.updated_by_last_action? == false
 
           # Create ssl certificate key
-          r = file "#{main_resource.name} SSL certificate key" do
-            path main_resource.key_path
-            owner 'root'
-            group 'root'
-            mode 00600
-            content main_resource.key_content
-            action :create
-          end
+          r = Chef::Resource::File.new(
+            "#{main_resource.name} SSL certificate key",
+            @new_resource.run_context
+          )
+          r.path(main_resource.key_path)
+          r.owner('root')
+          r.group('root')
+          r.mode(00600)
+          r.content(main_resource.key_content)
+          r.run_action(:create)
           updated_by_last_action ||= r.updated_by_last_action?
 
           # Create ssl certificate
-          r = file "#{main_resource.name} SSL public certificate" do
-            path main_resource.cert_path
-            owner 'root'
-            group 'root'
-            mode 00644
-            content main_resource.cert_content
-            action :create
-          end
+          r = Chef::Resource::File.new(
+            "#{main_resource.name} SSL public certificate",
+            @new_resource.run_context
+          )
+          r.path(main_resource.cert_path)
+          r.owner('root')
+          r.group('root')
+          r.mode(00644)
+          r.content(main_resource.cert_content)
+          r.run_action(:create)
           updated_by_last_action ||= r.updated_by_last_action?
 
         end
