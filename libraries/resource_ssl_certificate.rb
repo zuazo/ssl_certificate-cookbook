@@ -42,6 +42,7 @@ class Chef
           cert_encrypted
           cert_secret_file
           cert_content
+          subject_alternate_names
         }.each do |var|
           self.instance_variable_set("@#{var}".to_sym, self.send("default_#{var}"))
         end
@@ -363,6 +364,14 @@ class Chef
         )
       end
 
+      def subject_alternate_names(arg=nil)
+        set_or_return(
+          :subject_alternate_names,
+          arg,
+          :kind_of => Array
+        )
+      end
+
       private
 
       # key private methods
@@ -546,6 +555,12 @@ class Chef
         end
       end
 
+      def default_subject_alternate_names
+        lazy do
+          read_namespace(['ssl_cert', 'subject_alternate_names'])
+        end
+      end
+
       def cert_subject
         s = {}
         s['common_name'] = common_name unless common_name.nil?
@@ -683,8 +698,21 @@ class Chef
         cert.add_extension(ef.create_extension('basicConstraints', 'CA:TRUE', true))
         cert.add_extension(ef.create_extension('subjectKeyIdentifier', 'hash', false))
         cert.add_extension(ef.create_extension('authorityKeyIdentifier', 'keyid:always,issuer:always', false))
+        if subject_alternate_names
+          handle_subject_alternative_names(cert, ef, subject_alternate_names)
+        end
         cert.sign(key, OpenSSL::Digest::SHA256.new)
         cert.to_pem
+      end
+
+      # Subject Alternative Names support taken and modified from
+      # https://github.com/cchandler/certificate_authority/blob/master/lib/certificate_authority/signing_request.rb
+      def handle_subject_alternative_names(cert, factory, alt_names)
+        raise "alt_names must be an Array" unless alt_names.is_a?(Array)
+
+        name_list = alt_names.map{|m| "DNS:#{m}"}.join(",")
+        ext = factory.create_ext("subjectAltName", name_list, false)
+        cert.add_extension(ext)
       end
 
       def verify_self_signed_cert(key, cert, hostname)
