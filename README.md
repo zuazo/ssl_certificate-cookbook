@@ -228,6 +228,56 @@ By default the resource will create a self-signed certificate, but a custom one 
     <td>Subject Alternate Names for the cert.</td>
     <td><code>nil</code></td>
   </tr>
+  <tr>
+    <td>chain_path</td>
+    <td>Intermediate certificate chain full path.</td>
+    <td><em>calculated</em></td>
+  </tr>
+  <tr>
+    <td>chain_name</td>
+    <td>File name of intermediate certificate chain file.</td>
+    <td><code>nil</code></td>
+  </tr>
+  <tr>
+    <td>chain_dir</td>
+    <td>Intermediate certificate chain directory path.</td>
+    <td><em>calculated</em></td>
+  </tr>
+  <tr>
+    <td>chain_source</td>
+    <td>Source type to get the intermediate certificate chain from. Can be <code>"attribute"</code>, <code>"data-bag"</code>, <code>"chef-vault"</code> or <code>"file"</code>.</td>
+    <td><code>nil</code></td>
+  </tr>
+  <tr>
+    <td>chain_bag</td>
+    <td>Name of the Data Bag where the intermediate certificate chain is stored.</td>
+    <td><code>namespace["ssl_chain"]["bag"]</code></td>
+  </tr>
+  <tr>
+    <td>chain_item</td>
+    <td>Name of the Data Bag Item where the intermediate certificate chain is stored.</td>
+    <td><code>namespace["ssl_chain"]["item"]</code></td>
+  </tr>
+  <tr>
+    <td>chain_item_cert</td>
+    <td>Cert of the Data Bag Item where the intermediate certificate chain is stored.</td>
+    <td><code>namespace["ssl_chain"]["item_cert"]</code></td>
+  </tr>
+  <tr>
+    <td>chain_encrypted</td>
+    <td>Whether the Data Bag where the intermediate certificate chain is stored is encrypted.</td>
+    <td><code>false</code></td>
+  </tr>
+  <tr>
+    <td>chain_secret_file</td>
+    <td>Secret file used to decrypt the Data Bag where the intermediate certificate chain is stored.</td>
+    <td><code>nil</code></td>
+  </tr>
+  <tr>
+    <td>chain_content</td>
+    <td>Intermediate certificate chain file content in clear.</td>
+    <td><em>calculated</em></td>
+  </tr>
 </table>
 
 Templates
@@ -405,6 +455,38 @@ When a namespace is set in the resource, it will try to read the following attri
   <tr>
     <td><code>namespace["ssl_cert"]["subject_alternate_names"]</code></td>
     <td>An array of Subject Alternate Names for the SSL cert. Needed if your site has multiple domain names on the same cert.</td>
+  </tr>
+  <tr>
+    <td><code>namespace["ssl_chain"]["name"]</code></td>
+    <td>File name to be used for the intermediate certificate chain file. <em>If this is not present, no chain file will be written.</em></td>
+  </tr>
+  <tr>
+    <td><code>namespace["ssl_chain"]["source"]</code></td>
+    <td>Source type to get the intermediate certificate chain from. Can be <code>"attribute"</code>, <code>"data-bag"</code>, <code>"chef-vault"</code> or <code>"file"</code>.</td>
+  </tr>
+  <tr>
+    <td><code>namespace["ssl_chain"]["bag"]</code></td>
+    <td>Name of the Data Bag where the intermediate certificate chain is stored.</td>
+  </tr>
+  <tr>
+    <td><code>namespace["ssl_chain"]["item"]</code></td>
+    <td>Name of the Data Bag Item where the intermediate certificate chain is stored.</td>
+  </tr>
+  <tr>
+    <td><code>namespace["ssl_chain"]["item_cert"]</code></td>
+    <td>Cert of the Data Bag Item where the intermediate certificate chain is stored.</td>
+  </tr>
+  <tr>
+    <td><code>namespace["ssl_chain"]["encrypted"]</code></td>
+    <td>Whether the Data Bag where the intermediate certificate chain is stored is encrypted.</td>
+  </tr>
+  <tr>
+    <td><code>namespace["ssl_chain"]["secret_file"]</code></td>
+    <td>Secret file used to decrypt the Data Bag where the intermediate certificate chain is stored.</td>
+  </tr>
+  <tr>
+    <td><code>namespace["ssl_chain"]["content"]</code></td>
+    <td>Intermediate certificate chain content used when reading from attributes.</td>
   </tr>
 </table>
 
@@ -689,6 +771,29 @@ ssl_certificate 'mysite.com' do
   cert_source 'self-signed'
 end
 
+```
+
+### Reading Key, Cert, and Intermediary From a Data Bag
+```ruby
+cert_name = 'chain-data-bag'
+node.default[cert_name]['ssl_key']['source'] = 'data-bag'
+node.default[cert_name]['ssl_key']['bag'] = 'ssl'
+node.default[cert_name]['ssl_key']['item'] = 'key'
+node.default[cert_name]['ssl_key']['item_key'] = 'content'
+node.default[cert_name]['ssl_key']['encrypted'] = true
+node.default[cert_name]['ssl_cert']['source'] = 'data-bag'
+node.default[cert_name]['ssl_cert']['bag'] = 'ssl'
+node.default[cert_name]['ssl_cert']['item'] = 'cert'
+node.default[cert_name]['ssl_cert']['item_key'] = 'content'
+node.default[cert_name]['ssl_chain']['name'] = 'chain-ca-bundle.pem'
+node.default[cert_name]['ssl_chain']['source'] = 'data-bag'
+node.default[cert_name]['ssl_chain']['bag'] = 'ssl'
+node.default[cert_name]['ssl_chain']['item'] = 'chain'
+node.default[cert_name]['ssl_chain']['item_key'] = 'content'
+
+ssl_certificate 'chain-data-bag' do
+  namespace cert_name
+end
 ```
 
 Testing
