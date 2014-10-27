@@ -223,6 +223,11 @@ By default the resource will create a self-signed certificate, but a custom one 
     <td>SSL cert file content in clear.</td>
     <td><em>calculated</em></td>
   </tr>
+  <tr>
+    <td>subject_alternate_names</td>
+    <td>Subject Alternate Names for the cert.</td>
+    <td><code>nil</code></td>
+  </tr>
 </table>
 
 Templates
@@ -396,6 +401,10 @@ When a namespace is set in the resource, it will try to read the following attri
   <tr>
     <td><code>namespace["ssl_cert"]["content"]</code></td>
     <td>SSL cert content used when reading from attributes.</td>
+  </tr>
+  <tr>
+    <td><code>namespace["ssl_cert"]["subject_alternate_names"]</code></td>
+    <td>An array of Subject Alternate Names for the SSL cert. Needed if your site has multiple domain names on the same cert.</td>
   </tr>
 </table>
 
@@ -665,6 +674,21 @@ node.default["mysite"]["ssl_cert"]["encrypted"] = false
 ssl_certificate "mysite" do
   namespace node["mysite"]
 end
+```
+
+### Creating a Cert with Subject Alternate Names
+
+```ruby
+domain = 'mysite.com'
+# SAN for mysite.com, foo.mysite.com, bar.mysite.com, www.mysite.com
+node.default[ domain ]['ssl_cert']['subject_alternate_names'] = [ domain, 'foo.'+domain, 'bar.'+domain, 'www.' + domain ]
+
+ssl_certificate 'mysite.com' do
+  namespace node[ domain ]
+  key_source 'self-signed'
+  cert_source 'self-signed'
+end
+
 ```
 
 Testing
