@@ -816,6 +816,15 @@ $ kitchen verify
 
 ## ChefSpec matchers
 
+### ssl_certificate(name)
+
+Helper method for locating a `ssl_certificate` resource in the collection.
+
+```ruby
+resource = chef_run.ssl_certificate('postfixadmin')
+expect(resource).to notify('service[apache2]').to(:restart)
+```
+
 ### create_ssl_certificate(name)
 
 Assert that the Chef run creates ssl_certificate.
