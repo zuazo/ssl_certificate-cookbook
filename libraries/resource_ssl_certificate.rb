@@ -43,6 +43,16 @@ class Chef
           cert_secret_file
           cert_content
           subject_alternate_names
+          chain_path
+          chain_name
+          chain_dir
+          chain_source
+          chain_bag
+          chain_item
+          chain_item_key
+          chain_encrypted
+          chain_secret_file
+          chain_content
         }.each do |var|
           self.instance_variable_set("@#{var}".to_sym, self.send("default_#{var}"))
         end
@@ -58,10 +68,13 @@ class Chef
         key_content(key) unless key.nil?
         cert = read_from_path(cert_path)
         cert_content(cert) unless cert.nil?
+        chain = read_from_path(chain_path) unless chain_path.nil?
+        chain_content(chain) unless chain.nil?
       end
 
       def exists?
-        @key_content.kind_of?(String) and @cert_content.kind_of?(String)
+        # chain_content is optional
+        @key_content.kind_of?(String) and @cert_content.kind_of?(String) and (@chain_content.kind_of?(String) or @chain_content.nil?)
       end
 
       def ==(o)
@@ -169,31 +182,37 @@ class Chef
       def dir(arg)
         key_dir(arg)
         cert_dir(arg)
+        chain_dir(arg)
       end
 
       def source(arg)
         key_source(arg)
         cert_source(arg)
+        chain_source(arg)
       end
 
       def bag(arg)
         key_bag(arg)
         cert_bag(arg)
+        chain_bag(arg)
       end
 
       def item(arg)
         key_item(arg)
         cert_item(arg)
+        chain_item(arg)
       end
 
       def encrypted(arg)
         key_encrypted(arg)
         cert_encrypted(arg)
+        chain_encrypted(arg)
       end
 
       def secret_file(arg)
         key_secret_file(arg)
         cert_secret_file(arg)
+        chain_secret_file(arg)
       end
 
       # key public methods
@@ -369,6 +388,90 @@ class Chef
           :subject_alternate_names,
           arg,
           :kind_of => Array
+        )
+      end
+
+      # chain public methods
+
+      def chain_name(arg=nil)
+        set_or_return(
+          :chain_name,
+          arg,
+          :kind_of => String,
+          :required => false
+        )
+      end
+
+      def chain_dir(arg=nil)
+        set_or_return(
+          :chain_dir,
+          arg,
+          :kind_of => String
+        )
+      end
+
+      def chain_path(arg=nil)
+        set_or_return(
+          :chain_path,
+          arg,
+          :kind_of => String,
+          :required => false
+        )
+      end
+
+      def chain_source(arg=nil)
+        set_or_return(
+          :chain_source,
+          arg,
+          :kind_of => String
+        )
+      end
+
+      def chain_bag(arg=nil)
+        set_or_return(
+          :chain_bag,
+          arg,
+          :kind_of => String
+        )
+      end
+
+      def chain_item(arg=nil)
+        set_or_return(
+          :chain_item,
+          arg,
+          :kind_of => String
+        )
+      end
+
+      def chain_item_key(arg=nil)
+        set_or_return(
+          :chain_item_key,
+          arg,
+          :kind_of => String
+        )
+      end
+
+      def chain_encrypted(arg=nil)
+        set_or_return(
+          :chain_encrypted,
+          arg,
+          :kind_of => [ TrueClass, FalseClass ]
+        )
+      end
+
+      def chain_secret_file(arg=nil)
+        set_or_return(
+          :chain_secret_file,
+          arg,
+          :kind_of => String
+        )
+      end
+
+      def chain_content(arg=nil)
+        set_or_return(
+          :chain_content,
+          arg,
+          :kind_of => String
         )
       end
 
@@ -605,6 +708,99 @@ class Chef
               Chef::Application.fatal!("Cannot read SSL cert, unknown source: #{cert_source}")
             end
           end # @default_cert_content ||=
+        end # lazy
+      end
+
+      # chain private methods
+
+      def default_chain_path
+        lazy do
+          if not chain_name.nil?
+            @default_chain_path ||= ::File.join(chain_dir, chain_name)
+          end
+        end
+      end
+
+      def default_chain_name
+        lazy do
+          read_namespace(['ssl_chain', 'name'])
+        end
+      end
+
+      def default_chain_dir
+        case node['platform']
+        when 'debian', 'ubuntu'
+          '/etc/ssl/certs'
+        when 'redhat', 'centos', 'fedora', 'scientific', 'amazon'
+          '/etc/pki/tls/certs'
+        else
+          '/etc'
+        end
+      end
+
+      def default_chain_source
+        lazy do
+          read_namespace(['ssl_chain', 'source'])
+        end
+      end
+
+      def default_chain_bag
+        lazy do
+          read_namespace(['ssl_chain', 'bag']) or
+          read_namespace('bag')
+        end
+      end
+
+      def default_chain_item
+        lazy do
+          read_namespace(['ssl_chain', 'item']) or
+          read_namespace('item')
+        end
+      end
+
+      def default_chain_item_key
+        lazy { read_namespace(['ssl_chain', 'item_key']) }
+      end
+
+      def default_chain_encrypted
+        lazy do
+          read_namespace(['ssl_chain', 'encrypted']) or
+          read_namespace('encrypted')
+        end
+      end
+
+      def default_chain_secret_file
+        lazy do
+          read_namespace(['ssl_chain', 'secret_file']) or
+          read_namespace('secret_file')
+        end
+      end
+
+      def default_chain_content
+        lazy do
+          @default_chain_content ||= begin
+            case chain_source
+            when 'attribute'
+              content = read_namespace(['ssl_chain', 'content'])
+              if content.kind_of?(String)
+                content
+              else
+                Chef::Application.fatal!('Cannot read SSL intermediary chain from content key value')
+              end
+            when 'data-bag'
+              read_from_data_bag(chain_bag, chain_item, chain_item_key, chain_encrypted, chain_secret_file) or
+                Chef::Application.fatal!("Cannot read SSL intermediary chain from data bag: #{chain_bag}.#{chain_item}->#{chain_item_key}")
+            when 'chef-vault'
+              read_from_chef_vault(chain_bag, chain_item, chain_item_key) or
+                Chef::Application.fatal!("Cannot read SSL intermediary chain from chef-vault: #{chain_bag}.#{chain_item}->#{chain_item_key}")
+            when 'file'
+              read_from_path(chain_path) or
+                Chef::Application.fatal!("Cannot read SSL intermediary chain from path: #{chain_path}")
+            else
+              Chef::Log.debug("No SSL intermediary chain provided.")
+              nil
+            end
+          end # @default_chain_content ||=
         end # lazy
       end
 
