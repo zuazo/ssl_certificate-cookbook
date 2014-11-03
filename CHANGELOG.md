@@ -3,6 +3,16 @@ ssl_certificate CHANGELOG
 
 This file is used to list changes made in each version of the `ssl_certificate` cookbook.
 
+## v0.3.0 (2014-11-03)
+
+Special thanks to [Steve Meinel](https://github.com/smeinel) for his great contributions.
+
+* Add Subject Alternate Names support for certs ([issue #2](https://github.com/onddo/ssl_certificate-cookbook/pull/2), thanks [Steve Meinel](https://github.com/smeinel)).
+* Add support for deploying an intermediate cert chain file ([issue #3](https://github.com/onddo/ssl_certificate-cookbook/pull/3), thanks [Steve Meinel](https://github.com/smeinel)).
+* ChefSpec matchers: add helper methods to locate LWRP resources.
+* README: Chef `11.14.2` required.
+* TODO: complete it with more tasks and use checkboxes.
+
 ## v0.2.1 (2014-09-14)
 
 * `ssl_certificate` resource notifications fixed (issue [#1](https://github.com/onddo/ssl_certificate-cookbook/pull/1), thanks [Matt Graham](https://github.com/gadgetmg) for reporting)
