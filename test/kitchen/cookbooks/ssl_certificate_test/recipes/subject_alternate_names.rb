@@ -23,7 +23,8 @@ ssl_certificate 'subject_alternate_names' do
 end
 
 domain = node['fqdn']
-node.default[ domain ]['ssl_cert']['subject_alternate_names'] = [ domain, 'foo', 'bar', 'foo.' + domain ]
+node.default[ domain ]['ssl_cert']['subject_alternate_names'] =
+  [domain, 'foo', 'bar', 'foo.' + domain]
 
 ssl_certificate 'subject_alternate_names2' do
   namespace node[ domain ]

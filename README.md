@@ -9,6 +9,22 @@ Much of the code in this cookbook is heavily based on the SSL implementation fro
 Requirements
 ============
 
+## Supported Platforms
+
+This cookbook has been tested on the following platforms:
+
+* Amazon Linux
+* CentOS
+* Debian
+* Fedora
+* FreeBSD
+* RedHat
+* Ubuntu
+
+Please, [let us know](https://github.com/onddo/encrypted_attributes-cookbook/issues/new?title=I%20have%20used%20it%20successfully%20on%20...) if you use it successfully on any other platform.
+
+## Required Applications
+
 * Chef `>= 11.14.2`
 
 Resources

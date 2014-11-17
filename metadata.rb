@@ -6,4 +6,12 @@ description      'The main purpose of this cookbook is to make it easy for other
 long_description IO.read(File.join(File.dirname(__FILE__), 'README.md'))
 version          '0.4.0' # WiP
 
+supports 'amazon'
+supports 'debian'
+supports 'centos'
+supports 'fedora'
+supports 'freebsd'
+supports 'redhat'
+supports 'ubuntu'
+
 provides 'ssl_certificate'
