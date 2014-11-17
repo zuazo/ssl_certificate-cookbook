@@ -37,7 +37,7 @@
   DirectoryIndex <%= [@params[:directory_index]].flatten.join ' ' %>
   <% end -%>
 
-  <%- if node['apache']['version'] == '2.4' -%>
+  <% if node['apache']['version'].to_f >= 2.4 -%>
   LogLevel info rewrite:trace1
   <%- else -%>
   LogLevel info
