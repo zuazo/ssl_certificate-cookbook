@@ -5,7 +5,7 @@ This file is used to list changes made in each version of the `ssl_certificate` 
 
 ## v0.4.0 (2014-11-19)
 
-* Add Apache 2.4 support ([issue #4, thanks [Djuri Baars](https://github.com/dsbaars)).
+* Add Apache 2.4 support ([issue #4](https://github.com/onddo/ssl_certificate-cookbook/pull/4), thanks [Djuri Baars](https://github.com/dsbaars)).
 * Add supported platform list.
 * kitchen.yml completed and updated.
 
