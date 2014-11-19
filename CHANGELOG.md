@@ -3,6 +3,12 @@ ssl_certificate CHANGELOG
 
 This file is used to list changes made in each version of the `ssl_certificate` cookbook.
 
+## v0.4.0 (2014-11-19)
+
+* Add Apache 2.4 support ([issue #4, thanks [Djuri Baars](https://github.com/dsbaars)).
+* Add supported platform list.
+* kitchen.yml completed and updated.
+
 ## v0.3.0 (2014-11-03)
 
 Special thanks to [Steve Meinel](https://github.com/smeinel) for his great contributions.
