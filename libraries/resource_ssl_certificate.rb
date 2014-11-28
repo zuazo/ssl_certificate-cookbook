@@ -32,6 +32,7 @@ class Chef
           key_encrypted
           key_secret_file
           key_content
+          ca_cert_path
           cert_path
           cert_name
           cert_dir
@@ -296,6 +297,15 @@ class Chef
           :key_content,
           arg,
           :kind_of => String
+        )
+      end
+
+      # CA cert definition
+      def ca_cert_path(arg=nil)
+        set_or_return(
+          :ca_cert_path,
+          arg,
+          :kind_of => String,
         )
       end
 
@@ -585,7 +595,7 @@ class Chef
             when 'file'
               read_from_path(key_path) or
                 Chef::Application.fatal!("Cannot read SSL key from path: #{key_path}")
-            when 'self-signed', nil
+            when 'self-signed', 'self-signed-ca', nil
               content = read_from_path(key_path)
               unless content
                 content = generate_key
@@ -696,11 +706,12 @@ class Chef
             when 'file'
               read_from_path(cert_path) or
                 Chef::Application.fatal!("Cannot read SSL certificate from path: #{cert_path}")
-            when 'self-signed', nil
-              content = read_from_path(cert_path)
+            when 'self-signed', 'self-signed-ca', nil
+              content    = read_from_path(cert_path)
+              ca_content = ca_cert_path ? read_from_path(ca_cert_path) : nil
               unless content and verify_self_signed_cert(key_content, content, cert_subject)
                 Chef::Log.debug("Generating new self-signed certificate: #{name}.")
-                content = generate_self_signed_cert(key_content, cert_subject, time)
+                content = generate_self_signed_cert(key_content, cert_subject, time, ca_content)
                 updated_by_last_action(true)
               end
               content
@@ -873,14 +884,15 @@ class Chef
         OpenSSL::X509::Name.new(name)
       end
 
-      def generate_self_signed_cert(key, subject, time)
+      def generate_self_signed_cert(key, subject, time, ca_content = nil)
         # based on https://gist.github.com/nickyp/886884
         key = OpenSSL::PKey::RSA.new(key)
         cert = OpenSSL::X509::Certificate.new
+        ca_cert = OpenSSL::X509::Certificate.new ca_content if ca_content
         cert.version = 2
         cert.serial = OpenSSL::BN.rand(160)
         cert.subject = generate_cert_subject(subject)
-        cert.issuer = cert.subject # self-signed
+        cert.issuer = ca_content ? ca_cert.issuer : cert.subject # self-signed
         cert.public_key = key.public_key
         cert.not_before = Time.now
         if time.kind_of?(Time)
