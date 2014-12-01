@@ -604,7 +604,7 @@ class Chef
             when 'file'
               read_from_path(key_path) or
                 Chef::Application.fatal!("Cannot read SSL key from path: #{key_path}")
-            when 'self-signed', 'self-signed-ca', nil
+            when 'self-signed', nil
               content = read_from_path(key_path)
               unless content
                 content = generate_key
@@ -728,7 +728,7 @@ class Chef
             when 'file'
               read_from_path(cert_path) or
                 Chef::Application.fatal!("Cannot read SSL certificate from path: #{cert_path}")
-            when 'self-signed', 'self-signed-ca', nil
+            when 'self-signed', nil
               content         = read_from_path(cert_path)
               ca_cert_content = ca_cert_path ? read_from_path(ca_cert_path) : nil
               ca_key_content  = ca_key_path ? read_from_path(ca_key_path) : nil
