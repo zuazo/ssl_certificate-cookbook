@@ -92,7 +92,7 @@ class Chef
 
       def namespace(arg=nil)
         unless arg.nil? or arg.kind_of?(Chef::Node) or arg.kind_of?(Chef::Node::ImmutableMash)
-          arg = [ arg ].flatten
+          arg = [arg].flatten
           arg = arg.inject(node) do |n, k|
             n.respond_to?(:has_key?) && n.has_key?(k) ? n[k] : nil
           end
@@ -100,7 +100,7 @@ class Chef
         set_or_return(
           :namespace,
           arg,
-          :kind_of => [ Chef::Node, Chef::Node::ImmutableMash, Mash ]
+          :kind_of => [Chef::Node, Chef::Node::ImmutableMash, Mash]
         )
       end
 
@@ -119,7 +119,7 @@ class Chef
         set_or_return(
           :country,
           arg,
-          :kind_of => [ String ]
+          :kind_of => [String]
         )
       end
 
@@ -127,7 +127,7 @@ class Chef
         set_or_return(
           :city,
           arg,
-          :kind_of => [ String ]
+          :kind_of => [String]
         )
       end
 
@@ -135,7 +135,7 @@ class Chef
         set_or_return(
           :state,
           arg,
-          :kind_of => [ String ]
+          :kind_of => [String]
         )
       end
 
@@ -143,7 +143,7 @@ class Chef
         set_or_return(
           :organization,
           arg,
-          :kind_of => [ String ]
+          :kind_of => [String]
         )
       end
 
@@ -151,7 +151,7 @@ class Chef
         set_or_return(
           :department,
           arg,
-          :kind_of => [ String ]
+          :kind_of => [String]
         )
       end
 
@@ -159,7 +159,7 @@ class Chef
         set_or_return(
           :email,
           arg,
-          :kind_of => [ String ]
+          :kind_of => [String]
         )
       end
 
@@ -167,7 +167,7 @@ class Chef
         set_or_return(
           :time,
           arg,
-          :kind_of => [ Fixnum, String, Time ],
+          :kind_of => [Fixnum, String, Time],
           :default => 10 * 365 * 24 * 60 * 60
         )
       end
@@ -175,7 +175,7 @@ class Chef
       # some common (key + cert) public methods
 
       def years(arg)
-        unless [ Fixnum, String ].inject(false) { |p, v| p ||= arg.kind_of?(v) }
+        unless [Fixnum, String].inject(false) { |p, v| p ||= arg.kind_of?(v) }
           raise Exceptions::ValidationFailed, "Option years must be a kind of #{to_be}! You passed #{arg.inspect}."
         end
         time(arg.to_i * 365 * 24 * 60 * 60)
@@ -281,7 +281,7 @@ class Chef
         set_or_return(
           :key_encrypted,
           arg,
-          :kind_of => [ TrueClass, FalseClass ]
+          :kind_of => [TrueClass, FalseClass]
         )
       end
 
@@ -382,7 +382,7 @@ class Chef
         set_or_return(
           :cert_encrypted,
           arg,
-          :kind_of => [ TrueClass, FalseClass ]
+          :kind_of => [TrueClass, FalseClass]
         )
       end
 
@@ -474,7 +474,7 @@ class Chef
         set_or_return(
           :chain_encrypted,
           arg,
-          :kind_of => [ TrueClass, FalseClass ]
+          :kind_of => [TrueClass, FalseClass]
         )
       end
 
@@ -842,7 +842,7 @@ class Chef
 
       # read some values from node namespace avoiding exceptions
       def read_namespace(ary)
-        ary = [ ary ].flatten
+        ary = [ary].flatten
         if ary.kind_of?(Array)
           ary.inject(namespace) do |n, k|
             n.respond_to?(:has_key?) && n.has_key?(k) ? n[k] : nil
@@ -893,16 +893,16 @@ class Chef
       def generate_cert_subject(s)
         name = if s.kind_of?(Hash)
           n = []
-          n.push([ 'C', s['country'].to_s, OpenSSL::ASN1::PRINTABLESTRING ]) unless s['country'].nil?
-          n.push([ 'ST', s['state'].to_s, OpenSSL::ASN1::PRINTABLESTRING ]) unless s['state'].nil?
-          n.push([ 'L', s['city'].to_s, OpenSSL::ASN1::PRINTABLESTRING ]) unless s['city'].nil?
-          n.push([ 'O', s['organization'].to_s, OpenSSL::ASN1::UTF8STRING ]) unless s['organization'].nil?
-          n.push([ 'OU', s['department'].to_s, OpenSSL::ASN1::UTF8STRING ]) unless s['department'].nil?
-          n.push([ 'CN', s['common_name'].to_s, OpenSSL::ASN1::UTF8STRING ]) unless s['common_name'].nil?
-          n.push([ 'emailAddress', s['email'].to_s, OpenSSL::ASN1::UTF8STRING ]) unless s['email'].nil?
+          n.push(['C', s['country'].to_s, OpenSSL::ASN1::PRINTABLESTRING]) unless s['country'].nil?
+          n.push(['ST', s['state'].to_s, OpenSSL::ASN1::PRINTABLESTRING]) unless s['state'].nil?
+          n.push(['L', s['city'].to_s, OpenSSL::ASN1::PRINTABLESTRING]) unless s['city'].nil?
+          n.push(['O', s['organization'].to_s, OpenSSL::ASN1::UTF8STRING]) unless s['organization'].nil?
+          n.push(['OU', s['department'].to_s, OpenSSL::ASN1::UTF8STRING]) unless s['department'].nil?
+          n.push(['CN', s['common_name'].to_s, OpenSSL::ASN1::UTF8STRING]) unless s['common_name'].nil?
+          n.push(['emailAddress', s['email'].to_s, OpenSSL::ASN1::UTF8STRING]) unless s['email'].nil?
           n
         else
-          [[ 'CN', s.to_s, OpenSSL::ASN1::UTF8STRING ]]
+          [['CN', s.to_s, OpenSSL::ASN1::UTF8STRING]]
         end
         OpenSSL::X509::Name.new(name)
       end
@@ -970,10 +970,10 @@ class Chef
       # Subject Alternative Names support taken and modified from
       # https://github.com/cchandler/certificate_authority/blob/master/lib/certificate_authority/signing_request.rb
       def handle_subject_alternative_names(cert, factory, alt_names)
-        raise "alt_names must be an Array" unless alt_names.is_a?(Array)
+        raise 'alt_names must be an Array' unless alt_names.is_a?(Array)
 
-        name_list = alt_names.map{|m| "DNS:#{m}"}.join(",")
-        ext = factory.create_ext("subjectAltName", name_list, false)
+        name_list = alt_names.map { |m| "DNS:#{m}" }.join(',')
+        ext = factory.create_ext('subjectAltName', name_list, false)
         cert.add_extension(ext)
       end
 
