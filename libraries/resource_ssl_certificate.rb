@@ -33,6 +33,7 @@ class Chef
           key_secret_file
           key_content
           ca_cert_path
+          ca_key_path
           cert_path
           cert_name
           cert_dir
@@ -304,6 +305,14 @@ class Chef
       def ca_cert_path(arg=nil)
         set_or_return(
           :ca_cert_path,
+          arg,
+          :kind_of => String,
+        )
+      end
+
+      def ca_key_path(arg=nil)
+        set_or_return(
+          :ca_key_path,
           arg,
           :kind_of => String,
         )
@@ -609,6 +618,19 @@ class Chef
         end # lazy
       end
 
+      # ca cert private methods
+      def default_ca_cert_path
+        lazy do
+          read_namespace(['ca_cert_path'])
+        end
+      end
+
+      def default_ca_key_path
+        lazy do
+          read_namespace(['ca_key_path'])
+        end
+      end
+
       # cert private methods
 
       def default_cert_path
@@ -707,11 +729,12 @@ class Chef
               read_from_path(cert_path) or
                 Chef::Application.fatal!("Cannot read SSL certificate from path: #{cert_path}")
             when 'self-signed', 'self-signed-ca', nil
-              content    = read_from_path(cert_path)
-              ca_content = ca_cert_path ? read_from_path(ca_cert_path) : nil
-              unless content and verify_self_signed_cert(key_content, content, cert_subject)
+              content         = read_from_path(cert_path)
+              ca_cert_content = ca_cert_path ? read_from_path(ca_cert_path) : nil
+              ca_key_content  = ca_key_path ? read_from_path(ca_key_path) : nil
+              unless content and verify_self_signed_cert(key_content, content, cert_subject, ca_cert_content)
                 Chef::Log.debug("Generating new self-signed certificate: #{name}.")
-                content = generate_self_signed_cert(key_content, cert_subject, time, ca_content)
+                content = generate_self_signed_cert(key_content, cert_subject, time, ca_cert_content, ca_key_content)
                 updated_by_last_action(true)
               end
               content
@@ -884,32 +907,63 @@ class Chef
         OpenSSL::X509::Name.new(name)
       end
 
-      def generate_self_signed_cert(key, subject, time, ca_content = nil)
+      def create_csr(key, subject)
+        csr            = OpenSSL::X509::Request.new
+        csr.version    = 0
+        csr.subject    = generate_cert_subject(subject)
+        csr.public_key = key.public_key
+        csr.sign key, OpenSSL::Digest::SHA1.new
+        csr
+      end
+
+      def generate_self_signed_cert(key, subject, time, ca_cert_content = nil, ca_key_content = nil)
         # based on https://gist.github.com/nickyp/886884
-        key = OpenSSL::PKey::RSA.new(key)
+        key  = OpenSSL::PKey::RSA.new(key)
+        ef   = OpenSSL::X509::ExtensionFactory.new
         cert = OpenSSL::X509::Certificate.new
-        ca_cert = OpenSSL::X509::Certificate.new ca_content if ca_content
         cert.version = 2
         cert.serial = OpenSSL::BN.rand(160)
-        cert.subject = generate_cert_subject(subject)
-        cert.issuer = ca_content ? ca_cert.issuer : cert.subject # self-signed
-        cert.public_key = key.public_key
         cert.not_before = Time.now
         if time.kind_of?(Time)
           cert.not_after = time
         else
           cert.not_after = cert.not_before + time.to_i
         end
-        ef = OpenSSL::X509::ExtensionFactory.new
-        ef.subject_certificate = cert
-        ef.issuer_certificate = cert
-        cert.add_extension(ef.create_extension('basicConstraints', 'CA:TRUE', true))
-        cert.add_extension(ef.create_extension('subjectKeyIdentifier', 'hash', false))
-        cert.add_extension(ef.create_extension('authorityKeyIdentifier', 'keyid:always,issuer:always', false))
-        if subject_alternate_names
-          handle_subject_alternative_names(cert, ef, subject_alternate_names)
+        if ca_cert_content && ca_key_content
+          ca_cert = OpenSSL::X509::Certificate.new(ca_cert_content)
+          ca_key  = OpenSSL::PKey::RSA.new(ca_key_content)
+
+          csr = create_csr(key, subject)
+          cert.subject    = csr.subject
+          cert.public_key = csr.public_key
+          cert.issuer     = ca_cert.subject
+
+          ef.subject_certificate = cert
+          ef.issuer_certificate  = ca_cert
+
+          cert.add_extension ef.create_extension('basicConstraints', 'CA:FALSE')
+          cert.add_extension ef.create_extension('subjectKeyIdentifier', 'hash')
+          cert.add_extension ef.create_extension('keyUsage', 'keyEncipherment,dataEncipherment,digitalSignature')
+
+          if subject_alternate_names
+            handle_subject_alternative_names(cert, ef, subject_alternate_names)
+          end
+          cert.sign(ca_key, OpenSSL::Digest::SHA256.new)
+        else
+          cert.subject    = generate_cert_subject(subject)
+          cert.issuer     = cert.subject # self-signed
+          cert.public_key = key.public_key
+
+          ef.subject_certificate = cert
+          ef.issuer_certificate  = cert
+          cert.add_extension(ef.create_extension('basicConstraints', 'CA:TRUE', true))
+          cert.add_extension(ef.create_extension('subjectKeyIdentifier', 'hash', false))
+          cert.add_extension(ef.create_extension('authorityKeyIdentifier', 'keyid:always,issuer:always', false))
+          if subject_alternate_names
+            handle_subject_alternative_names(cert, ef, subject_alternate_names)
+          end
+          cert.sign(key, OpenSSL::Digest::SHA256.new)
         end
-        cert.sign(key, OpenSSL::Digest::SHA256.new)
         cert.to_pem
       end
 
@@ -923,14 +977,19 @@ class Chef
         cert.add_extension(ext)
       end
 
-      def verify_self_signed_cert(key, cert, hostname)
+      def verify_self_signed_cert(key, cert, hostname, ca_cert_content = nil)
         key = OpenSSL::PKey::RSA.new(key)
         cert = OpenSSL::X509::Certificate.new(cert)
         cur_subject = cert.subject
         new_subject = generate_cert_subject(cert_subject)
         Chef::Log.debug("Self-signed SSL cert current subject: #{cur_subject.to_s}")
         Chef::Log.debug("Self-signed SSL cert new subject: #{new_subject.to_s}")
-        key.params['n'] == cert.public_key.params['n'] && cur_subject.cmp(new_subject) == 0 && cert.issuer.cmp(cur_subject) == 0
+        if ca_cert_content
+          ca_cert = OpenSSL::X509::Certificate.new(ca_cert_content)
+          cur_subject.cmp(new_subject) == 0 && cert.issuer.cmp(ca_cert.subject) && cert.verify(ca_cert.public_key)
+        else
+          key.params['n'] == cert.public_key.params['n'] && cur_subject.cmp(new_subject) == 0 && cert.issuer.cmp(cur_subject) == 0
+        end
       end
 
     end
