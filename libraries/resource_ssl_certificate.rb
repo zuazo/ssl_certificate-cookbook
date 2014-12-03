@@ -930,40 +930,49 @@ class Chef
           cert.not_after = cert.not_before + time.to_i
         end
         if ca_cert_content && ca_key_content
-          ca_cert = OpenSSL::X509::Certificate.new(ca_cert_content)
-          ca_key  = OpenSSL::PKey::RSA.new(ca_key_content)
-
-          csr = create_csr(key, subject)
-          cert.subject    = csr.subject
-          cert.public_key = csr.public_key
-          cert.issuer     = ca_cert.subject
-
-          ef.subject_certificate = cert
-          ef.issuer_certificate  = ca_cert
-
-          cert.add_extension ef.create_extension('basicConstraints', 'CA:FALSE')
-          cert.add_extension ef.create_extension('subjectKeyIdentifier', 'hash')
-          cert.add_extension ef.create_extension('keyUsage', 'keyEncipherment,dataEncipherment,digitalSignature')
-
-          if subject_alternate_names
-            handle_subject_alternative_names(cert, ef, subject_alternate_names)
-          end
-          cert.sign(ca_key, OpenSSL::Digest::SHA256.new)
+          generate_self_signed_cert_with_ca(key, cert, ef, subject, ca_cert_content, ca_key_content)
         else
-          cert.subject    = generate_cert_subject(subject)
-          cert.issuer     = cert.subject # self-signed
-          cert.public_key = key.public_key
-
-          ef.subject_certificate = cert
-          ef.issuer_certificate  = cert
-          cert.add_extension(ef.create_extension('basicConstraints', 'CA:TRUE', true))
-          cert.add_extension(ef.create_extension('subjectKeyIdentifier', 'hash', false))
-          cert.add_extension(ef.create_extension('authorityKeyIdentifier', 'keyid:always,issuer:always', false))
-          if subject_alternate_names
-            handle_subject_alternative_names(cert, ef, subject_alternate_names)
-          end
-          cert.sign(key, OpenSSL::Digest::SHA256.new)
+          generate_self_signed_cert_without_ca(key, cert, ef, subject)
         end
+      end
+
+      def generate_self_signed_cert_without_ca(key, cert, ef, subject)
+        cert.subject    = generate_cert_subject(subject)
+        cert.issuer     = cert.subject # self-signed
+        cert.public_key = key.public_key
+
+        ef.subject_certificate = cert
+        ef.issuer_certificate  = cert
+        cert.add_extension(ef.create_extension('basicConstraints', 'CA:TRUE', true))
+        cert.add_extension(ef.create_extension('subjectKeyIdentifier', 'hash', false))
+        cert.add_extension(ef.create_extension('authorityKeyIdentifier', 'keyid:always,issuer:always', false))
+        if subject_alternate_names
+          handle_subject_alternative_names(cert, ef, subject_alternate_names)
+        end
+        cert.sign(key, OpenSSL::Digest::SHA256.new)
+        cert.to_pem
+      end
+
+      def generate_self_signed_cert_with_ca(key, cert, ef, subject, ca_cert_content, ca_key_content)
+        ca_cert = OpenSSL::X509::Certificate.new(ca_cert_content)
+        ca_key  = OpenSSL::PKey::RSA.new(ca_key_content)
+
+        csr             = create_csr(key, subject)
+        cert.subject    = csr.subject
+        cert.public_key = csr.public_key
+        cert.issuer     = ca_cert.subject
+
+        ef.subject_certificate = cert
+        ef.issuer_certificate  = ca_cert
+
+        cert.add_extension ef.create_extension('basicConstraints', 'CA:FALSE')
+        cert.add_extension ef.create_extension('subjectKeyIdentifier', 'hash')
+        cert.add_extension ef.create_extension('keyUsage', 'keyEncipherment,dataEncipherment,digitalSignature')
+
+        if subject_alternate_names
+          handle_subject_alternative_names(cert, ef, subject_alternate_names)
+        end
+        cert.sign(ca_key, OpenSSL::Digest::SHA256.new)
         cert.to_pem
       end
 
