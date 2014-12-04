@@ -26,6 +26,6 @@ if ::File.directory?(::File.join('files', 'default', 'tests', 'minitest')) ||
 end
 
 # Integration tests cookbook:
-if ::File.directory?("./test/cookbooks/#{my_cookbook}_test")
-  cookbook "#{my_cookbook}_test", path: "./test/cookbooks/#{my_cookbook}_test"
+if ::File.directory?("./test/kitchen/cookbooks/#{my_cookbook}_test")
+  cookbook "#{my_cookbook}_test", path: "./test/kitchen/cookbooks/#{my_cookbook}_test"
 end
