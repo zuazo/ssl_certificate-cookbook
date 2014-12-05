@@ -206,7 +206,9 @@ By default the resource will create a self-signed certificate, but a custom one 
   </tr>
   <tr>
     <td>cert_source</td>
-    <td>Source type to get the SSL cert from. Can be <code>"self-signed"</code>, <code>"attribute"</code>, <code>"data-bag"</code>, <code>"chef-vault"</code> or <code>"file"</code>.</td>
+    <td>Source type to get the SSL cert from. Can be <code>"self-signed"</code>,
+    <code>"with-ca"</code>, <code>"attribute"</code>, <code>"data-bag"</code>,
+    <code>"chef-vault"</code> or <code>"file"</code>.</td>
     <td><code>"self-signed"</code></td>
   </tr>
   <tr>
@@ -293,6 +295,16 @@ By default the resource will create a self-signed certificate, but a custom one 
     <td>chain_content</td>
     <td>Intermediate certificate chain file content in clear.</td>
     <td><em>calculated</em></td>
+  </tr>
+  <tr>
+    <td>ca_cert_path</td>
+    <td>Certificate Authority full path.</td>
+    <td><em>nil</em></td>
+  </tr>
+  <tr>
+    <td>ca_key_path</td>
+    <td>Key Authority full path.</td>
+    <td><em>nil</em></td>
   </tr>
 </table>
 
@@ -788,6 +800,24 @@ ssl_certificate 'mysite.com' do
 end
 
 ```
+
+
+### Creating a Cert with Certificate Authority
+
+```ruby
+ca_cert = '/usr/share/pki/ca-trust-source/anchors/CA.cert'
+ca_key = '/usr/share/pki/ca-trust-source/anchors/CA.key'
+
+cert = ssl_certificate 'test' do
+  namespace node['test.com']
+  key_source 'self-signed'
+  cert_source 'with-ca'
+  ca_cert_path ca_cert
+  ca_key_path ca_key
+end
+
+```
+
 
 ### Reading Key, Cert, and Intermediary From a Data Bag
 ```ruby
