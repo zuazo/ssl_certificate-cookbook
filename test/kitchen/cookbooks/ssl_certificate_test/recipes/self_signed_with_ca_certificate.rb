@@ -19,7 +19,7 @@ node.default['test.com']['organization']       = 'Toto'
 node.default['test.com']['department']         = 'Titi'
 node.default['test.com']['email']              = 'titi@test.com'
 node.default['test.com']['ssl_key']['source']  = 'self-signed'
-node.default['test.com']['ssl_cert']['source'] = 'self-signed'
+node.default['test.com']['ssl_cert']['source'] = 'with-ca'
 node.default['test.com']['ca_cert_path']       = ca_cert
 node.default['test.com']['ca_cert_key']        = ca_key
 

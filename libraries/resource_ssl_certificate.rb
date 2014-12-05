@@ -730,11 +730,21 @@ class Chef
                 Chef::Application.fatal!("Cannot read SSL certificate from path: #{cert_path}")
             when 'self-signed', nil
               content         = read_from_path(cert_path)
-              ca_cert_content = ca_cert_path ? read_from_path(ca_cert_path) : nil
-              ca_key_content  = ca_key_path ? read_from_path(ca_key_path) : nil
-              unless content and verify_self_signed_cert(key_content, content, cert_subject, ca_cert_content)
+              unless content and verify_self_signed_cert(key_content, content, cert_subject, nil)
                 Chef::Log.debug("Generating new self-signed certificate: #{name}.")
-                content = generate_self_signed_cert(key_content, cert_subject, time, ca_cert_content, ca_key_content)
+                content = generate_cert(key_content, cert_subject, time, ca_cert_content, ca_key_content)
+                updated_by_last_action(true)
+              end
+              content
+            when 'with-ca', nil
+              content         = read_from_path(cert_path)
+              ca_cert_content = read_from_path(ca_cert_path) or
+                Chef::Application.fatal!("Cannot read CA certificate from path: #{ca_cert_path}")
+              ca_key_content  = read_from_path(ca_key_path) or
+                Chef::Application.fatal!("Cannot read CA key from path: #{ca_key_path}")
+              unless content and verify_self_signed_cert(key_content, content, cert_subject, ca_cert_content)
+                Chef::Log.debug("Generating new certificate: #{name} from given CA.")
+                content = generate_cert(key_content, cert_subject, time, ca_cert_content, ca_key_content)
                 updated_by_last_action(true)
               end
               content
@@ -916,7 +926,7 @@ class Chef
         csr
       end
 
-      def generate_self_signed_cert(key, subject, time, ca_cert_content = nil, ca_key_content = nil)
+      def generate_cert(key, subject, time, ca_cert_content = nil, ca_key_content = nil)
         # based on https://gist.github.com/nickyp/886884
         key  = OpenSSL::PKey::RSA.new(key)
         ef   = OpenSSL::X509::ExtensionFactory.new
