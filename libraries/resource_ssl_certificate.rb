@@ -32,8 +32,6 @@ class Chef
           key_encrypted
           key_secret_file
           key_content
-          ca_cert_path
-          ca_key_path
           cert_path
           cert_name
           cert_dir
@@ -55,6 +53,8 @@ class Chef
           chain_encrypted
           chain_secret_file
           chain_content
+          ca_cert_path
+          ca_key_path
         }.each do |var|
           self.instance_variable_set("@#{var}".to_sym, self.send("default_#{var}"))
         end
@@ -301,23 +301,6 @@ class Chef
         )
       end
 
-      # CA cert definition
-      def ca_cert_path(arg=nil)
-        set_or_return(
-          :ca_cert_path,
-          arg,
-          :kind_of => String,
-        )
-      end
-
-      def ca_key_path(arg=nil)
-        set_or_return(
-          :ca_key_path,
-          arg,
-          :kind_of => String,
-        )
-      end
-
       # cert public methods
 
       def cert_name(arg=nil)
@@ -494,6 +477,24 @@ class Chef
         )
       end
 
+      # CA cert definition
+
+      def ca_cert_path(arg=nil)
+        set_or_return(
+          :ca_cert_path,
+          arg,
+          :kind_of => String,
+        )
+      end
+
+      def ca_key_path(arg=nil)
+        set_or_return(
+          :ca_key_path,
+          arg,
+          :kind_of => String,
+        )
+      end
+
       private
 
       # key private methods
@@ -618,19 +619,6 @@ class Chef
         end # lazy
       end
 
-      # ca cert private methods
-      def default_ca_cert_path
-        lazy do
-          read_namespace(['ca_cert_path'])
-        end
-      end
-
-      def default_ca_key_path
-        lazy do
-          read_namespace(['ca_key_path'])
-        end
-      end
-
       # cert private methods
 
       def default_cert_path
@@ -732,11 +720,11 @@ class Chef
               content         = read_from_path(cert_path)
               unless content and verify_self_signed_cert(key_content, content, cert_subject, nil)
                 Chef::Log.debug("Generating new self-signed certificate: #{name}.")
-                content = generate_cert(key_content, cert_subject, time, ca_cert_content, ca_key_content)
+                content = generate_cert(key_content, cert_subject, time)
                 updated_by_last_action(true)
               end
               content
-            when 'with-ca', nil
+            when 'with-ca'
               content         = read_from_path(cert_path)
               ca_cert_content = read_from_path(ca_cert_path) or
                 Chef::Application.fatal!("Cannot read CA certificate from path: #{ca_cert_path}")
@@ -846,6 +834,16 @@ class Chef
             end
           end # @default_chain_content ||=
         end # lazy
+      end
+
+      # ca cert private methods
+
+      def default_ca_cert_path
+        lazy { read_namespace(['ca_cert_path']) }
+      end
+
+      def default_ca_key_path
+        lazy { read_namespace(['ca_key_path']) }
       end
 
       # reading private methods
