@@ -130,8 +130,8 @@ By default the resource will create a self-signed certificate, but a custom one 
     <td><code>nil</code></td>
   </tr>
   <tr>
-    <td>encryption</td>
-    <td>Write only attribute for setting certificate encryption and key encryption (both) to a value (<code>key_encryption</code> and <code>cert_encryption</code>).</td>
+    <td>encrypted</td>
+    <td>Write only attribute for setting certificate encryption and key encryption (both) to a value (<code>key_encrypted</code> and <code>cert_encrypted</code>).</td>
     <td><code>nil</code></td>
   </tr>
   <tr>
@@ -222,7 +222,7 @@ By default the resource will create a self-signed certificate, but a custom one 
     <td><code>namespace["ssl_cert"]["item"]</code></td>
   </tr>
   <tr>
-    <td>cert_item_cert</td>
+    <td>cert_item_key</td>
     <td>Cert of the Data Bag Item where the SSL cert is stored.</td>
     <td><code>namespace["ssl_cert"]["item_cert"]</code></td>
   </tr>
