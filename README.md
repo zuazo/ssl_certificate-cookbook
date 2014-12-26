@@ -27,7 +27,7 @@ Please, [let us know](https://github.com/onddo/ssl_certificate-cookbook/issues/n
 
 ## Required Applications
 
-* Chef `>= 11.14.2`
+* Chef `>= 11.14.2`.
 * Ruby `1.9.3` or higher.
 
 Resources
@@ -45,15 +45,15 @@ By default the resource will create a self-signed certificate, but a custom one 
 * Chef Vault
 * File
 
-### ssl_certificate actions
+### ssl_certificate Actions
 
 * `create`: Creates the SSL certificate.
 
-### ssl_certificate attributes
+### ssl_certificate Parameters
 
 <table>
   <tr>
-    <th>Attribute</th>
+    <th>Parameter</th>
     <th>Description</th>
     <th>Default</th>
   </tr>
@@ -334,10 +334,10 @@ web_app "my-webapp" do
 end
 ```
 
-Usage
-=====
+Usage Examples
+==============
 
-## Including the cookbook
+## Including the Cookbook
 
 You need to include this recipe in your `run_list` before using the  `ssl_certificate` resource:
 
@@ -600,7 +600,7 @@ end
 node.set["web-app"]["ssl_cert"]["content"] = cert.cert_content
 ```
 
-### Reading The Certificate From Attributes
+### Reading the Certificate From Attributes
 
 The SSL certificate can be read from an attribute directly:
 
@@ -634,7 +634,7 @@ ssl_certificate "mysite" do
 end
 ```
 
-### Reading The Certificate From a Data Bag
+### Reading the Certificate from a Data Bag
 
 ```ruby
 ssl_certificate "mysite" do
@@ -676,7 +676,7 @@ ssl_certificate "mysite" do
 end
 ```
 
-### Reading The Certificate From Chef Vault
+### Reading the Certificate from Chef Vault
 
 ```ruby
 ssl_certificate "mysite" do
@@ -712,7 +712,7 @@ ssl_certificate "mysite" do
 end
 ```
 
-### Reading The Certificate From Files
+### Reading the Certificate from Files
 
 ```ruby
 ssl_certificate "mysite" do
@@ -741,7 +741,7 @@ ssl_certificate "mysite" do
 end
 ```
 
-### Reading The Certificate From Different Places
+### Reading the Certificate from Different Places
 
 You can also read the certificate and the private key from different places each:
 
@@ -789,7 +789,7 @@ ssl_certificate "mysite" do
 end
 ```
 
-### Creating a Cert with Subject Alternate Names
+### Creating a Certificate with Subject Alternate Names
 
 ```ruby
 domain = 'mysite.com'
@@ -801,11 +801,9 @@ ssl_certificate 'mysite.com' do
   key_source 'self-signed'
   cert_source 'self-signed'
 end
-
 ```
 
-
-### Creating a Cert with Certificate Authority
+### Creating a Certificate with Certificate Authority
 
 ```ruby
 ca_cert = '/usr/share/pki/ca-trust-source/anchors/CA.cert'
@@ -818,11 +816,10 @@ cert = ssl_certificate 'test' do
   ca_cert_path ca_cert
   ca_key_path ca_key
 end
-
 ```
 
+### Reading Key, Certificate and Intermediary from a Data Bag
 
-### Reading Key, Cert, and Intermediary From a Data Bag
 ```ruby
 cert_name = 'chain-data-bag'
 node.default[cert_name]['ssl_key']['source'] = 'data-bag'
@@ -848,22 +845,9 @@ end
 Testing
 =======
 
-## Requirements
+See [TESTING.md](https://github.com/onddo/ssl_certificate-cookbook/blob/master/TESTING.md).
 
-* `vagrant`
-* `berkshelf` >= `2.0`
-* `test-kitchen` >= `1.2`
-* `kitchen-vagrant` >= `0.10`
-
-## Running the tests
-
-```bash
-$ kitchen test
-$ kitchen verify
-[...]
-```
-
-## ChefSpec matchers
+## ChefSpec Matchers
 
 ### ssl_certificate(name)
 
@@ -885,17 +869,18 @@ expect(chef_run).to create_ssl_certificate("cloud.mysite.com")
 Contributing
 ============
 
-1. Fork the repository on Github
-2. Create a named feature branch (like `add_component_x`)
-3. Write you change
-4. Write tests for your change (if applicable)
-5. Run the tests, ensuring they all pass
-6. Submit a Pull Request using Github
+Please do not hesitate to [open an issue](https://github.com/onddo/ssl_certificate-cookbook/issues/new) with any questions or problems.
 
-See the `TODO.md` file if you're looking for inspiration.
+See [CONTRIBUTING.md](https://github.com/onddo/ssl_certificate-cookbook/blob/master/CONTRIBUTING.md).
+
+TODO
+====
+
+See [TODO.md](https://github.com/onddo/ssl_certificate-cookbook/blob/master/TODO.md).
+
 
 License and Author
-=====================
+==================
 
 |                      |                                          |
 |:---------------------|:-----------------------------------------|
