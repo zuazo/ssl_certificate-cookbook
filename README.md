@@ -8,6 +8,40 @@ The main purpose of this cookbook is to make it easy for other cookbooks to supp
 
 Much of the code in this cookbook is heavily based on the SSL implementation from the [owncloud](http://community.opscode.com/cookbooks/owncloud) cookbook.
 
+Table of Contents
+=================
+
+* [Requirements](#)
+  * [Supported Platforms](#)
+  * [Required Applications](#)
+* [Resources](#)
+  * [ssl_certificate](#)
+    * [ssl_certificate Actions](#)
+    * [ssl_certificate Parameters](#)
+* [Templates](#)
+* [Usage](#)
+  * [Including the Cookbook](#)
+  * [A Short Example](#)
+  * [Namespaces](#)
+  * [Examples](#)
+    * [Apache Examples](#)
+    * [Nginx Example](#)
+    * [Reading the Certificate From Attributes](#)
+    * [Reading the Certificate from a Data Bag](#)
+    * [Reading the Certificate from Chef Vault](#)
+    * [Reading the Certificate from Files](#)
+    * [Reading the Certificate from Different Places](#)
+    * [Creating a Certificate with Subject Alternate Names](#)
+    * [Creating a Certificate with Certificate Authority](#)
+    * [Reading Key, Certificate and Intermediary from a Data Bag](#)
+* [Testing](#)
+  * [ChefSpec Matchers](#)
+    * [ssl_certificate(name)](#)
+    * [create_ssl_certificate(name)](#)
+* [Contributing](#)
+* [TODO](#)
+* [License and Author](#)
+
 Requirements
 ============
 
@@ -334,8 +368,8 @@ web_app "my-webapp" do
 end
 ```
 
-Usage Examples
-==============
+Usage
+=====
 
 ## Including the Cookbook
 
