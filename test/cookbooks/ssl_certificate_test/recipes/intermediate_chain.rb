@@ -1,8 +1,10 @@
+# encoding: UTF-8
 #
-# Cookbook Name:: ssl_certificate_test
-# Recipe:: default
-#
-# Copyright 2014, Onddo Labs, Sl.
+# Cookbook Name:: ssl_certificate
+# Recipe:: intermediate_chain
+# Author:: Xabier de Zuazo (<xabier@onddo.com>)
+# Copyright:: Copyright (c) 2014 Onddo Labs, SL. (www.onddo.com)
+# License:: Apache License, Version 2.0
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -36,7 +38,6 @@ node.default[cert_name]['ssl_chain']['item_key'] = 'content'
 ssl_certificate 'chain-data-bag' do
   namespace cert_name
 end
-
 
 cert2_name = 'chain-data-bag2'
 source = 'attribute'

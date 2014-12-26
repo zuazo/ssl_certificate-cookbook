@@ -5,7 +5,12 @@
 source 'https://supermarket.getchef.com'
 my_cookbook = ::File.basename(Dir.pwd).sub(/[-_]?cookbook$/, '')
 
-# Helper to include a local cookbook from disk
+# Berkshelf helper to include a local cookbook from disk.
+#
+# @param name [String] cookbook name.
+# @param version [String] cookbook version requirement.
+# @param options [Hash] #cookbook method options.
+# return void
 def local_cookbook(name, version = '>= 0.0.0', options = {})
   cookbook(name, version, {
     path: "../../cookbooks/#{name}"
@@ -26,6 +31,6 @@ if ::File.directory?(::File.join('files', 'default', 'tests', 'minitest')) ||
 end
 
 # Integration tests cookbook:
-if ::File.directory?("./test/kitchen/cookbooks/#{my_cookbook}_test")
-  cookbook "#{my_cookbook}_test", path: "./test/kitchen/cookbooks/#{my_cookbook}_test"
+if ::File.directory?("./test/cookbooks/#{my_cookbook}_test")
+  cookbook "#{my_cookbook}_test", path: "./test/cookbooks/#{my_cookbook}_test"
 end

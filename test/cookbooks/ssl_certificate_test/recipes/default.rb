@@ -1,8 +1,11 @@
+# encoding: UTF-8
 #
 # Cookbook Name:: ssl_certificate_test
 # Recipe:: default
-#
-# Copyright 2014, Onddo Labs, Sl.
+# Author:: Raul Rodriguez (<raul@onddo.com>)
+# Author:: Xabier de Zuazo (<xabier@onddo.com>)
+# Copyright:: Copyright (c) 2014 Onddo Labs, SL. (www.onddo.com)
+# License:: Apache License, Version 2.0
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -101,7 +104,7 @@ end
 # Apache2 test
 
 cert = ssl_certificate node['fqdn'] do
-  namespace node[ node['fqdn'] ]
+  namespace node[node['fqdn']]
   notifies :restart, 'service[apache2]'
 end
 
@@ -115,5 +118,5 @@ web_app node['fqdn'] do
   server_name cert.common_name
   ssl_key cert.key_path
   ssl_cert cert.cert_path
-  extra_directives ({ :EnableSendfile => 'On' })
+  extra_directives EnableSendfile: 'On'
 end

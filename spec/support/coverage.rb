@@ -1,8 +1,5 @@
 # encoding: UTF-8
 #
-# Cookbook Name:: ssl_certificate
-# Library:: matchers
-# Author:: Raul Rodriguez (<raul@onddo.com>)
 # Author:: Xabier de Zuazo (<xabier@onddo.com>)
 # Copyright:: Copyright (c) 2014 Onddo Labs, SL. (www.onddo.com)
 # License:: Apache License, Version 2.0
@@ -20,20 +17,19 @@
 # limitations under the License.
 #
 
-require 'chef/resource'
-if defined?(ChefSpec)
-
-  if ChefSpec.respond_to?(:define_matcher)
-    # ChefSpec >= 4.1
-    ChefSpec.define_matcher :ssl_certificate
-  elsif defined?(ChefSpec::Runner) &&
-        ChefSpec::Runner.respond_to?(:define_runner_method)
-    # ChefSpec < 4.1
-    ChefSpec::Runner.define_runner_method :ssl_certificate
+if ENV['TRAVIS']
+  require 'coveralls'
+  Coveralls.wear!
+else
+  require 'simplecov'
+  SimpleCov.start do
+    add_group 'Libraries', '/libraries'
+    add_group 'ChefSpec' do |src|
+      %r{/spec/(recipes|resources|providers)}.match(src.filename)
+    end
+    add_group 'RSpec' do |src|
+      %r{/spec/(unit|functional|integration|libraries)}.match(src.filename)
+    end
+    add_group 'RSpec Support', '/spec/support'
   end
-
-  def create_ssl_certificate(name)
-    ChefSpec::Matchers::ResourceMatcher.new(:ssl_certificate, :create, name)
-  end
-
 end

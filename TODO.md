@@ -7,7 +7,6 @@ TODO
 * [ ] Generate a CSR.
 * [ ] Manage certificate expiration.
 * [ ] Add `:delete` action.
-* [ ] Remove the old library code.
 * [ ] Add older Chef versions support (patch lazy).
 * [ ] Fix RuboCop offenses.
 * [ ] Integrate tests with `should_not` gem.
@@ -15,7 +14,7 @@ TODO
 * [ ] Integrate with test coverage.
 * [ ] Split README documentation.
 * [ ] Add Guardfile.
-* [ ] Berksfile `3.1`.
-* [ ] Use `vagrant-wrapper` gem.
-* [ ] Homogenize license headers.
+* [x] Berksfile `3.1`.
+* [x] Use `vagrant-wrapper` gem.
+* [x] Homogenize license headers.
 * [ ] Use markdown tables in the README.

@@ -1,8 +1,10 @@
+# encoding: UTF-8
 #
 # Cookbook Name:: ssl_certificate_test
-# Recipe:: subject_alternate_names
-#
-# Copyright 2014, Onddo Labs, Sl.
+# Author:: Raul Rodriguez (<raul@onddo.com>)
+# Author:: Xabier de Zuazo (<xabier@onddo.com>)
+# Copyright:: Copyright (c) 2014 Onddo Labs, SL. (www.onddo.com)
+# License:: Apache License, Version 2.0
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -17,17 +19,16 @@
 # limitations under the License.
 #
 
-ssl_certificate 'subject_alternate_names' do
-  key_source 'self-signed'
-  cert_source 'self-signed'
-end
+name 'ssl_certificate_test'
+maintainer 'Onddo Labs, Sl.'
+maintainer_email 'team@onddo.com'
+license 'Apache 2.0'
+description <<-EOS
+This cookbook is used with test-kitchen to test the parent, ssl_certificate
+cookbook.
+EOS
+long_description IO.read(File.join(File.dirname(__FILE__), 'README.md'))
+version '0.1.0'
 
-domain = node['fqdn']
-node.default[ domain ]['ssl_cert']['subject_alternate_names'] =
-  [domain, 'foo', 'bar', 'foo.' + domain]
-
-ssl_certificate 'subject_alternate_names2' do
-  namespace node[ domain ]
-  key_source 'self-signed'
-  cert_source 'self-signed'
-end
+depends 'apache2'
+depends 'ssl_certificate'

@@ -1,6 +1,7 @@
 # encoding: UTF-8
 #
-# Cookbook Name:: ssl_certificate
+# Cookbook Name:: ssl_certificate_test
+# Attribute:: default
 # Author:: Raul Rodriguez (<raul@onddo.com>)
 # Author:: Xabier de Zuazo (<xabier@onddo.com>)
 # Copyright:: Copyright (c) 2014 Onddo Labs, SL. (www.onddo.com)
@@ -19,25 +20,4 @@
 # limitations under the License.
 #
 
-name 'ssl_certificate'
-maintainer 'Onddo Labs, Sl.'
-maintainer_email 'team@onddo.com'
-license 'Apache 2.0'
-description <<-EOS
-The main purpose of this cookbook is to make it easy for other cookbooks to
-support SSL. With the resource included, you will be able to manage certificates
-reading them from attributes, data bags or chef-vaults. Exposing its
-configuration through node attributes.
-EOS
-long_description IO.read(File.join(File.dirname(__FILE__), 'README.md'))
-version '0.5.0' # WiP
-
-supports 'amazon'
-supports 'debian'
-supports 'centos'
-supports 'fedora'
-supports 'freebsd'
-supports 'redhat'
-supports 'ubuntu'
-
-provides 'ssl_certificate'
+default['fqdn'] = node['machinename'] if node['fqdn'].nil?

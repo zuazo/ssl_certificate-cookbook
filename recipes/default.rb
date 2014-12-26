@@ -1,8 +1,11 @@
+# encoding: UTF-8
 #
 # Cookbook Name:: ssl_certificate
 # Recipe:: default
-#
-# Copyright 2014, Onddo Labs, Sl.
+# Author:: Raul Rodriguez (<raul@onddo.com>)
+# Author:: Xabier de Zuazo (<xabier@onddo.com>)
+# Copyright:: Copyright (c) 2014 Onddo Labs, SL. (www.onddo.com)
+# License:: Apache License, Version 2.0
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -16,3 +19,5 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 #
+
+Chef::Log.warn('[DEPRECATED] Do not include ssl_certificate::default recipe.')

@@ -1,11 +1,34 @@
+# encoding: UTF-8
+#
+# Cookbook Name:: ssl_certificate
+# Provider:: ssl_certificate
+# Author:: Raul Rodriguez (<raul@onddo.com>)
+# Author:: Xabier de Zuazo (<xabier@onddo.com>)
+# Copyright:: Copyright (c) 2014 Onddo Labs, SL. (www.onddo.com)
+# License:: Apache License, Version 2.0
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+#
+
 require 'chef/provider'
 
 class Chef
   class Provider
+    # Chef Provider for ssl_certificate Resource.
     class SslCertificate < Chef::Provider
-
       def load_current_resource
-        @current_resource ||= Chef::Resource::SslCertificate.new(@new_resource.name, run_context)
+        @current_resource ||=
+          Chef::Resource::SslCertificate.new(@new_resource.name, run_context)
         @current_resource.load
         @current_resource
       end
@@ -20,8 +43,9 @@ class Chef
           updated_by_last_action ||= r.updated_by_last_action?
         end
 
-        unless @current_resource.exists? and @current_resource == @new_resource and
-          main_resource.updated_by_last_action? == false
+        unless @current_resource.exist? &&
+               @current_resource == @new_resource &&
+               main_resource.updated_by_last_action? == false
 
           # Create ssl certificate key
           r = Chef::Resource::File.new(
@@ -50,7 +74,7 @@ class Chef
           updated_by_last_action ||= r.updated_by_last_action?
 
           # Conditionally write intermediary chain certificate
-          if not main_resource.chain_content.nil? and not main_resource.chain_name.nil?
+          if !main_resource.chain_content.nil? && !main_resource.chain_name.nil?
             r = Chef::Resource::File.new(
               "#{main_resource.name} SSL intermediary chain certificate",
               @new_resource.run_context
@@ -68,7 +92,6 @@ class Chef
 
         main_resource.updated_by_last_action(updated_by_last_action)
       end
-
     end
   end
 end

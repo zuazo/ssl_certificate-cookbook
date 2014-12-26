@@ -26,6 +26,7 @@ Please, [let us know](https://github.com/onddo/ssl_certificate-cookbook/issues/n
 ## Required Applications
 
 * Chef `>= 11.14.2`
+* Ruby `1.9.3` or higher.
 
 Resources
 =========
