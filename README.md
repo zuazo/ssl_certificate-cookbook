@@ -26,7 +26,7 @@ Table of Contents
   * [Examples](#examples)
     * [Apache Examples](#apache-examples)
     * [Nginx Example](#nginx-example)
-    * [Reading the Certificate From Attributes](#reading-the-certificate-from-attributes)
+    * [Reading the Certificate from Attributes](#reading-the-certificate-from-attributes)
     * [Reading the Certificate from a Data Bag](#reading-the-certificate-from-a-data-bag)
     * [Reading the Certificate from Chef Vault](#reading-the-certificate-from-chef-vault)
     * [Reading the Certificate from Files](#reading-the-certificate-from-files)
@@ -634,7 +634,7 @@ end
 node.set["web-app"]["ssl_cert"]["content"] = cert.cert_content
 ```
 
-### Reading the Certificate From Attributes
+### Reading the Certificate from Attributes
 
 The SSL certificate can be read from an attribute directly:
 
