@@ -9,11 +9,11 @@ TODO
 * [ ] Add `:delete` action.
 * [ ] Add older Chef versions support (patch lazy).
 * [ ] Fix RuboCop offenses.
-* [ ] Integrate tests with `should_not` gem.
-* [ ] Integrate with travis-ci.
+* [x] Integrate tests with `should_not` gem.
+* [x] Integrate with travis-ci.
 * [ ] Integrate with test coverage.
 * [ ] Split README documentation.
-* [ ] Add Guardfile.
+* [x] Add Guardfile.
 * [x] Berksfile `3.1`.
 * [x] Use `vagrant-wrapper` gem.
 * [x] Homogenize license headers.
