@@ -2,6 +2,7 @@
 #
 # Cookbook Name:: ssl_certificate_test
 # Recipe:: subject_alternate_names
+# Author:: Steve Meinel (<steve.meinel@caltech.edu>)
 # Author:: Xabier de Zuazo (<xabier@onddo.com>)
 # Copyright:: Copyright (c) 2014 Onddo Labs, SL. (www.onddo.com)
 # License:: Apache License, Version 2.0

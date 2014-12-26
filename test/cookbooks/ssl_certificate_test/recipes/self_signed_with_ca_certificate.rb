@@ -3,7 +3,7 @@
 # Cookbook Name:: ssl_certificate_test
 # Recipe:: self_signed_with_ca_certificate
 # Description::	 Test kitchen test for testing self-signed host with CA.
-# Author:: Jeremy MAURO (j.mauro@criteo.com)
+# Author:: Jeremy MAURO (<j.mauro@criteo.com>)
 # Author:: Xabier de Zuazo (<xabier@onddo.com>)
 # Copyright:: Copyright (c) 2014 Onddo Labs, SL. (www.onddo.com)
 # License:: Apache License, Version 2.0
