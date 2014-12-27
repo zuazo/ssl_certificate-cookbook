@@ -75,7 +75,7 @@ class Chef
           updated_by_last_action ||= r.updated_by_last_action?
 
           # Conditionally write intermediary chain certificate
-          if !main_resource.chain_content.nil? && !main_resource.chain_name.nil?
+          if !main_resource.chain_name.nil? && !main_resource.chain_content.nil?
             r = Chef::Resource::File.new(
               "#{main_resource.name} SSL intermediary chain certificate",
               @new_resource.run_context
