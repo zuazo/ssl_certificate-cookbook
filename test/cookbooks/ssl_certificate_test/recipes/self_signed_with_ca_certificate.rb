@@ -69,7 +69,7 @@ web_app 'example.com' do
   extra_directives EnableSendfile: 'On'
 end
 
-# Create the CA from a encrypted attributes
+# Create the CA from an encrypted data bag
 
 ca_cert = ssl_certificate 'ca.example.org' do
   common_name 'ca.example.org'
