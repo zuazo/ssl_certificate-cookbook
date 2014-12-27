@@ -32,8 +32,9 @@ Table of Contents
     * [Reading the Certificate from Files](#reading-the-certificate-from-files)
     * [Reading the Certificate from Different Places](#reading-the-certificate-from-different-places)
     * [Creating a Certificate with Subject Alternate Names](#creating-a-certificate-with-subject-alternate-names)
-    * [Creating a Certificate with Certificate Authority](#creating-a-certificate-with-certificate-authority)
     * [Reading Key, Certificate and Intermediary from a Data Bag](#reading-key-certificate-and-intermediary-from-a-data-bag)
+    * [Creating a Certificate from a Certificate Authority](#creating-a-certificate-from-a-certificate-authority)
+    * [Reading the CA Certificate from a Chef Vault Bag](#reading-the-ca-certificate-from-a-chef-vault-bag)
 * [Testing](#testing)
   * [ChefSpec Matchers](#chefspec-matchers)
     * [ssl_certificate(name)](#ssl_certificatename)
@@ -837,21 +838,6 @@ ssl_certificate 'mysite.com' do
 end
 ```
 
-### Creating a Certificate with Certificate Authority
-
-```ruby
-ca_cert = '/usr/share/pki/ca-trust-source/anchors/CA.cert'
-ca_key = '/usr/share/pki/ca-trust-source/anchors/CA.key'
-
-cert = ssl_certificate 'test' do
-  namespace node['test.com']
-  key_source 'self-signed'
-  cert_source 'with-ca'
-  ca_cert_path ca_cert
-  ca_key_path ca_key
-end
-```
-
 ### Reading Key, Certificate and Intermediary from a Data Bag
 
 ```ruby
@@ -875,6 +861,57 @@ ssl_certificate 'chain-data-bag' do
   namespace cert_name
 end
 ```
+
+### Creating a Certificate from a Certificate Authority
+
+```ruby
+ca_cert = '/usr/share/pki/ca-trust-source/anchors/CA.cert'
+ca_key = '/usr/share/pki/ca-trust-source/anchors/CA.key'
+
+cert = ssl_certificate 'test' do
+  namespace node['test.com']
+  key_source 'self-signed'
+  cert_source 'with-ca'
+  ca_cert_path ca_cert
+  ca_key_path ca_key
+end
+```
+
+### Reading the CA Certificate from a Chef Vault Bag
+
+In this example, we read the CA certificate from a Chef Vault and use it to generate the shelf-signed certificates:
+
+```ruby
+# Create the CA from a Chef Vault bag
+
+ca_cert = ssl_certificate 'ca.example.org' do
+  common_name 'ca.example.org'
+  source 'chef-vault'
+  bag 'ssl'
+  item 'ca_cert'
+  key_item_key 'key_content'
+  cert_item_key 'cert_content'
+end
+
+ssl_certificate 'example.org' do
+  ca_cert_path ca_cert.cert_path
+  ca_key_path ca_cert.key_path
+end
+```
+
+The vault bag content:
+
+```json
+{
+  "id": "ca_cert",
+  "key_content": "-----BEGIN RSA PRIVATE KEY-----\nMIIE [...]",
+  "cert_content": "-----BEGIN CERTIFICATE-----\nMIIE [...]"
+}
+```
+
+The knife command to create the vault bag item:
+
+    $ knife vault create ssl ca_cert [...]
 
 Testing
 =======
