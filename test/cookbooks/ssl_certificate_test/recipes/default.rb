@@ -103,6 +103,8 @@ end
 
 # Apache2 test
 
+node.default[node['fqdn']]['organization'] =
+  'ssl_certificate apache2 template test'
 cert = ssl_certificate node['fqdn'] do
   namespace node['fqdn'].to_s
   notifies :restart, 'service[apache2]'

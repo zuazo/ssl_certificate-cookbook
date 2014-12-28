@@ -99,7 +99,7 @@ describe 'ssl_certificate_test::default', order: :random do
       expect { chef_run }.to_not raise_error
     end
 
-    (1..4).step.each do |i|
+    (1..4).each do |i|
       it "creates dummy#{i} key" do
         expect(chef_run).to create_file("dummy#{i} SSL certificate key")
           .with_path("/etc/ssl/private/dummy#{i}.key")
