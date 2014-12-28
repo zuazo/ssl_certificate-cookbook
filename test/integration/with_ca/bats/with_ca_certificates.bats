@@ -52,8 +52,7 @@ setup() {
   [ -f "${CERT_PATH}/example.org.pem" ]
 }
 
-# TODO: Fix this test
-# @test "the certificate with a CA has the correct issuer" {
-#   openssl x509 -in "${CERT_PATH}/example.org.pem" -noout -text \
-#     | grep -F 'Issuer: C=ES, ST=Bizkaia, L=Bilbao, O=Conquer the World, OU=Everything, CN=ca.example.org/emailAddress=everything@example.org'
-# }
+@test "the certificate with a CA has the correct issuer" {
+  openssl x509 -in "${CERT_PATH}/example.org.pem" -noout -text \
+    | grep -F 'Issuer: C=ES, ST=Bizkaia, L=Bilbao, O=Conquer the World, OU=Everything, CN=ca.example.org/emailAddress=everything@example.org'
+}

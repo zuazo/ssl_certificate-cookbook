@@ -895,6 +895,7 @@ ca_cert = ssl_certificate 'ca.example.org' do
 end
 
 ssl_certificate 'example.org' do
+  cert_source 'with-ca'
   ca_cert_path ca_cert.cert_path
   ca_key_path ca_cert.key_path
 end
