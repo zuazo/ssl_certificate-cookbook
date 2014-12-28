@@ -210,46 +210,53 @@ class Chef
 
       # some common (key + cert) public methods
 
-      def years(arg)
+      def years(arg = nil)
+        return (time.to_i / 31_536_000).round if arg.nil?
         unless [Fixnum, String].inject(false) { |a, e| a || arg.is_a?(e) }
           fail Exceptions::ValidationFailed,
                "Option years must be a kind of #{to_be}! You passed "\
                "#{arg.inspect}."
         end
-        time(arg.to_i * 365 * 24 * 60 * 60)
+        time(arg.to_i * 31_536_000)
       end
 
-      def dir(arg)
+      def dir(arg = nil)
+        return key_dir if arg.nil?
         key_dir(arg)
         cert_dir(arg)
         chain_dir(arg)
       end
 
-      def source(arg)
+      def source(arg = nil)
+        return key_source if arg.nil?
         key_source(arg)
         cert_source(arg)
         chain_source(arg)
       end
 
-      def bag(arg)
+      def bag(arg = nil)
+        return key_bag if arg.nil?
         key_bag(arg)
         cert_bag(arg)
         chain_bag(arg)
       end
 
-      def item(arg)
+      def item(arg = nil)
+        return key_item if arg.nil?
         key_item(arg)
         cert_item(arg)
         chain_item(arg)
       end
 
-      def encrypted(arg)
+      def encrypted(arg = nil)
+        return key_encrypted if arg.nil?
         key_encrypted(arg)
         cert_encrypted(arg)
         chain_encrypted(arg)
       end
 
-      def secret_file(arg)
+      def secret_file(arg = nil)
+        return key_secret_file if arg.nil?
         key_secret_file(arg)
         cert_secret_file(arg)
         chain_secret_file(arg)
@@ -535,6 +542,10 @@ class Chef
 
       private
 
+      def default_source
+        'self-signed'
+      end
+
       # key private methods
 
       def default_key_path
@@ -585,7 +596,7 @@ class Chef
       end
 
       def default_key_source
-        lazy { read_namespace(%w(ssl_key source)) }
+        lazy { read_namespace(%w(ssl_key source)) || default_source }
       end
 
       def default_key_bag
@@ -673,7 +684,7 @@ class Chef
       end
 
       def default_cert_source
-        lazy { read_namespace(%w(ssl_cert source)) }
+        lazy { read_namespace(%w(ssl_cert source)) || default_source }
       end
 
       def default_cert_bag

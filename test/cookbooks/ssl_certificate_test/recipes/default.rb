@@ -57,7 +57,7 @@ ssl_certificate 'dummy5-data-bag' do
   namespace cert5_name
 end
 
-cert6_name = 'dummy6-data-bag'
+cert6_name = 'dummy6-attributes'
 source = 'attribute'
 node.default[cert6_name]['ssl_key']['source'] = source
 node.default[cert6_name]['ssl_key']['content'] = <<EOC
@@ -97,14 +97,14 @@ AHeOpZbU6ak47dHfZVevB34JUkuje+nnG01ahDqtRtIuAiXdWE8+r4XeNeQTMQMZ
 wCVUQVe2b2XgEGlbTpmzyOHrERKM2C7w0ueeOG/FU04=
 -----END CERTIFICATE-----
 EOC
-ssl_certificate 'dummy6-data-bag' do
+ssl_certificate cert6_name do
   namespace cert6_name
 end
 
 # Apache2 test
 
 cert = ssl_certificate node['fqdn'] do
-  namespace node[node['fqdn']]
+  namespace node['fqdn'].to_s
   notifies :restart, 'service[apache2]'
 end
 

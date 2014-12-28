@@ -58,6 +58,8 @@ class Chef
           r.group('root')
           r.mode(00600)
           r.content(main_resource.key_content)
+          r.action(:nothing)
+          run_context.resource_collection << r
           r.run_action(:create)
           updated_by_last_action ||= r.updated_by_last_action?
 
@@ -71,6 +73,8 @@ class Chef
           r.group('root')
           r.mode(00644)
           r.content(main_resource.cert_content)
+          r.action(:nothing)
+          run_context.resource_collection << r
           r.run_action(:create)
           updated_by_last_action ||= r.updated_by_last_action?
 
@@ -85,6 +89,8 @@ class Chef
             r.group('root')
             r.mode(00644)
             r.content(main_resource.chain_content)
+            r.action(:nothing)
+            run_context.resource_collection << r
             r.run_action(:create)
             updated_by_last_action ||= r.updated_by_last_action?
           end

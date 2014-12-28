@@ -22,6 +22,7 @@ group :unit do
   gem 'simplecov', '~> 0.9'
   gem 'should_not', '~> 1.1'
   gem 'chefspec', '~> 4.1'
+  gem 'chef-vault', '~> 2.4'
 end
 
 group :integration do
