@@ -865,7 +865,7 @@ end
 ### Creating a Certificate from a Certificate Authority
 
 ```ruby
-ca_cert = '/usr/share/pki/ca-trust-source/anchors/CA.cert'
+ca_cert = '/usr/share/pki/ca-trust-source/anchors/CA.crt'
 ca_key = '/usr/share/pki/ca-trust-source/anchors/CA.key'
 
 cert = ssl_certificate 'test' do

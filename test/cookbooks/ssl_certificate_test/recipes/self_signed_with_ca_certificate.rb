@@ -21,7 +21,7 @@
 # limitations under the License.
 #
 
-ca_cert = ::File.join(Chef::Config[:file_cache_path], 'CA.cert')
+ca_cert = ::File.join(Chef::Config[:file_cache_path], 'CA.crt')
 ca_key  = ::File.join(Chef::Config[:file_cache_path], 'CA.key')
 
 node.default['test.com']['common_name']        = 'test.com'
@@ -71,7 +71,7 @@ end
 
 # Create the CA from an encrypted data bag
 
-ca_cert = ssl_certificate 'ca.example.org' do
+ca_cert2 = ssl_certificate 'ca.example.org' do
   common_name 'ca.example.org'
   source 'data-bag'
   bag 'ssl'
@@ -83,6 +83,6 @@ ca_cert = ssl_certificate 'ca.example.org' do
 end
 
 ssl_certificate 'example.org' do
-  ca_cert_path ca_cert.cert_path
-  ca_key_path ca_cert.key_path
+  ca_cert_path ca_cert2.cert_path
+  ca_key_path ca_cert2.key_path
 end
