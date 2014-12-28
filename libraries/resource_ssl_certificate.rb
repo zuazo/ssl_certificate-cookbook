@@ -753,7 +753,7 @@ class Chef
               read_from_path(cert_path) or
               fail "Cannot read SSL certificate from path: #{cert_path}"
             when 'self-signed', nil
-              content         = read_from_path(cert_path)
+              content = read_from_path(cert_path)
               unless content &&
                      verify_self_signed_cert(
                        key_content, content, cert_subject, nil
@@ -766,10 +766,10 @@ class Chef
               end
               content
             when 'with-ca'
-              content         = read_from_path(cert_path)
+              content = read_from_path(cert_path)
               ca_cert_content = read_from_path(ca_cert_path) or
               fail "Cannot read CA certificate from path: #{ca_cert_path}"
-              ca_key_content  = read_from_path(ca_key_path) or
+              ca_key_content = read_from_path(ca_key_path) or
               fail "Cannot read CA key from path: #{ca_key_path}"
               unless content &&
                      verify_self_signed_cert(
@@ -973,9 +973,9 @@ class Chef
       end
 
       def create_csr(key, subject)
-        csr            = OpenSSL::X509::Request.new
-        csr.version    = 0
-        csr.subject    = generate_cert_subject(subject)
+        csr = OpenSSL::X509::Request.new
+        csr.version = 0
+        csr.subject = generate_cert_subject(subject)
         csr.public_key = key.public_key
         csr.sign key, OpenSSL::Digest::SHA1.new
         csr
@@ -984,8 +984,8 @@ class Chef
       def generate_cert(key, subject, time, ca_cert_content = nil,
           ca_key_content = nil)
         # based on https://gist.github.com/nickyp/886884
-        key  = OpenSSL::PKey::RSA.new(key)
-        ef   = OpenSSL::X509::ExtensionFactory.new
+        key = OpenSSL::PKey::RSA.new(key)
+        ef = OpenSSL::X509::ExtensionFactory.new
         cert = OpenSSL::X509::Certificate.new
         cert.version = 2
         cert.serial = OpenSSL::BN.rand(160)
@@ -1002,12 +1002,12 @@ class Chef
       end
 
       def generate_self_signed_cert_without_ca(key, cert, ef, subject)
-        cert.subject    = generate_cert_subject(subject)
-        cert.issuer     = cert.subject # self-signed
+        cert.subject = generate_cert_subject(subject)
+        cert.issuer = cert.subject # self-signed
         cert.public_key = key.public_key
 
         ef.subject_certificate = cert
-        ef.issuer_certificate  = cert
+        ef.issuer_certificate = cert
         cert.add_extension(ef.create_extension(
           'basicConstraints', 'CA:TRUE', true
         ))
@@ -1027,15 +1027,15 @@ class Chef
       def generate_self_signed_cert_with_ca(key, cert, ef, subject,
           ca_cert_content, ca_key_content)
         ca_cert = OpenSSL::X509::Certificate.new(ca_cert_content)
-        ca_key  = OpenSSL::PKey::RSA.new(ca_key_content)
+        ca_key = OpenSSL::PKey::RSA.new(ca_key_content)
 
-        csr             = create_csr(key, subject)
-        cert.subject    = csr.subject
+        csr = create_csr(key, subject)
+        cert.subject = csr.subject
         cert.public_key = csr.public_key
-        cert.issuer     = ca_cert.subject
+        cert.issuer = ca_cert.subject
 
         ef.subject_certificate = cert
-        ef.issuer_certificate  = ca_cert
+        ef.issuer_certificate = ca_cert
 
         cert.add_extension ef.create_extension('basicConstraints', 'CA:FALSE')
         cert.add_extension ef.create_extension('subjectKeyIdentifier', 'hash')
