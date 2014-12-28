@@ -47,11 +47,11 @@
 
   <% if node['apache']['version'].to_f >= 2.4 -%>
   LogLevel info rewrite:trace1
-  <%- else -%>
+  <% else -%>
   LogLevel info
   RewriteLog <%= node['apache']['log_dir'] %>/<%= @application_name %>-rewrite.log
   RewriteLogLevel 0
-  <%- end -%>
+  <% end -%>
 
   # Canonical host, <%= @params[:server_name] %>
   RewriteCond %{HTTP_HOST} !^<%= @params[:server_name] %> [NC]
@@ -70,6 +70,9 @@
 
   SSLCertificateFile    <%= @params[:ssl_cert] %>
   SSLCertificateKeyFile <%= @params[:ssl_key] %>
+  <% if @params[:ssl_chain].is_a?(String) -%>
+  SSLCertificateChainFile <%= @params[:ssl_chain] %>
+  <% end -%>
 
   BrowserMatch "MSIE [2-6]" \
     nokeepalive ssl-unclean-shutdown \

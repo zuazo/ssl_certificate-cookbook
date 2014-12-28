@@ -112,6 +112,18 @@ kGGmSavOPN/mymTugmU5RZUWukEGAJi6DFZh5MbGhgHPZqkiKQLWPc/EKo2Z3vsJ
 FJ4O0dXG14HdrSSrrAcF4h1ow3BmX9M=
 -----END CERTIFICATE-----
 EOC
-ssl_certificate 'chain-data-bag2' do
+cert = ssl_certificate 'chain-data-bag2' do
   namespace cert2_name
+end
+
+include_recipe 'apache2'
+include_recipe 'apache2::mod_ssl'
+web_app node['fqdn'] do
+  cookbook 'ssl_certificate'
+  docroot node['apache']['docroot_dir']
+  server_name cert.common_name
+  ssl_key cert.key_path
+  ssl_cert cert.cert_path
+  ssl_chain cert.chain_path
+  extra_directives EnableSendfile: 'On'
 end

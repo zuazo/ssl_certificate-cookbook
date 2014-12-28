@@ -366,6 +366,7 @@ web_app "my-webapp" do
   # [...]
   ssl_key cert.key_path
   ssl_cert cert.cert_path
+  ssl_chain cert.chain_path
 end
 ```
 

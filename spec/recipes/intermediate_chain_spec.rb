@@ -23,6 +23,11 @@ describe 'ssl_certificate_test::intermediate_chain', order: :random do
   let(:chef_runner) { ChefSpec::ServerRunner.new }
   let(:chef_run) { chef_runner.converge(described_recipe) }
   let(:node) { chef_runner.node }
+  let(:fqdn) { 'ssl-certificate.example.com' }
+  before do
+    stub_command('/usr/sbin/apache2 -t').and_return(true)
+    node.automatic['fqdn'] = fqdn
+  end
 
   it 'creates chain-data-bag certificate' do
     expect(chef_run).to create_ssl_certificate('chain-data-bag')
@@ -30,6 +35,21 @@ describe 'ssl_certificate_test::intermediate_chain', order: :random do
 
   it 'creates chain-data-bag2 certificate' do
     expect(chef_run).to create_ssl_certificate('chain-data-bag2')
+  end
+
+  it 'includes apache2 recipe' do
+    expect(chef_run).to include_recipe 'apache2'
+  end
+
+  it 'includes apache2::mod_ssl recipe' do
+    expect(chef_run).to include_recipe 'apache2::mod_ssl'
+  end
+
+  context 'web_app fqdn definition' do
+    it 'creates apache2 site' do
+      expect(chef_run)
+        .to create_template(%r{/sites-available/#{Regexp.escape(fqdn)}\.conf$})
+    end
   end
 
   context 'step into ssl_certificate resource' do
