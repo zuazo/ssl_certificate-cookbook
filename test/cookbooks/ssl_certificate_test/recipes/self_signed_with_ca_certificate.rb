@@ -24,25 +24,25 @@
 ca_cert = ::File.join(Chef::Config[:file_cache_path], 'CA.cert')
 ca_key  = ::File.join(Chef::Config[:file_cache_path], 'CA.key')
 
-node.default['example.com']['common_name']        = 'example.com'
-node.default['example.com']['country']            = 'FR'
-node.default['example.com']['city']               = 'Paris'
-node.default['example.com']['state']              = 'Ile de Paris'
-node.default['example.com']['organization']       = 'Toto'
-node.default['example.com']['department']         = 'Titi'
-node.default['example.com']['email']              = 'titi@example.com'
-node.default['example.com']['ssl_key']['source']  = 'self-signed'
-node.default['example.com']['ssl_cert']['source'] = 'with-ca'
-node.default['example.com']['ca_cert_path']       = ca_cert
-node.default['example.com']['ca_cert_key']        = ca_key
+node.default['test.com']['common_name']        = 'test.com'
+node.default['test.com']['country']            = 'FR'
+node.default['test.com']['city']               = 'Paris'
+node.default['test.com']['state']              = 'Ile de Paris'
+node.default['test.com']['organization']       = 'Toto'
+node.default['test.com']['department']         = 'Titi'
+node.default['test.com']['email']              = 'titi@test.com'
+node.default['test.com']['ssl_key']['source']  = 'self-signed'
+node.default['test.com']['ssl_cert']['source'] = 'with-ca'
+node.default['test.com']['ca_cert_path']       = ca_cert
+node.default['test.com']['ca_cert_key']        = ca_key
 
-node.default['ca-certificate']['common_name']  = 'ca.example.com'
+node.default['ca-certificate']['common_name']  = 'ca.test.com'
 node.default['ca-certificate']['country']      = 'FR'
 node.default['ca-certificate']['city']         = 'Paris'
 node.default['ca-certificate']['state']        = 'Ile de Paris'
 node.default['ca-certificate']['organization'] = 'Toto'
 node.default['ca-certificate']['department']   = 'Titi'
-node.default['ca-certificate']['email']        = 'titi@example.com'
+node.default['ca-certificate']['email']        = 'titi@test.com'
 node.default['ca-certificate']['time']         = 10 * 365
 
 ca_name = ::CACertificate.generate_cert_subject(node['ca-certificate'])
@@ -51,8 +51,8 @@ ca_name = ::CACertificate.generate_cert_subject(node['ca-certificate'])
   ca_name, ca_key, ca_cert, node['ca-certificate']['time']
 )
 
-cert = ssl_certificate 'example.com' do
-  namespace node['example.com']
+cert = ssl_certificate 'test.com' do
+  namespace node['test.com']
   ca_cert_path ca_cert
   ca_key_path ca_key
 end
@@ -60,7 +60,7 @@ end
 include_recipe 'apache2'
 include_recipe 'apache2::mod_ssl'
 
-web_app 'example.com' do
+web_app 'test.com' do
   cookbook 'ssl_certificate'
   docroot node['apache']['docroot_dir']
   server_name cert.common_name

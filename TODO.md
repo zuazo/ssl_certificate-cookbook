@@ -1,6 +1,8 @@
 TODO
 ====
 
+* [ ] Fix *with_ca_certificates.bats* tests.
+* [ ] Add chained certificate support to Apache template.
 * [ ] Add more integration tests.
 * [ ] Add unit tests (rspec?).
 * [ ] why-run support.
