@@ -64,6 +64,7 @@ describe 'ssl_certificate_test::self_signed_with_ca_certificate',
 
   it 'creates example.org certificate from data bag CA certificate' do
     expect(chef_run).to create_ssl_certificate('example.org')
+      .with_cert_source('with-ca')
       .with_ca_cert_path('/etc/ssl/certs/ca.example.org.pem')
       .with_ca_key_path('/etc/ssl/private/ca.example.org.key')
   end
@@ -73,16 +74,84 @@ describe 'ssl_certificate_test::self_signed_with_ca_certificate',
       ChefSpec::ServerRunner.new(step_into: %w(ssl_certificate))
     end
     let(:db_ca_key) do
-      '-----BEGIN PRIVATE KEY-----[...]-----END PRIVATE KEY-----'
+      [
+        '-----BEGIN RSA PRIVATE KEY-----',
+        'MIIEpQIBAAKCAQEA54mmAezLsd2iUb8NL+lTffiof+G1KCMCamUFa+KXFXhSdTnM',
+        'QSLoBrkQ92qGwEbwpmzcI+rUzsnng26/4b4afBiEvNeIORD4VH2fLlGbbXNSw4JS',
+        'BAiR+0oaTBhHRXKzXpseGbwrkspiWS9c/gfdpiEVx55Qtuk/n0JgD7scnwn4dT6W',
+        'vHCp360yxY5VNnGNrBqqeofG/ZTS9jnJNsH/I7FDadD/Ij1RwYs1lTUz+zUbid2W',
+        'bfPVNjncXImzm7Mclcaxh5pvz8UiQ7fhxDRhkKWdxJPljLN1kbp4YZpZECzr3YUz',
+        'dcNEtwCXgfIrSgdx3ZSr+8rWa3uaMbYigV5rgQIDAQABAoIBAQCyJs1eyc5pSvls',
+        'IK6K4OLnGH699vMmsNlY9+XV/wD0+iGoJRKuQ6d4FMmjNYn9RBhCVZyE3lljyyKh',
+        'lIN7tIQ4W702eDhOgGoyyH3Ea/JFouhZmlp01AtO6NOXHU8pdnnhH0Vn08tLJQHL',
+        'UZAhvfejre1OLNg6BPp5Fd9H+1aoXtLuBEgQNNFU4LUdejtL6f0hqCdULckL/HeQ',
+        'T4mg2jlp6I2zr9E6bbv4/OqxjzbIJDwkVbXIhRYb+fltor6/CfwZZh2m3d56pRl/',
+        'tORjuNpdvlxc22/09SfovPX2EINMBEg4LiOcjgQWvqPSPnPrT9YReS+ktANor3eK',
+        'iU3s4pMJAoGBAPSWoKHaF7gs8Zs3qyC+di/86+tJsbI57cZOKjCICTpx8J7SZMbd',
+        'lB8XjoD8s05kz7GlmgEcJezd9TUPMngPiSx9c58XmCI7ZG+eKVZsvAkNT3HOFlx+',
+        '5Z+W77ofirxKi5XV1Q3lC1thJOCpnFeD+CwI7v4gF2Spbnp0QMzpTH0TAoGBAPJX',
+        'JJoEoZ1yL9RIBk/SSmptwdNIaDGcizNgwewpnDciORC5l3gSTgxHt5UEFYl6cDxe',
+        '43MM415vRouLYLGX1i0KFpUT2SJK61prPkpllllP581/rNtOK+npWAaGgNZUVvXk',
+        '+LHKqpEGz0NgA9ZDMUpFb5sqi2iYlHgI6jBE0aubAoGBAM3zR68BhZd/wLGCXoZj',
+        '2gDuZ3jnxMjeHmksyDm1Uo/0ATi60EDjsyW7IDNclV8dZAWh+9uTaBvbie3zrfuK',
+        'mWbs+76qj1/Dwv55nzU2ud6lZo/diNa5w4BuB84hYSDLZF32gEAC7V00n2jNaOgI',
+        'J6BspVE2lHwebviNi0L/73ghAoGBAKMfiWGrEGZ8wDkyKh18vd6Z9sgTix8p8oEo',
+        '9h/TenWaMbNSWeTW3XZip+5Ei4K4yee5L3z4BexBFslDjli8jcxPaBf8/kGZEIcS',
+        'fSFy9Bs2MCAheuc73U9cZIYv73VV3Bs0fzqd4uYwIT+G185X+Eu4JYHax3AmlHmf',
+        '9pN7H29VAoGAAsyGwjPUREZ99g+AL68DQpSf8MhT9d2YsIwzu548bHpJZ5JCX2Hk',
+        'l7APHlvTUFu21/nvCSDBO+fQxLBnUO3QM2Cys1WJBvgMTCMf9TCDohkvLJmDw0Y/',
+        '0Np0kSanVp1v2MBtkIj5YdFNu9JZX6mI0cYevZqRvkqtqHKl434IV5Q=',
+        '-----END RSA PRIVATE KEY-----'
+      ].join("\n")
     end
     let(:db_ca_cert) do
-      '-----BEGIN CERTIFICATE-----[...]-----END CERTIFICATE-----'
+      [
+        '-----BEGIN CERTIFICATE-----',
+        'MIIEATCCAumgAwIBAgIBADANBgkqhkiG9w0BAQUFADCBoTELMAkGA1UEBhMCRVMx',
+        'EDAOBgNVBAgTB0JpemthaWExDzANBgNVBAcTBkJpbGJhbzEaMBgGA1UECgwRQ29u',
+        'cXVlciB0aGUgV29ybGQxEzARBgNVBAsMCkV2ZXJ5dGhpbmcxFzAVBgNVBAMMDmNh',
+        'LmV4YW1wbGUub3JnMSUwIwYJKoZIhvcNAQkBDBZldmVyeXRoaW5nQGV4YW1wbGUu',
+        'b3JnMB4XDTE0MTIyNjIzMTk1MFoXDTE0MTIyNzAwMjA0MFowgaExCzAJBgNVBAYT',
+        'AkVTMRAwDgYDVQQIEwdCaXprYWlhMQ8wDQYDVQQHEwZCaWxiYW8xGjAYBgNVBAoM',
+        'EUNvbnF1ZXIgdGhlIFdvcmxkMRMwEQYDVQQLDApFdmVyeXRoaW5nMRcwFQYDVQQD',
+        'DA5jYS5leGFtcGxlLm9yZzElMCMGCSqGSIb3DQEJAQwWZXZlcnl0aGluZ0BleGFt',
+        'cGxlLm9yZzCCASIwDQYJKoZIhvcNAQEBBQADggEPADCCAQoCggEBAOeJpgHsy7Hd',
+        'olG/DS/pU334qH/htSgjAmplBWvilxV4UnU5zEEi6Aa5EPdqhsBG8KZs3CPq1M7J',
+        '54Nuv+G+GnwYhLzXiDkQ+FR9ny5Rm21zUsOCUgQIkftKGkwYR0Vys16bHhm8K5LK',
+        'YlkvXP4H3aYhFceeULbpP59CYA+7HJ8J+HU+lrxwqd+tMsWOVTZxjawaqnqHxv2U',
+        '0vY5yTbB/yOxQ2nQ/yI9UcGLNZU1M/s1G4ndlm3z1TY53FyJs5uzHJXGsYeab8/F',
+        'IkO34cQ0YZClncST5YyzdZG6eGGaWRAs692FM3XDRLcAl4HyK0oHcd2Uq/vK1mt7',
+        'mjG2IoFea4ECAwEAAaNCMEAwHQYDVR0OBBYEFFlmVAuc4kzsdq+CNNp6LiraGcdz',
+        'MA8GA1UdEwEB/wQFMAMBAf8wDgYDVR0PAQH/BAQDAgEGMA0GCSqGSIb3DQEBBQUA',
+        'A4IBAQAAujEY3Ga1DQla1c/xnyjGzYCn846Hm1Y4YpTMf/esjDjaPQnuBDkB2sj1',
+        'AqHe3UwXnULKAbpBAc43wxKY7eM+PgUnggqiLU9pHEIs7NozB0mVOok2iHpFdQUM',
+        '10UpMyDXvh6JVQRyP/3zwU86oA3Ia9FGnFCmwc2yEovWs93mqw0DfXKohM3iBq/W',
+        'q8s9DimjJQInO0tcrgt34IJ+f8FfUBzF5+NDZUEKz9Odd6qq5U1apWOoZaqzzpoS',
+        '7I6thT5vWCjLXueG9le0slCHyUk7cBR1eT7edtpk95IH8cSU2DonUgvOBrYy0Rzt',
+        'QSxMwODsN+gk6FIJmCQzRUMFixj8',
+        '-----END CERTIFICATE-----'
+      ].join("\n")
     end
     before do
       allow(Chef::EncryptedDataBagItem).to receive(:load)
         .with('ssl', 'ca_key', nil).and_return('content' => db_ca_key)
       allow(Chef::DataBagItem).to receive(:load).with('ssl', 'ca_cert')
         .and_return('content' => db_ca_cert)
+
+      allow(::File).to receive(:exist?).and_call_original
+      allow(::File).to receive(:exist?)
+        .with('/etc/ssl/certs/ca.example.org.pem')
+        .and_return(true)
+      allow(::File).to receive(:exist?)
+        .with('/etc/ssl/private/ca.example.org.key')
+        .and_return(true)
+      allow(::IO).to receive(:read).and_call_original
+      allow(::IO).to receive(:read)
+        .with('/etc/ssl/certs/ca.example.org.pem')
+        .and_return(db_ca_cert)
+      allow(::IO).to receive(:read)
+        .with('/etc/ssl/private/ca.example.org.key')
+        .and_return(db_ca_key)
     end
 
     it 'runs without errors' do

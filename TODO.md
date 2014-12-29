@@ -1,7 +1,7 @@
 TODO
 ====
 
-* [ ] Fix *with_ca_certificates.bats* tests.
+* [x] Fix *with_ca_certificates.bats* tests.
 * [x] Add chained certificate support to Apache template.
 * [ ] Generate a CSR.
 * [ ] Manage certificate expiration.
