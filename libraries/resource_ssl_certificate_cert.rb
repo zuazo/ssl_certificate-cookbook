@@ -172,40 +172,26 @@ class Chef
         end
 
         def default_cert_content_from_attribute
-          content = read_namespace(%w(ssl_cert content))
-          unless content.is_a?(String)
-            fail 'Cannot read SSL certificate from content key value'
-          end
-          content
+          safe_read_namespace('SSL certificate', %w(ssl_cert content))
         end
 
         def default_cert_content_from_data_bag
-          content = read_from_data_bag(
-            cert_bag, cert_item, cert_item_key, cert_encrypted,
-            cert_secret_file
+          safe_read_from_data_bag(
+            'SSL certificate',
+            bag: cert_bag, item: cert_item, key: cert_item_key,
+            encrypt: cert_encrypted, secret_file: cert_secret_file
           )
-          unless content.is_a?(String)
-            fail 'Cannot read SSL certificate from data bag: '\
-                 "#{cert_bag}.#{cert_item}->#{cert_item_key}"
-          end
-          content
         end
 
         def default_cert_content_from_chef_vault
-          content = read_from_chef_vault(cert_bag, cert_item, cert_item_key)
-          unless content.is_a?(String)
-            fail 'Cannot read SSL certificate from chef-vault: '\
-                 "#{cert_bag}.#{cert_item}->#{cert_item_key}"
-          end
-          content
+          safe_read_from_chef_vault(
+            'SSL certificate',
+            bag: cert_bag, item: cert_item, key: cert_item_key
+          )
         end
 
         def default_cert_content_from_file
-          content = read_from_path(cert_path)
-          unless content.is_a?(String)
-            fail "Cannot read SSL certificate from path: #{cert_path}"
-          end
-          content
+          safe_read_from_path('SSL certificate', cert_path)
         end
 
         def default_cert_content_from_self_signed
@@ -222,14 +208,8 @@ class Chef
         end
 
         def read_ca_cert
-          ca_cert_content = read_from_path(ca_cert_path)
-          unless ca_cert_content.is_a?(String)
-            fail "Cannot read CA certificate from path: #{ca_cert_path}"
-          end
-          ca_key_content = read_from_path(ca_key_path)
-          unless ca_key_content.is_a?(String)
-            fail "Cannot read CA key from path: #{ca_key_path}"
-          end
+          ca_cert_content = safe_read_from_path('CA certificate', ca_cert_path)
+          ca_key_content = safe_read_from_path('CA key', ca_key_path)
           [ca_cert_content, ca_key_content]
         end
 

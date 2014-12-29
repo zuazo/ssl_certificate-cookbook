@@ -49,8 +49,12 @@ class Chef
         resource
       end
 
-      def file_create(name, &resource_attrs_block)
-        resource = file(name, &resource_attrs_block)
+      def file_create(desc, f_path, f_content, f_mode = 00644)
+        resource = file("#{new_resource.name} #{desc}") do
+          path f_path
+          content f_content
+          mode f_mode
+        end
         run_context.resource_collection << resource
         resource.run_action(:create)
         new_resource.updated_by_last_action(resource.updated_by_last_action?)
@@ -58,21 +62,17 @@ class Chef
       end
 
       def create_key
-        main_resource = new_resource
-        file_create "#{main_resource.name} SSL certificate key" do
-          path main_resource.key_path
-          mode 00600
-          content main_resource.key_content
-        end
+        file_create(
+          'SSL certificate key',
+          new_resource.key_path, new_resource.key_content, 00600
+        )
       end
 
       def create_cert
-        main_resource = new_resource
-        file_create "#{main_resource.name} SSL public certificate" do
-          path main_resource.cert_path
-          mode 00644
-          content main_resource.cert_content
-        end
+        file_create(
+          'SSL public certificate',
+          new_resource.cert_path, new_resource.cert_content
+        )
       end
 
       def create_chain?
@@ -80,13 +80,10 @@ class Chef
       end
 
       def create_chain
-        main_resource = new_resource
-        file_create "#{main_resource.name} SSL intermediary chain certificate" \
-                    do
-          path main_resource.chain_path
-          mode 00644
-          content main_resource.chain_content
-        end
+        file_create(
+          'SSL intermediary chain certificate',
+          new_resource.chain_path, new_resource.chain_content
+        )
       end
 
       def current_resource_updated?(new_resource_updated)

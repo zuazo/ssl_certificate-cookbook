@@ -155,40 +155,26 @@ class Chef
         end
 
         def default_chain_content_from_attribute
-          content = read_namespace(%w(ssl_chain content))
-          unless content.is_a?(String)
-            fail 'Cannot read SSL intermediary chain from content key value'
-          end
-          content
+          safe_read_namespace('SSL ntermediary chain', %w(ssl_chain content))
         end
 
         def default_chain_content_from_data_bag
-          content = read_from_data_bag(
-            chain_bag, chain_item, chain_item_key, chain_encrypted,
-            chain_secret_file
+          safe_read_from_data_bag(
+            'SSL intermediary chain',
+            bag: chain_bag, item: chain_item, key: chain_item_key,
+            encrypt: chain_encrypted, secret_file: chain_secret_file
           )
-          unless content.is_a?(String)
-            fail 'Cannot read SSL intermediary chain from data bag: '\
-                 "#{chain_bag}.#{chain_item}->#{chain_item_key}"
-          end
-          content
         end
 
         def default_chain_content_from_chef_vault
-          content = read_from_chef_vault(chain_bag, chain_item, chain_item_key)
-          unless content.is_a?(String)
-            fail 'Cannot read SSL intermediary chain from chef-vault: '\
-                 "#{chain_bag}.#{chain_item}->#{chain_item_key}"
-          end
-          content
+          safe_read_from_chef_vault(
+            'SSL intermediary chain',
+            bag: chain_bag, item: chain_item, key: chain_item_key
+          )
         end
 
         def default_chain_content_from_file
-          content = read_from_path(chain_path)
-          unless content.is_a?(String)
-            fail "Cannot read SSL intermediary chain from path: #{chain_path}"
-          end
-          content
+          safe_read_from_path('SSL intermediary chain', chain_path)
         end
 
         def default_chain_content

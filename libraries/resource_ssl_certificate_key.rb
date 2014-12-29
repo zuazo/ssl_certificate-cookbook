@@ -148,39 +148,26 @@ class Chef
         end
 
         def default_key_content_from_attribute
-          content = read_namespace(%w(ssl_key content))
-          unless content.is_a?(String)
-            fail 'Cannot read SSL key from content key value'
-          end
-          content
+          safe_read_namespace('SSL key', %w(ssl_key content))
         end
 
         def default_key_content_from_data_bag
-          content = read_from_data_bag(
-            key_bag, key_item, key_item_key, key_encrypted, key_secret_file
+          safe_read_from_data_bag(
+            'SSL key',
+            bag: key_bag, item: key_item, key: key_item_key,
+            encrypt: key_encrypted, secret_file: key_secret_file
           )
-          unless content.is_a?(String)
-            fail 'Cannot read SSL key from data bag: '\
-                 "#{key_bag}.#{key_item}->#{key_item_key}"
-          end
-          content
         end
 
         def default_key_content_from_chef_vault
-          content = read_from_chef_vault(key_bag, key_item, key_item_key)
-          unless content.is_a?(String)
-            fail 'Cannot read SSL key from chef-vault: '\
-                 "#{key_bag}.#{key_item}->#{key_item_key}"
-          end
-          content
+          safe_read_from_chef_vault(
+            'SSL key',
+            bag: key_bag, item: key_item, key: key_item_key
+          )
         end
 
         def default_key_content_from_file
-          content = read_from_path(key_path)
-          unless content.is_a?(String)
-            fail "Cannot read SSL key from path: #{key_path}"
-          end
-          content
+          safe_read_from_path('SSL key', cert_path)
         end
 
         def default_key_content_from_self_signed

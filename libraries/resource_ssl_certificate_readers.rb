@@ -40,9 +40,25 @@ class Chef
           end
         end
 
+        def safe_read_namespace(desc, ary)
+          data = read_namespace(ary)
+          unless data.is_a?(String)
+            fail "Cannot read #{desc} from node attributes"
+          end
+          data
+        end
+
         def read_from_path(path)
           return nil unless ::File.exist?(path)
           ::IO.read(path)
+        end
+
+        def safe_read_from_path(desc, path)
+          data = read_from_path(path)
+          unless data.is_a?(String)
+            fail "Cannot read #{desc} from path: #{path}"
+          end
+          data
         end
 
         def read_from_data_bag(bag, item, key, encrypt = false, secret = nil)
@@ -58,17 +74,35 @@ class Chef
           nil
         end
 
-        def read_from_chef_vault(bag, item, item_key)
+        def safe_read_from_data_bag(desc, db)
+          data = read_from_data_bag(
+            db[:bag], db[:item], db[:key], db[:encrypt], db[:secret_file]
+          )
+          unless data.is_a?(String)
+            fail "Cannot read #{desc} from data bag: #{bag}.#{item}->#{key}"
+          end
+          data
+        end
+
+        def read_from_chef_vault(bag, item, key)
           require 'chef-vault'
 
           begin
             item = ChefVault::Item.load(bag, item)
-            item[item_key.to_s]
+            item[key.to_s]
           rescue StandardError => e
             Chef::Log.error(e.message)
             Chef::Log.error("Backtrace:\n#{e.backtrace.join("\n")}\n")
             nil
           end
+        end
+
+        def safe_read_from_chef_vault(desc, db)
+          data = read_from_chef_vault(db[:bag], db[:item], db[:key])
+          unless data.is_a?(String)
+            fail "Cannot read #{desc} from chef-vault: #{bag}.#{item}->#{key}"
+          end
+          data
         end
       end
     end
