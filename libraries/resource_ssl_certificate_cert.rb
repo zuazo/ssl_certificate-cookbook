@@ -130,14 +130,7 @@ class Chef
         end
 
         def default_cert_dir
-          case node['platform']
-          when 'debian', 'ubuntu'
-            '/etc/ssl/certs'
-          when 'redhat', 'centos', 'fedora', 'scientific', 'amazon'
-            '/etc/pki/tls/certs'
-          else
-            '/etc'
-          end
+          node['ssl_certificate']['cert_dir']
         end
 
         def default_cert_path

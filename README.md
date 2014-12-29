@@ -14,6 +14,7 @@ Table of Contents
 * [Requirements](#requirements)
   * [Supported Platforms](#supported-platforms)
   * [Required Applications](#required-applications)
+* [Attributes](#attributes)
 * [Resources](#resources)
   * [ssl_certificate](#ssl_certificate)
     * [ssl_certificate Actions](#ssl_certificate-actions)
@@ -64,6 +65,14 @@ Please, [let us know](https://github.com/onddo/ssl_certificate-cookbook/issues/n
 
 * Chef `>= 11.14.2`.
 * Ruby `1.9.3` or higher.
+
+Attributes
+==========
+
+| Attribute                             | Default      | Description                        |
+|:--------------------------------------|:-------------|:-----------------------------------|
+| `node['ssl_certificate']['key_dir']`  | *calculated* | Default SSL key directory.         |
+| `node['ssl_certificate']['cert_dir']` | *calculated* | Default SSL certificate directory. |
 
 Resources
 =========

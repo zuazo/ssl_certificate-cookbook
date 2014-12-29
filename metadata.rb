@@ -41,3 +41,17 @@ supports 'redhat'
 supports 'ubuntu'
 
 provides 'ssl_certificate'
+
+attribute 'ssl_certificate/key_dir',
+          display_name: 'ssl_certificate key dir',
+          description: 'Default SSL key directory.',
+          type: 'string',
+          required: 'optional',
+          calculated: true
+
+attribute 'ssl_certificate/cert_dir',
+          display_name: 'ssl_certificate cert dir',
+          description: 'Default SSL certificate directory.',
+          type: 'string',
+          required: 'optional',
+          calculated: true

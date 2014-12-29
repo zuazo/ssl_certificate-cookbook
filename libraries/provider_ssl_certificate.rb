@@ -40,10 +40,17 @@ class Chef
         new_resource.updated_by_last_action(r.updated_by_last_action?)
       end
 
-      def file_create(name, &resource_attrs_block)
+      def file(name, &resource_attrs_block)
         resource = Chef::Resource::File.new(name, new_resource.run_context)
+        resource.owner('root')
+        resource.group('root')
         resource.instance_eval(&resource_attrs_block) if block_given?
         resource.action(:nothing)
+        resource
+      end
+
+      def file_create(name, &resource_attrs_block)
+        resource = file(name, &resource_attrs_block)
         run_context.resource_collection << resource
         resource.run_action(:create)
         new_resource.updated_by_last_action(resource.updated_by_last_action?)
@@ -54,8 +61,6 @@ class Chef
         main_resource = new_resource
         file_create "#{main_resource.name} SSL certificate key" do
           path main_resource.key_path
-          owner 'root'
-          group 'root'
           mode 00600
           content main_resource.key_content
         end
@@ -65,8 +70,6 @@ class Chef
         main_resource = new_resource
         file_create "#{main_resource.name} SSL public certificate" do
           path main_resource.cert_path
-          owner 'root'
-          group 'root'
           mode 00644
           content main_resource.cert_content
         end
@@ -81,8 +84,6 @@ class Chef
         file_create "#{main_resource.name} SSL intermediary chain certificate" \
                     do
           path main_resource.chain_path
-          owner 'root'
-          group 'root'
           mode 00644
           content main_resource.chain_content
         end

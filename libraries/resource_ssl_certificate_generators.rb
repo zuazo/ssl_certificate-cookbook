@@ -130,12 +130,18 @@ class Chef
           end
         end
 
-        def generate_self_signed_cert_without_ca_extensions(cert)
+        def generate_self_signed_cert_with_extensions(cert, issuer_cert, exts)
           ef = OpenSSL::X509::ExtensionFactory.new
           ef.subject_certificate = cert
-          ef.issuer_certificate = cert
-          cert_add_extensions(cert, ef, Generators::EXTENSIONS[:without_ca])
+          ef.issuer_certificate = issuer_cert
+          cert_add_extensions(cert, ef, exts)
           ef
+        end
+
+        def generate_self_signed_cert_without_ca_extensions(cert)
+          generate_self_signed_cert_with_extensions(
+            cert, cert, Generators::EXTENSIONS[:without_ca]
+          )
         end
 
         def generate_self_signed_cert_without_ca(key, cert, subject)
@@ -157,11 +163,9 @@ class Chef
         end
 
         def generate_self_signed_cert_with_ca_extensions(cert, ca_cert)
-          ef = OpenSSL::X509::ExtensionFactory.new
-          ef.subject_certificate = cert
-          ef.issuer_certificate = ca_cert
-          cert_add_extensions(cert, ef, Generators::EXTENSIONS[:with_ca])
-          ef
+          generate_self_signed_cert_with_extensions(
+            cert, ca_cert, Generators::EXTENSIONS[:with_ca]
+          )
         end
 
         def generate_self_signed_cert_with_ca_csr(cert, key, ca_cert, subject)

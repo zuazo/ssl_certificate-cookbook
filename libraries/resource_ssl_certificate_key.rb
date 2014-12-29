@@ -111,14 +111,7 @@ class Chef
         end
 
         def default_key_dir
-          case node['platform']
-          when 'debian', 'ubuntu'
-            '/etc/ssl/private'
-          when 'redhat', 'centos', 'fedora', 'scientific', 'amazon'
-            '/etc/pki/tls/private'
-          else
-            '/etc'
-          end
+          node['ssl_certificate']['key_dir']
         end
 
         def default_key_path
