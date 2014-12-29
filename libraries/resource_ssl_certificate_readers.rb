@@ -77,6 +77,11 @@ class Chef
           data
         end
 
+        def dabagag_read_fail(desc, db, type = 'data bag')
+          fail "Cannot read #{desc} from #{type}: "\
+            "#{db[:bag]}.#{db[:item]}[#{db[:key]}]"
+        end
+
         def read_from_data_bag(bag, item, key, encrypt = false, secret = nil)
           unsafe_no_exceptions_block do
             data =
@@ -93,10 +98,7 @@ class Chef
           data = read_from_data_bag(
             db[:bag], db[:item], db[:key], db[:encrypt], db[:secret_file]
           )
-          unless data.is_a?(String)
-            fail "Cannot read #{desc} from data bag: "\
-                 "#{db[:bag]}.#{db[:item]}[#{db[:key]}]"
-          end
+          dabagag_read_fail(desc, db) unless data.is_a?(String)
           data
         end
 
@@ -110,10 +112,7 @@ class Chef
 
         def safe_read_from_chef_vault(desc, db)
           data = read_from_chef_vault(db[:bag], db[:item], db[:key])
-          unless data.is_a?(String)
-            fail "Cannot read #{desc} from chef-vault: "\
-                 "#{db[:bag]}.#{db[:item]}[#{db[:key]}]"
-          end
+          dabagag_read_fail(desc, db, 'chef-vault') unless data.is_a?(String)
           data
         end
       end

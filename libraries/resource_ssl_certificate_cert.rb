@@ -245,13 +245,11 @@ class Chef
         def default_cert_content
           lazy do
             @default_cert_content ||= begin
-              source = cert_source.gsub('-', '_')
-              unless Cert::SOURCES.include?(source)
-                fail "Cannot read SSL cert, unknown source: #{cert_source}"
-              end
+              source = filter_source(cert_source)
+              assert_source!('SSL certificate', source, Cert::SOURCES)
               send("default_cert_content_from_#{source}")
-            end # @default_cert_content ||=
-          end # lazy
+            end
+          end
         end
 
         # ca cert private methods

@@ -63,15 +63,6 @@ class Chef
         initialize_defaults
       end
 
-      protected
-
-      def initialize_defaults
-        initialize_key_defaults
-        initialize_cert_defaults
-        initialize_chain_defaults
-        initialize_subject_defaults
-      end
-
       public
 
       def initialize_attribute_defaults(attributes)
@@ -129,6 +120,13 @@ class Chef
 
       private
 
+      def initialize_defaults
+        initialize_key_defaults
+        initialize_cert_defaults
+        initialize_chain_defaults
+        initialize_subject_defaults
+      end
+
       def key_eql?(other)
         key_path == other.key_path &&
           key_content == other.key_content
@@ -145,6 +143,15 @@ class Chef
 
       def default_source
         'self-signed'
+      end
+
+      def filter_source(source)
+        source.gsub('-', '_')
+      end
+
+      def assert_source!(desc, source, valid_sources)
+        return if valid_sources.include?(source)
+        fail "Cannot read #{desc}, unknown source: #{source}"
       end
     end
   end

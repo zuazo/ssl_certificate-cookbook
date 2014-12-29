@@ -178,13 +178,11 @@ class Chef
         def default_key_content
           lazy do
             @default_key_content ||= begin
-              source = key_source.gsub('-', '_')
-              unless Key::SOURCES.include?(source)
-                fail "Cannot read SSL key, unknown source: #{key_source}"
-              end
+              source = filter_source(key_source)
+              assert_source!('SSL key', source, Key::SOURCES)
               send("default_key_content_from_#{source}")
-            end # @default_key_content ||=
-          end # lazy
+            end
+          end
         end
       end
     end

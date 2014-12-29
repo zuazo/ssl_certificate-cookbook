@@ -176,14 +176,11 @@ class Chef
         def default_chain_content
           lazy do
             @default_chain_content ||= begin
-              source = chain_source.gsub('-', '_')
-              unless Chain::SOURCES.include?(source)
-                Chef::Log.debug('No SSL intermediary chain provided.')
-                return nil
-              end
+              source = filter_source(chain_source)
+              assert_source!('SSL intermediary chain', source, Chain::SOURCES)
               send("default_chain_content_from_#{source}")
-            end # @default_chain_content ||=
-          end # lazy
+            end
+          end
         end
       end
     end
