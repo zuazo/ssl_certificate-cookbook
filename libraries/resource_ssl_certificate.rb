@@ -145,13 +145,15 @@ class Chef
         'self-signed'
       end
 
-      def filter_source(source)
-        source.gsub('-', '_')
-      end
-
       def assert_source!(desc, source, valid_sources)
         return if valid_sources.include?(source)
         fail "Cannot read #{desc}, unknown source: #{source}"
+      end
+
+      def filter_source(desc, source, valid_sources)
+        source = source.gsub('-', '_')
+        assert_source!(desc, source, valid_sources)
+        source
       end
     end
   end

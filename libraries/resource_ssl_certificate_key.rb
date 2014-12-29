@@ -178,8 +178,7 @@ class Chef
         def default_key_content
           lazy do
             @default_key_content ||= begin
-              source = filter_source(key_source)
-              assert_source!('SSL key', source, Key::SOURCES)
+              source = filter_source('SSL key', key_source, Key::SOURCES)
               send("default_key_content_from_#{source}")
             end
           end

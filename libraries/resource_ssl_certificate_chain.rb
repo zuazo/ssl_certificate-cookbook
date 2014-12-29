@@ -176,8 +176,9 @@ class Chef
         def default_chain_content
           lazy do
             @default_chain_content ||= begin
-              source = filter_source(chain_source)
-              assert_source!('SSL intermediary chain', source, Chain::SOURCES)
+              source = filter_source(
+                'SSL intermediary chain', chain_source, Chain::SOURCES
+              )
               send("default_chain_content_from_#{source}")
             end
           end

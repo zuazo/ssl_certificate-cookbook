@@ -9,6 +9,7 @@ TODO
 * [ ] why-run support.
 * [x] Add more integration tests.
 * [x] Add ChefSpec unit tests.
+* [ ] Chef generated certificate data in ChefSpec unit tests.
 * [ ] Add RSpec library unit tests.
 * [ ] Add older Chef versions support (patch lazy).
 * [x] Fix RuboCop offenses.

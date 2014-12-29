@@ -245,8 +245,9 @@ class Chef
         def default_cert_content
           lazy do
             @default_cert_content ||= begin
-              source = filter_source(cert_source)
-              assert_source!('SSL certificate', source, Cert::SOURCES)
+              source = filter_source(
+                'SSL certificate', cert_source, Cert::SOURCES
+              )
               send("default_cert_content_from_#{source}")
             end
           end
