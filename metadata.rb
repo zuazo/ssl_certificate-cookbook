@@ -55,3 +55,21 @@ attribute 'ssl_certificate/cert_dir',
           type: 'string',
           required: 'optional',
           calculated: true
+
+grouping 'ssl_certificate/web',
+         title: 'ssl_certificate web',
+         description: 'ssl_certificate web template defaults.'
+
+attribute 'ssl_certificate/web/cipher_suite',
+          display_name: 'ssl_certificate web cipher suite',
+          description: 'Web template default SSL cipher suite.',
+          type: 'string',
+          required: 'optional',
+          default: 'ALL:!aNULL:!ADH:!eNULL:!LOW:!EXP:RC4+RSA:+HIGH:+MEDIUM'
+
+attribute 'ssl_certificate/web/protocol',
+          display_name: 'ssl_certificate web protocol',
+          description: 'Web template default SSL protocols.',
+          type: 'string',
+          required: 'optional',
+          default: 'all -SSLv2 -SSLv3'

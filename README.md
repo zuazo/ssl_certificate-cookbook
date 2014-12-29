@@ -70,10 +70,12 @@ Please, [let us know](https://github.com/onddo/ssl_certificate-cookbook/issues/n
 Attributes
 ==========
 
-| Attribute                             | Default      | Description                        |
-|:--------------------------------------|:-------------|:-----------------------------------|
-| `node['ssl_certificate']['key_dir']`  | *calculated* | Default SSL key directory.         |
-| `node['ssl_certificate']['cert_dir']` | *calculated* | Default SSL certificate directory. |
+| Attribute                                        | Default               | Description                        |
+|:-------------------------------------------------|:----------------------|:-----------------------------------|
+| `node['ssl_certificate']['key_dir']`             | *calculated*          | Default SSL key directory.
+| `node['ssl_certificate']['cert_dir']`            | *calculated*          | Default SSL certificate directory.
+| `node['ssl_certificate']['web']['cipher_suite']` | *calculated*          | Web template default SSL cipher suite.
+| `node['ssl_certificate']['web']['protocol']`     | `'all -SSLv2 -SSLv3'` | Web template default SSL protocols.
 
 Resources
 =========

@@ -80,8 +80,16 @@
   # MSIE 7 and newer should be able to use keepalive
   BrowserMatch "MSIE [17-9]" ssl-unclean-shutdown
 
-  # Accept strong encryption only
-  SSLCipherSuite ALL:!aNULL:!ADH:!eNULL:!LOW:!EXP:RC4+RSA:+HIGH:+MEDIUM
+  <% if @params[:ssl_protocol].is_a?(String) -%>
+    SSLProtocol <%= @params[:ssl_protocol] %>
+  <% else -%>
+    SSLProtocol <%= node['ssl_certificate']['web']['protocol'] %>
+  <% end -%>
+  <% if @params[:ssl_cipher_suite].is_a?(String) -%>
+    SSLCipherSuite <%= @params[:cipher_suite] %>
+  <% else -%>
+    SSLCipherSuite <%= node['ssl_certificate']['web']['cipher_suite'] %>
+  <% end -%>
 
 <% if @params[:extra_directives].kind_of?(Hash)
      @params[:extra_directives].each do |name, value|

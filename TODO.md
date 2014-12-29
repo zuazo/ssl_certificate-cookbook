@@ -3,6 +3,7 @@ TODO
 
 * [x] Fix *with_ca_certificates.bats* tests.
 * [x] Add chained certificate support to Apache template.
+* [ ] Document apache template parameters.
 * [ ] Generate a CSR.
 * [ ] Manage certificate expiration.
 * [ ] Add `:delete` action.
