@@ -79,6 +79,23 @@ class Chef
           cert_secret_file(arg)
           chain_secret_file(arg)
         end
+
+        protected
+
+        def default_source
+          'self-signed'
+        end
+
+        def assert_source!(desc, source, valid_sources)
+          return if valid_sources.include?(source)
+          fail "Cannot read #{desc}, unknown source: #{source}"
+        end
+
+        def filter_source(desc, source, valid_sources)
+          source = source.gsub('-', '_')
+          assert_source!(desc, source, valid_sources)
+          source
+        end
       end
     end
   end

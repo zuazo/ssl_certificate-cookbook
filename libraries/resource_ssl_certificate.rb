@@ -141,19 +141,16 @@ class Chef
         common_name == other.common_name
       end
 
-      def default_source
-        'self-signed'
-      end
-
-      def assert_source!(desc, source, valid_sources)
-        return if valid_sources.include?(source)
-        fail "Cannot read #{desc}, unknown source: #{source}"
-      end
-
-      def filter_source(desc, source, valid_sources)
-        source = source.gsub('-', '_')
-        assert_source!(desc, source, valid_sources)
-        source
+      def lazy_cached_variable(var, &block)
+        lazy do
+          value = instance_variable_get("@#{var}")
+          if value.nil?
+            value = instance_eval(&block)
+            instance_variable_set("@#{var}", value)
+          else
+            value
+          end
+        end
       end
     end
   end

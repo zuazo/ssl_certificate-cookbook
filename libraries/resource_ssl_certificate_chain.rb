@@ -174,13 +174,11 @@ class Chef
         end
 
         def default_chain_content
-          lazy do
-            @default_chain_content ||= begin
-              source = filter_source(
-                'SSL intermediary chain', chain_source, Chain::SOURCES
-              )
-              send("default_chain_content_from_#{source}")
-            end
+          lazy_cached_variable(:default_chain_content) do
+            source = filter_source(
+              'SSL intermediary chain', chain_source, Chain::SOURCES
+            )
+            send("default_chain_content_from_#{source}")
           end
         end
       end

@@ -111,7 +111,9 @@ class Chef
         end
 
         def default_key_path
-          lazy { @default_key_path ||= ::File.join(key_dir, key_name) }
+          lazy_cached_variable(:default_key_path) do
+            ::File.join(key_dir, key_name)
+          end
         end
 
         def default_key_source
@@ -176,11 +178,9 @@ class Chef
         end
 
         def default_key_content
-          lazy do
-            @default_key_content ||= begin
-              source = filter_source('SSL key', key_source, Key::SOURCES)
-              send("default_key_content_from_#{source}")
-            end
+          lazy_cached_variable(:default_key_content) do
+            source = filter_source('SSL key', key_source, Key::SOURCES)
+            send("default_key_content_from_#{source}")
           end
         end
       end

@@ -130,7 +130,9 @@ class Chef
         end
 
         def default_cert_path
-          lazy { @default_cert_path ||= ::File.join(cert_dir, cert_name) }
+          lazy_cached_variable(:default_cert_path) do
+            ::File.join(cert_dir, cert_name)
+          end
         end
 
         def default_cert_source
@@ -243,13 +245,11 @@ class Chef
         end
 
         def default_cert_content
-          lazy do
-            @default_cert_content ||= begin
-              source = filter_source(
-                'SSL certificate', cert_source, Cert::SOURCES
-              )
-              send("default_cert_content_from_#{source}")
-            end
+          lazy_cached_variable(:default_cert_content) do
+            source = filter_source(
+              'SSL certificate', cert_source, Cert::SOURCES
+            )
+            send("default_cert_content_from_#{source}")
           end
         end
 
