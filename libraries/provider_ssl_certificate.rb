@@ -34,70 +34,73 @@ class Chef
         @current_resource
       end
 
+      def install_chef_vault
+        return unless new_resource.depends_chef_vault?
+        r = chef_gem 'chef-vault'
+        new_resource.updated_by_last_action(r.updated_by_last_action?)
+      end
+
+      def file_create(name, &resource_attrs_block)
+        resource = Chef::Resource::File.new(name, new_resource.run_context)
+        resource.instance_eval(&resource_attrs_block) if block_given?
+        resource.action(:nothing)
+        run_context.resource_collection << resource
+        resource.run_action(:create)
+        new_resource.updated_by_last_action(resource.updated_by_last_action?)
+        resource
+      end
+
+      def create_key
+        main_resource = new_resource
+        file_create "#{main_resource.name} SSL certificate key" do
+          path main_resource.key_path
+          owner 'root'
+          group 'root'
+          mode 00600
+          content main_resource.key_content
+        end
+      end
+
+      def create_cert
+        main_resource = new_resource
+        file_create "#{main_resource.name} SSL public certificate" do
+          path main_resource.cert_path
+          owner 'root'
+          group 'root'
+          mode 00644
+          content main_resource.cert_content
+        end
+      end
+
+      def create_chain?
+        !new_resource.chain_name.nil? && !new_resource.chain_content.nil?
+      end
+
+      def create_chain
+        main_resource = new_resource
+        file_create "#{main_resource.name} SSL intermediary chain certificate" \
+                    do
+          path main_resource.chain_path
+          owner 'root'
+          group 'root'
+          mode 00644
+          content main_resource.chain_content
+        end
+      end
+
+      def current_resource_updated?(new_resource_updated)
+        @current_resource.exist? &&
+          @current_resource == new_resource &&
+          new_resource_updated == false
+      end
+
       def action_create
-        main_resource = @new_resource
-        updated_by_last_action = main_resource.updated_by_last_action?
-
-        # install needed dependencies
-        if @new_resource.depends_chef_vault?
-          r = chef_gem 'chef-vault'
-          updated_by_last_action ||= r.updated_by_last_action?
-        end
-
-        unless @current_resource.exist? &&
-               @current_resource == @new_resource &&
-               main_resource.updated_by_last_action? == false
-
-          # Create ssl certificate key
-          r = Chef::Resource::File.new(
-            "#{main_resource.name} SSL certificate key",
-            @new_resource.run_context
-          )
-          r.path(main_resource.key_path)
-          r.owner('root')
-          r.group('root')
-          r.mode(00600)
-          r.content(main_resource.key_content)
-          r.action(:nothing)
-          run_context.resource_collection << r
-          r.run_action(:create)
-          updated_by_last_action ||= r.updated_by_last_action?
-
-          # Create ssl certificate
-          r = Chef::Resource::File.new(
-            "#{main_resource.name} SSL public certificate",
-            @new_resource.run_context
-          )
-          r.path(main_resource.cert_path)
-          r.owner('root')
-          r.group('root')
-          r.mode(00644)
-          r.content(main_resource.cert_content)
-          r.action(:nothing)
-          run_context.resource_collection << r
-          r.run_action(:create)
-          updated_by_last_action ||= r.updated_by_last_action?
-
-          # Conditionally write intermediary chain certificate
-          if !main_resource.chain_name.nil? && !main_resource.chain_content.nil?
-            r = Chef::Resource::File.new(
-              "#{main_resource.name} SSL intermediary chain certificate",
-              @new_resource.run_context
-            )
-            r.path(main_resource.chain_path)
-            r.owner('root')
-            r.group('root')
-            r.mode(00644)
-            r.content(main_resource.chain_content)
-            r.action(:nothing)
-            run_context.resource_collection << r
-            r.run_action(:create)
-            updated_by_last_action ||= r.updated_by_last_action?
-          end
-
-        end
-
-        main_resource.updated_by_last_action(updated_by_last_action)
+        new_resource_updated = new_resource.updated_by_last_action?
+        install_chef_vault
+        return if current_resource_updated?(new_resource_updated)
+        create_key
+        create_cert
+        create_chain if create_chain?
       end
     end
   end

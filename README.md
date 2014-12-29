@@ -245,7 +245,7 @@ By default the resource will create a self-signed certificate, but a custom one 
   <tr>
     <td>cert_source</td>
     <td>Source type to get the SSL cert from. Can be <code>"self-signed"</code>,
-    <code>"with-ca"</code>, <code>"attribute"</code>, <code>"data-bag"</code>,
+    <code>"with_ca"</code>, <code>"attribute"</code>, <code>"data-bag"</code>,
     <code>"chef-vault"</code> or <code>"file"</code>.</td>
     <td><code>"self-signed"</code></td>
   </tr>
@@ -872,7 +872,7 @@ ca_key = '/usr/share/pki/ca-trust-source/anchors/CA.key'
 cert = ssl_certificate 'test' do
   namespace node['test.com']
   key_source 'self-signed'
-  cert_source 'with-ca'
+  cert_source 'with_ca'
   ca_cert_path ca_cert
   ca_key_path ca_key
 end
@@ -895,7 +895,7 @@ ca_cert = ssl_certificate 'ca.example.org' do
 end
 
 ssl_certificate 'example.org' do
-  cert_source 'with-ca'
+  cert_source 'with_ca'
   ca_cert_path ca_cert.cert_path
   ca_key_path ca_cert.key_path
 end

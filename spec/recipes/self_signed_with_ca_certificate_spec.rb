@@ -64,7 +64,7 @@ describe 'ssl_certificate_test::self_signed_with_ca_certificate',
 
   it 'creates example.org certificate from data bag CA certificate' do
     expect(chef_run).to create_ssl_certificate('example.org')
-      .with_cert_source('with-ca')
+      .with_cert_source('with_ca')
       .with_ca_cert_path('/etc/ssl/certs/ca.example.org.pem')
       .with_ca_key_path('/etc/ssl/private/ca.example.org.key')
   end

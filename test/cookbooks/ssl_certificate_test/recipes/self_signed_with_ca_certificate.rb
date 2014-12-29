@@ -32,7 +32,7 @@ node.default['test.com']['organization'] = 'Toto'
 node.default['test.com']['department'] = 'Titi'
 node.default['test.com']['email'] = 'titi@test.com'
 node.default['test.com']['ssl_key']['source'] = 'self-signed'
-node.default['test.com']['ssl_cert']['source'] = 'with-ca'
+node.default['test.com']['ssl_cert']['source'] = 'with_ca'
 node.default['test.com']['ca_cert_path'] = ca_cert
 node.default['test.com']['ca_cert_key'] = ca_key
 
@@ -45,10 +45,9 @@ node.default['ca-certificate']['department'] = 'Titi'
 node.default['ca-certificate']['email'] = 'titi@test.com'
 node.default['ca-certificate']['time'] = 10 * 365
 
-ca_name = ::CACertificate.generate_cert_subject(node['ca-certificate'])
-::CACertificate.ca_key(ca_key)
-::CACertificate.ca_certificate(
-  ca_name, ca_key, ca_cert, node['ca-certificate']['time']
+::CACertificate.key_to_file(ca_key)
+::CACertificate.ca_cert_to_file(
+  node['ca-certificate'], ca_key, ca_cert, node['ca-certificate']['time']
 )
 
 cert = ssl_certificate 'test.com' do
@@ -83,7 +82,7 @@ ca_cert2 = ssl_certificate 'ca.example.org' do
 end
 
 ssl_certificate 'example.org' do
-  cert_source 'with-ca'
+  cert_source 'with_ca'
   ca_cert_path ca_cert2.cert_path
   ca_key_path ca_cert2.key_path
 end

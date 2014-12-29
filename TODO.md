@@ -11,7 +11,7 @@ TODO
 * [x] Add ChefSpec unit tests.
 * [ ] Add RSpec library unit tests.
 * [ ] Add older Chef versions support (patch lazy).
-* [ ] Fix RuboCop offenses.
+* [x] Fix RuboCop offenses.
 * [x] Integrate tests with `should_not` gem.
 * [x] Integrate with travis-ci.
 * [ ] Integrate with test coverage.
