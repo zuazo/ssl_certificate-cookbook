@@ -29,9 +29,9 @@ class Chef
       # ssl_certificate Chef Resource cert related methods.
       module Chain
         # Resource certificate attributes to be initialized by a
-        # `default#{attribute}` method.
-        unless defined?(::Chef::Resource::SslCertificate::Chain::ATTRIBUTES)
-          ATTRIBUTES = %w(
+        # `default_#{attribute}` method.
+        unless defined?(::Chef::Resource::SslCertificate::Chain::ATTRS)
+          ATTRS = %w(
             chain_path
             chain_name
             chain_dir
@@ -57,11 +57,7 @@ class Chef
         public
 
         def initialize_chain_defaults
-          ::Chef::Resource::SslCertificate::Chain::ATTRIBUTES.each do |var|
-            instance_variable_set(
-              "@#{var}".to_sym, send("default_#{var}")
-            )
-          end
+          initialize_attribute_defaults(Chain::ATTRS)
         end
 
         def chain_name(arg = nil)

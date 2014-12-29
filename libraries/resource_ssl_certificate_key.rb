@@ -27,10 +27,10 @@ class Chef
     class SslCertificate < Chef::Resource
       # ssl_certificate Chef Resource key related methods.
       module Key
-        # Resource key attributes to be initialized by a `default#{attribute}`
+        # Resource key attributes to be initialized by a `default_#{attribute}`
         # method.
-        unless defined?(::Chef::Resource::SslCertificate::Key::ATTRIBUTES)
-          ATTRIBUTES = %w(
+        unless defined?(::Chef::Resource::SslCertificate::Key::ATTRS)
+          ATTRS = %w(
             key_name
             key_dir
             key_path
@@ -57,11 +57,7 @@ class Chef
         public
 
         def initialize_key_defaults
-          ::Chef::Resource::SslCertificate::Key::ATTRIBUTES.each do |var|
-            instance_variable_set(
-              "@#{var}".to_sym, send("default_#{var}")
-            )
-          end
+          initialize_attribute_defaults(Key::ATTRS)
         end
 
         def key_name(arg = nil)

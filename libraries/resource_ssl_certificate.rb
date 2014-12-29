@@ -51,22 +51,6 @@ class Chef
       # Include helper methods to read from differente sources.
       include ::Chef::Resource::SslCertificate::Readers
 
-      # Resource attributes to be initialized by a `default#{attribute}` method.
-      unless defined?(
-               ::Chef::Resource::SslCertificate::
-               RESOURCE_ATTRIBUTES_INIT_DEFAULT
-             )
-        RESOURCE_ATTRIBUTES_INIT_DEFAULT = %w(
-          common_name
-          country
-          city
-          state
-          organization
-          department
-          email
-        )
-      end
-
       def initialize(name, run_context = nil)
         super
         @resource_name = :ssl_certificate
@@ -85,14 +69,18 @@ class Chef
         initialize_key_defaults
         initialize_cert_defaults
         initialize_chain_defaults
-        RESOURCE_ATTRIBUTES_INIT_DEFAULT.each do |var|
+        initialize_subject_defaults
+      end
+
+      public
+
+      def initialize_attribute_defaults(attributes)
+        attributes.each do |var|
           instance_variable_set(
             "@#{var}".to_sym, send("default_#{var}")
           )
         end
       end
-
-      public
 
       def depends_chef_vault?
         key_source == 'chef-vault' || cert_source == 'chef-vault'
@@ -124,7 +112,7 @@ class Chef
       def namespace(arg = nil)
         unless arg.nil? || arg.is_a?(Chef::Node) ||
                arg.is_a?(Chef::Node::ImmutableMash)
-          arg = namespace_from_ary(arg)
+          arg = read_node_namespace(arg)
         end
         set_or_return(
           :namespace, arg,
@@ -153,13 +141,6 @@ class Chef
 
       def name_eql?(other)
         common_name == other.common_name
-      end
-
-      def namespace_from_ary(arg)
-        arg = [arg].flatten
-        arg.inject(node) do |n, k|
-          n.respond_to?(:key?) && n.key?(k) ? n[k] : nil
-        end
       end
 
       def default_source

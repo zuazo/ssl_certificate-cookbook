@@ -31,15 +31,31 @@ class Chef
       module Readers
         protected
 
-        # Read some values from node namespace avoiding exceptions.
-        def read_namespace(ary)
+        def unsafe_no_exceptions_block(&block)
+          instance_eval(&block)
+        rescue StandardError => e
+          Chef::Log.error(e.message)
+          Chef::Log.error("Backtrace:\n#{e.backtrace.join("\n")}\n")
+          nil
+        end
+
+        def read_namespace_from_object(obj, ary)
           ary = [ary].flatten
           # TODO: Check ary parameter value.
-          ary.inject(namespace) do |n, k|
+          ary.inject(obj) do |n, k|
             n.respond_to?(:key?) && n.key?(k) ? n[k] : nil
           end
         end
 
+        def read_namespace(ary)
+          read_namespace_from_object(namespace, ary)
+        end
+
+        def read_node_namespace(ary)
+          read_namespace_from_object(node, ary)
+        end
+
+        # Read some values from node namespace avoiding exceptions.
         def safe_read_namespace(desc, ary)
           data = read_namespace(ary)
           unless data.is_a?(String)
@@ -62,16 +78,15 @@ class Chef
         end
 
         def read_from_data_bag(bag, item, key, encrypt = false, secret = nil)
-          if encrypt
-            item = Chef::EncryptedDataBagItem.load(bag, item, secret)
-          else
-            item = Chef::DataBagItem.load(bag, item)
+          unsafe_no_exceptions_block do
+            data =
+              if encrypt
+                Chef::EncryptedDataBagItem.load(bag, item, secret)
+              else
+                Chef::DataBagItem.load(bag, item)
+              end
+            data[key.to_s]
           end
-          item[key.to_s]
-        rescue StandardError => e
-          Chef::Log.error(e.message)
-          Chef::Log.error("Backtrace:\n#{e.backtrace.join("\n")}\n")
-          nil
         end
 
         def safe_read_from_data_bag(desc, db)
@@ -79,28 +94,25 @@ class Chef
             db[:bag], db[:item], db[:key], db[:encrypt], db[:secret_file]
           )
           unless data.is_a?(String)
-            fail "Cannot read #{desc} from data bag: #{bag}.#{item}->#{key}"
+            fail "Cannot read #{desc} from data bag: "\
+                 "#{db[:bag]}.#{db[:item]}[#{db[:key]}]"
           end
           data
         end
 
         def read_from_chef_vault(bag, item, key)
           require 'chef-vault'
-
-          begin
-            item = ChefVault::Item.load(bag, item)
-            item[key.to_s]
-          rescue StandardError => e
-            Chef::Log.error(e.message)
-            Chef::Log.error("Backtrace:\n#{e.backtrace.join("\n")}\n")
-            nil
+          unsafe_no_exceptions_block do
+            data = ChefVault::Item.load(bag, item)
+            data[key.to_s]
           end
         end
 
         def safe_read_from_chef_vault(desc, db)
           data = read_from_chef_vault(db[:bag], db[:item], db[:key])
           unless data.is_a?(String)
-            fail "Cannot read #{desc} from chef-vault: #{bag}.#{item}->#{key}"
+            fail "Cannot read #{desc} from chef-vault: "\
+                 "#{db[:bag]}.#{db[:item]}[#{db[:key]}]"
           end
           data
         end

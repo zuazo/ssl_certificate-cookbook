@@ -28,8 +28,10 @@ class Chef
     class SslCertificate < Chef::Resource
       # ssl_certificate Chef Resource certificate subject related methods.
       module Subject
-        unless defined?(::Chef::Resource::SslCertificate::Subject::FIELDS)
-          FIELDS = %w(
+        # Resource subject attributes to be initialized by a
+        # `default_#{attribute}` method.
+        unless defined?(::Chef::Resource::SslCertificate::Subject::ATTRS)
+          ATTRS = %w(
             common_name
             country
             city
@@ -38,6 +40,10 @@ class Chef
             department
             email
           )
+        end
+
+        def initialize_subject_defaults
+          initialize_attribute_defaults(Subject::ATTRS)
         end
 
         def common_name(arg = nil)
@@ -101,7 +107,7 @@ class Chef
         end
 
         def cert_subject
-          Subject::FIELDS.each_with_object({}) do |field, mem|
+          Subject::ATTRS.each_with_object({}) do |field, mem|
             mem[field] = send(field) unless send(field).nil?
           end
         end
