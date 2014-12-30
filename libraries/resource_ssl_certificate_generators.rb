@@ -107,7 +107,7 @@ class Chef
           OpenSSL::X509::Name.new(name)
         end
 
-        def create_csr(key, subject)
+        def generate_csr(key, subject)
           csr = OpenSSL::X509::Request.new
           csr.version = 0
           csr.subject = generate_cert_subject(subject)
@@ -172,7 +172,7 @@ class Chef
         end
 
         def generate_self_signed_cert_with_ca_csr(cert, key, ca_cert, subject)
-          csr = create_csr(key, subject)
+          csr = generate_csr(key, subject)
           cert.subject = csr.subject
           cert.public_key = csr.public_key
           cert.issuer = ca_cert.subject
