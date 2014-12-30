@@ -30,8 +30,3 @@ else
   default['ssl_certificate']['key_dir'] = '/etc'
   default['ssl_certificate']['cert_dir'] = '/etc'
 end
-
-# Accept strong encryption only
-default['ssl_certificate']['web']['cipher_suite'] =
-  'ALL:!aNULL:!ADH:!eNULL:!LOW:!EXP:RC4+RSA:+HIGH:+MEDIUM'
-default['ssl_certificate']['web']['protocol'] = 'all -SSLv2 -SSLv3'

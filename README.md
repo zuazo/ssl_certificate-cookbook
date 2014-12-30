@@ -21,6 +21,7 @@ Table of Contents
     * [ssl_certificate Actions](#ssl_certificate-actions)
     * [ssl_certificate Parameters](#ssl_certificate-parameters)
 * [Templates](#templates)
+  * [Securing Server Side TLS](#securing-server-side-tls)
 * [Usage](#usage)
   * [Including the Cookbook](#including-the-cookbook)
   * [A Short Example](#a-short-example)
@@ -70,12 +71,13 @@ Please, [let us know](https://github.com/onddo/ssl_certificate-cookbook/issues/n
 Attributes
 ==========
 
-| Attribute                                        | Default               | Description                        |
-|:-------------------------------------------------|:----------------------|:-----------------------------------|
-| `node['ssl_certificate']['key_dir']`             | *calculated*          | Default SSL key directory.
-| `node['ssl_certificate']['cert_dir']`            | *calculated*          | Default SSL certificate directory.
-| `node['ssl_certificate']['web']['cipher_suite']` | *calculated*          | Web template default SSL cipher suite.
-| `node['ssl_certificate']['web']['protocol']`     | `'all -SSLv2 -SSLv3'` | Web template default SSL protocols.
+| Attribute                                         | Default      | Description                        |
+|:--------------------------------------------------|:-------------|:-----------------------------------|
+| `node['ssl_certificate']['key_dir']`              | *calculated* | Default SSL key directory.
+| `node['ssl_certificate']['cert_dir']`             | *calculated* | Default SSL certificate directory.
+| `node['ssl_certificate']['web']['cipher_suite']`  | `nil`        | Web template default SSL cipher suite.
+| `node['ssl_certificate']['web']['protocol']`      | `nil`        | Web template default SSL protocols.
+| `node['ssl_certificate']['web']['compatibility']` | `nil`        | Web template SSL compatibility level (See [below](#securing-server-side-tls)).
 
 Resources
 =========
@@ -382,6 +384,33 @@ web_app 'my-webapp' do
   ssl_ca cert.ca_cert_path
 end
 ```
+
+## Securing Server Side TLS
+
+You can change the SSL compatibility level based on [the TLS recommendations in the Mozilla wiki](https://wiki.mozilla.org/Security/Server_Side_TLS#Recommended_configurations) using the `ssl_compatibility` template parameter:
+
+```ruby
+cert = ssl_certificate 'my-webapp' do
+  namespace node['my-webapp']
+  notifies :restart, 'service[apache2]'
+end
+
+include_recipe 'apache2'
+include_recipe 'apache2::mod_ssl'
+web_app 'my-webapp' do
+  cookbook 'ssl_certificate'
+  server_name cert.common_name
+  docroot # [...]
+  # [...]
+  ssl_key cert.key_path
+  ssl_cert cert.cert_path
+  ssl_chain cert.chain_path
+  ssl_ca cert.ca_cert_path
+  ssl_compatibility :modern # :modern | :intermediate | :old
+end
+```
+
+You can also use the `node['ssl_certificate']['web']['compatibility']` node attribute to change the compatibility level used by default.
 
 Usage
 =====

@@ -29,11 +29,6 @@ setup() {
     | grep -F 'Subject: C=FR, ST=Ile de Paris, L=Paris, O=Toto, OU=Titi, CN=test.com/emailAddress=titi@test.com'
 }
 
-@test "creates the apache2 virtualhost" {
-  echo | openssl s_client -connect 127.0.0.1:443 \
-    | grep -F 'subject=/C=FR/ST=Ile de Paris/L=Paris/O=Toto/OU=Titi/CN=test.com/emailAddress=titi@test.com'
-}
-
 @test "creates a CA certificate from a data bag" {
   [ -f "${CERT_PATH}/ca.example.org.pem" ]
 }

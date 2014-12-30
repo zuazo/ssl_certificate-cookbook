@@ -65,11 +65,18 @@ attribute 'ssl_certificate/web/cipher_suite',
           description: 'Web template default SSL cipher suite.',
           type: 'string',
           required: 'optional',
-          default: 'ALL:!aNULL:!ADH:!eNULL:!LOW:!EXP:RC4+RSA:+HIGH:+MEDIUM'
+          default: nil
 
 attribute 'ssl_certificate/web/protocol',
           display_name: 'ssl_certificate web protocol',
           description: 'Web template default SSL protocols.',
           type: 'string',
           required: 'optional',
-          default: 'all -SSLv2 -SSLv3'
+          default: nil
+
+attribute 'ssl_certificate/web/compatibility',
+          display_name: 'ssl_certificate web compatibility',
+          description: 'Web template SSL compatibility level.',
+          type: 'string',
+          required: 'optional',
+          default: nil

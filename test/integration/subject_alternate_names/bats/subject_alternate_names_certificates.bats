@@ -43,12 +43,12 @@ setup() {
     | grep -F 'DNS:bar'
 }
 
-@test "the SAN certificate has a DNS:subject-alternate-name entry" {
+@test "the SAN certificate has a DNS:FQDN entry" {
   openssl x509 -in "${CERT_PATH}/subject_alternate_names2.pem" -text -noout \
-    | grep -F 'DNS:subject-alternate-name'
+    | grep -F 'DNS:ssl-certificate.local'
 }
 
-@test "the SAN certificate has a DNS:foo.subject-alternate-name entry" {
+@test "the SAN certificate has a DNS:foo.FQDN entry" {
   openssl x509 -in "${CERT_PATH}/subject_alternate_names2.pem" -text -noout \
-    | grep -F 'DNS:foo.subject-alternate-name'
+    | grep -F 'DNS:foo.ssl-certificate.local'
 }

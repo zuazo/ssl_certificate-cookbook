@@ -41,8 +41,3 @@ setup() {
   openssl x509 -in "${CERT_PATH}/dummy6-attributes.pem" -text -noout \
     | grep -F 'C=AU, ST=Some-State, O=Internet Widgits Pty Ltd'
 }
-
-@test "creates the apache2 virtualhost" {
-  echo | openssl s_client -connect 127.0.0.1:443 \
-    | grep -F 'subject=/O=ssl_certificate apache2 template test/'
-}

@@ -21,8 +21,8 @@
 # limitations under the License.
 #
 
-ca_cert = ::File.join(Chef::Config[:file_cache_path], 'CA.crt')
-ca_key = ::File.join(Chef::Config[:file_cache_path], 'CA.key')
+ca_cert = ::File.join(node['ssl_certificate']['cert_dir'], 'CA.crt')
+ca_key = ::File.join(node['ssl_certificate']['key_dir'], 'CA.key')
 
 node.default['test.com']['common_name'] = 'test.com'
 node.default['test.com']['country'] = 'FR'
@@ -66,6 +66,7 @@ web_app 'test.com' do
   ssl_key cert.key_path
   ssl_cert cert.cert_path
   ssl_ca cert.ca_cert_path
+  ssl_compatibility :modern
   extra_directives EnableSendfile: 'On'
 end
 

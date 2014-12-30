@@ -1,6 +1,8 @@
 TODO
 ====
 
+* [ ] Fix FreeBSD support.
+* [ ] Fix CentOS `7` support.
 * [ ] Document apache template parameters.
 * [ ] Generate a CSR.
 * [ ] Manage certificate expiration.
