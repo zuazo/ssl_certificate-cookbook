@@ -46,9 +46,16 @@ ssl_compatibility =
   <Location /server-status>
     SetHandler server-status
 
+    <% if node['apache']['version'].to_f >= 2.4 -%>
+    <RequireAny>
+      Require ip 127.0.0.1
+      Require ip ::1
+    </RequireAny>
+    <% else -%>
     Order Deny,Allow
     Deny from all
     Allow from 127.0.0.1
+    <% end -%>
   </Location>
 
   LogLevel info
