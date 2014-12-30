@@ -23,7 +23,10 @@
 require 'chef/resource'
 require 'openssl'
 
+# Chef configuration management tool main class.
 class Chef
+  # Chef Resource describes the desired state of an element of your
+  # infrastructure.
   class Resource
     class SslCertificate < Chef::Resource
       # ssl_certificate Chef Resource certificate subject related methods.
@@ -108,7 +111,8 @@ class Chef
 
         def cert_subject
           Subject::ATTRS.each_with_object({}) do |field, mem|
-            mem[field] = send(field) unless send(field).nil?
+            value = send(field)
+            mem[field] = value if value.is_a?(String)
           end
         end
       end

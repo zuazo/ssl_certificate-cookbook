@@ -20,7 +20,6 @@
 # limitations under the License.
 #
 
-require 'chef/resource'
 if defined?(ChefSpec)
 
   if ChefSpec.respond_to?(:define_matcher)

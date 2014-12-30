@@ -23,7 +23,10 @@
 
 require 'chef/provider'
 
+# Chef configuration management tool main class.
 class Chef
+  # Chef provider defines the steps that are needed to bring that piece of the
+  # system from its current state into the desired state.
   class Provider
     # Chef Provider for ssl_certificate Resource.
     class SslCertificate < Chef::Provider

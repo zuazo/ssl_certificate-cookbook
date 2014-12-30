@@ -23,7 +23,10 @@
 require 'chef/resource'
 require 'openssl'
 
+# Chef configuration management tool main class.
 class Chef
+  # Chef Resource describes the desired state of an element of your
+  # infrastructure.
   class Resource
     class SslCertificate < Chef::Resource
       # ssl_certificate Chef Resource cert related methods.
@@ -106,7 +109,7 @@ class Chef
 
         def default_chain_path
           lazy do
-            unless chain_name.nil?
+            if chain_name.is_a?(String)
               @default_chain_path ||= ::File.join(chain_dir, chain_name)
             end
           end

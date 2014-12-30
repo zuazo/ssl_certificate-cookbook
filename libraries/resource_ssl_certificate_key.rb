@@ -22,7 +22,10 @@
 
 require 'chef/resource'
 
+# Chef configuration management tool main class.
 class Chef
+  # Chef Resource describes the desired state of an element of your
+  # infrastructure.
   class Resource
     class SslCertificate < Chef::Resource
       # ssl_certificate Chef Resource key related methods.

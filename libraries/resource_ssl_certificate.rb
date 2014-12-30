@@ -32,7 +32,10 @@ require_relative 'resource_ssl_certificate_chain'
 require_relative 'resource_ssl_certificate_generators'
 require_relative 'resource_ssl_certificate_readers'
 
+# Chef configuration management tool main class.
 class Chef
+  # Chef Resource describes the desired state of an element of your
+  # infrastructure.
   class Resource
     # ssl_certificate Chef Resource.
     class SslCertificate < Chef::Resource
