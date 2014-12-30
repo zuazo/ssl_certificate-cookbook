@@ -379,6 +379,7 @@ web_app 'my-webapp' do
   ssl_key cert.key_path
   ssl_cert cert.cert_path
   ssl_chain cert.chain_path
+  ssl_ca cert.ca_cert_path
 end
 ```
 
@@ -598,6 +599,7 @@ web_app 'my-webapp' do
   ssl_key cert.key_path
   ssl_cert cert.cert_path
   ssl_chain cert.chain_path
+  ssl_ca cert.ca_cert_path
 end
 ```
 

@@ -121,5 +121,6 @@ web_app node['fqdn'] do
   ssl_key cert.key_path
   ssl_cert cert.cert_path
   ssl_chain cert.chain_path # nil
+  ssl_ca cert.ca_cert_path # nil
   extra_directives EnableSendfile: 'On'
 end

@@ -73,6 +73,9 @@
   <% if @params[:ssl_chain].is_a?(String) -%>
   SSLCertificateChainFile <%= @params[:ssl_chain] %>
   <% end -%>
+  <% if @params[:ssl_ca].is_a?(String) -%>
+  SSLCACertificateFile <%= @params[:ssl_ca] %>
+  <% end -%>
 
   BrowserMatch "MSIE [2-6]" \
     nokeepalive ssl-unclean-shutdown \
