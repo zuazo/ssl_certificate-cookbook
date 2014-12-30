@@ -3,6 +3,34 @@ ssl_certificate CHANGELOG
 
 This file is used to list changes made in each version of the `ssl_certificate` cookbook.
 
+## v1.0.0 (2014-12-30)
+
+* Bugfix: Cannot read SSL intermediary chain from data bag.
+* Fix Directory Permissions for Apache `2.4` ([issue #7](https://github.com/onddo/ssl_certificate-cookbook/pull/7), thanks [Elliott Davis](https://github.com/elliott-davis)).
+* Add CA support for self signed certificates ([issue #8](https://github.com/onddo/ssl_certificate-cookbook/pull/8), thanks [Jeremy MAURO](https://github.com/jmauro)).
+* Apache template:
+  * Disable `SSLv3` by default (**breaking change**).
+  * Add chained certificate support.
+  * Allow to change the cipher suite and protocol in the apache template.
+* Big code clean up:
+  * Split resource code in multiple files.
+  * Remove duplicated code.
+  * Integrate with foodcritic.
+  * Integrate with RuboCop.
+  * Integrate with `should_not` gem.
+  * Integrate with travis-ci, codeclimate and gemnasium.
+  * Homogenize license headers.
+* Add ChefSpec unit tests.
+* Add integration tests: bats and Serverspec.
+* Update Gemfile and Berksfile files.
+* Add Guardfile.
+* README:
+  * Multiple fixes and improvements ([issue #9](https://github.com/onddo/ssl_certificate-cookbook/pull/9), thanks [Benjamin Nørgaard](https://github.com/blacksails)).
+  * Split in multiple files.
+  * Add TOC.
+  * Add badges.
+* Add LICENSE file.
+
 ## v0.4.0 (2014-11-19)
 
 * Add Apache 2.4 support ([issue #4](https://github.com/onddo/ssl_certificate-cookbook/pull/4), thanks [Djuri Baars](https://github.com/dsbaars)).
