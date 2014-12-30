@@ -112,7 +112,7 @@ class Chef
           csr.version = 0
           csr.subject = generate_cert_subject(subject)
           csr.public_key = key.public_key
-          csr.sign key, OpenSSL::Digest::SHA1.new
+          csr.sign(key, OpenSSL::Digest::SHA1.new)
           csr
         end
 
