@@ -25,23 +25,27 @@ key_dir, cert_dir =
     %w(/etc/ssl/private /etc/ssl/certs)
   elsif %w(redhat centos fedora scientific amazon).include?(family)
     %w(/etc/pki/tls/private /etc/pki/tls/certs)
+  elsif %w(freebsd).include?(family)
+    %w(/etc/ssl /etc/ssl)
   else
     %w(/etc /etc)
   end
+
+group = family == 'freebsd' ? 'wheel' : 'root'
 
 (1..4).each do |i|
   describe file("#{key_dir}/dummy#{i}.key") do
     it { should be_file }
     it { should be_mode 600 }
     it { should be_owned_by 'root' }
-    it { should be_grouped_into 'root' }
+    it { should be_grouped_into group }
   end
 
   describe file("#{cert_dir}/dummy#{i}.pem") do
     it { should be_file }
     it { should be_mode 644 }
     it { should be_owned_by 'root' }
-    it { should be_grouped_into 'root' }
+    it { should be_grouped_into group }
   end
 end
 
@@ -49,26 +53,26 @@ describe file("#{key_dir}/dummy5-data-bag.key") do
   it { should be_file }
   it { should be_mode 600 }
   it { should be_owned_by 'root' }
-  it { should be_grouped_into 'root' }
+  it { should be_grouped_into group }
 end
 
 describe file("#{cert_dir}/dummy5-data-bag.pem") do
   it { should be_file }
   it { should be_mode 644 }
   it { should be_owned_by 'root' }
-  it { should be_grouped_into 'root' }
+  it { should be_grouped_into group }
 end
 
 describe file("#{key_dir}/dummy6-attributes.key") do
   it { should be_file }
   it { should be_mode 600 }
   it { should be_owned_by 'root' }
-  it { should be_grouped_into 'root' }
+  it { should be_grouped_into group }
 end
 
 describe file("#{cert_dir}/dummy6-attributes.pem") do
   it { should be_file }
   it { should be_mode 644 }
   it { should be_owned_by 'root' }
-  it { should be_grouped_into 'root' }
+  it { should be_grouped_into group }
 end

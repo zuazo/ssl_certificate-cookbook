@@ -1,18 +1,22 @@
 #!/usr/bin/env bats
 
-SSL_PATH='/etc'
-DEB_PATH='/etc/ssl'
-RH_PATH='/etc/pki/tls'
+DEB_PATH='/etc/ssl/certs'
+RH_PATH='/etc/pki/tls/certs'
+FB_PATH='/etc/ssl'
 
 setup() {
   if [ -d "${DEB_PATH}" ]
   then
-    SSL_PATH="${DEB_PATH}"
+    CERT_PATH="${DEB_PATH}"
   elif [ -d "${RH_PATH}" ]
   then
-    SSL_PATH="${RH_PATH}"
+    CERT_PATH="${RH_PATH}"
+  elif [ -d "${FB_PATH}" ]
+  then
+    CERT_PATH="${FB_PATH}"
+  else
+    CERT_PATH='/etc'
   fi
-  CERT_PATH="${SSL_PATH}/certs"
 }
 
 @test "creates a non-SAN certificate" {

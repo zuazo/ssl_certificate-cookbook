@@ -19,6 +19,14 @@
 # limitations under the License.
 #
 
+default['ssl_certificate']['user'] = 'root'
+case node['platform']
+when 'openbsd', 'freebsd', 'mac_os_x'
+  default['ssl_certificate']['group'] = 'wheel'
+else
+  default['ssl_certificate']['group'] = 'root'
+end
+
 case node['platform']
 when 'debian', 'ubuntu'
   default['ssl_certificate']['key_dir'] = '/etc/ssl/private'
@@ -26,6 +34,9 @@ when 'debian', 'ubuntu'
 when 'redhat', 'centos', 'fedora', 'scientific', 'amazon'
   default['ssl_certificate']['key_dir'] = '/etc/pki/tls/private'
   default['ssl_certificate']['cert_dir'] = '/etc/pki/tls/certs'
+when 'openbsd', 'freebsd', 'mac_os_x'
+  default['ssl_certificate']['key_dir'] = '/etc/ssl'
+  default['ssl_certificate']['cert_dir'] = '/etc/ssl'
 else
   default['ssl_certificate']['key_dir'] = '/etc'
   default['ssl_certificate']['cert_dir'] = '/etc'

@@ -170,5 +170,30 @@ describe 'ssl_certificate_test::default', order: :random do
         .with_group('root')
         .with_mode(00644)
     end
-  end
+
+    context 'with FreeBSD' do
+      let(:chef_runner) do
+        ChefSpec::ServerRunner.new(
+          step_into: %w(ssl_certificate), platform: 'freebsd', version: '9.2'
+        )
+      end
+      before { stub_command('/usr/local/sbin/httpd -t').and_return(true) }
+
+      it 'creates dummy1 key for wheel group' do
+        expect(chef_run).to create_file('dummy1 SSL certificate key')
+          .with_path('/etc/ssl/dummy1.key')
+          .with_owner('root')
+          .with_group('wheel')
+          .with_mode(00600)
+      end
+
+      it 'creates dummy1 certificate for wheel group' do
+        expect(chef_run).to create_file('dummy1 SSL public certificate')
+          .with_path('/etc/ssl/dummy1.pem')
+          .with_owner('root')
+          .with_group('wheel')
+          .with_mode(00644)
+      end
+    end # context with FreeBSD
+  end # context step into ssl_certificate resource
 end

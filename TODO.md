@@ -1,7 +1,7 @@
 TODO
 ====
 
-* [ ] Fix FreeBSD support.
+* [x] Fix FreeBSD support.
 * [ ] Fix CentOS `7` support.
 * [ ] Create partial templates for apache and nginx.
 * [ ] Document apache template parameters.
