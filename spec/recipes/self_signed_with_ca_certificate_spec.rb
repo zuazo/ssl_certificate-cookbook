@@ -46,11 +46,11 @@ describe 'ssl_certificate_test::self_signed_with_ca_certificate',
   end
 
   it 'includes apache2 recipe' do
-    expect(chef_run).to include_recipe 'apache2'
+    expect(chef_run).to include_recipe('apache2')
   end
 
   it 'includes apache2::mod_ssl recipe' do
-    expect(chef_run).to include_recipe 'apache2::mod_ssl'
+    expect(chef_run).to include_recipe('apache2::mod_ssl')
   end
 
   context 'web_app test.com definition' do

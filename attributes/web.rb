@@ -20,7 +20,8 @@
 #
 
 default['ssl_certificate']['web']['cipher_suite'] = nil
-default['ssl_certificate']['web']['protocol'] = nil
+default['ssl_certificate']['web']['protocols']['apache'] = nil
+default['ssl_certificate']['web']['protocols']['nginx'] = nil
 default['ssl_certificate']['web']['compatibility'] = nil
 
 # SSL Recommended configurations from
@@ -45,7 +46,8 @@ old['cipher_suite'] =
   'HIGH:'\
   '!aNULL:!eNULL:!EXPORT:!DES:!RC4:!MD5:!PSK:!aECDH:!EDH-DSS-DES-CBC3-SHA:'\
   '!EDH-RSA-DES-CBC3-SHA:!KRB5-DES-CBC3-SHA'
-old['protocol'] = 'all -SSLv2'
+old['apache']['protocols'] = 'all -SSLv2'
+old['nginx']['protocols'] = 'SSLv3 TLSv1 TLSv1.1 TLSv1.2'
 
 intermediate = default['ssl_certificate']['web']['intermediate']
 intermediate['description'] =
@@ -66,7 +68,8 @@ intermediate['cipher_suite'] =
   'DES-CBC3-SHA:'\
   '!aNULL:!eNULL:!EXPORT:!DES:!RC4:!MD5:!PSK:!aECDH:!EDH-DSS-DES-CBC3-SHA:'\
   '!EDH-RSA-DES-CBC3-SHA:!KRB5-DES-CBC3-SHA'
-intermediate['protocol'] = 'all -SSLv2 -SSLv3'
+intermediate['apache']['protocols'] = 'all -SSLv2 -SSLv3'
+intermediate['nginx']['protocols'] = 'TLSv1 TLSv1.1 TLSv1.2'
 
 modern = default['ssl_certificate']['web']['modern']
 modern['description'] =
@@ -82,4 +85,5 @@ modern['cipher_suite'] =
   'DHE-RSA-AES128-SHA:DHE-DSS-AES128-SHA256:DHE-RSA-AES256-SHA256:'\
   'DHE-DSS-AES256-SHA:DHE-RSA-AES256-SHA:'\
   '!aNULL:!eNULL:!EXPORT:!DES:!RC4:!3DES:!MD5:!PSK'
-modern['protocol'] = 'all -SSLv2 -SSLv3 -TLSv1'
+modern['apache']['protocols'] = 'all -SSLv2 -SSLv3 -TLSv1'
+modern['nginx']['protocols'] = 'TLSv1.1 TLSv1.2'

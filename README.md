@@ -21,6 +21,7 @@ Table of Contents
     * [ssl_certificate Actions](#ssl_certificate-actions)
     * [ssl_certificate Parameters](#ssl_certificate-parameters)
 * [Templates](#templates)
+  * [Partial Templates](#partial-templates)
   * [Securing Server Side TLS](#securing-server-side-tls)
 * [Usage](#usage)
   * [Including the Cookbook](#including-the-cookbook)
@@ -76,7 +77,9 @@ Attributes
 | `node['ssl_certificate']['key_dir']`              | *calculated* | Default SSL key directory.
 | `node['ssl_certificate']['cert_dir']`             | *calculated* | Default SSL certificate directory.
 | `node['ssl_certificate']['web']['cipher_suite']`  | `nil`        | Web template default SSL cipher suite.
-| `node['ssl_certificate']['web']['protocol']`      | `nil`        | Web template default SSL protocols.
+| `node['ssl_certificate']['web']['protocols']`     | `nil`        | Web template default SSL protocols.
+| `node['ssl_certificate']['web']['apache']`        | *calculated* | Web template Apache httpd specific SSL attributes.
+| `node['ssl_certificate']['web']['nginx']`         | *calculated* | Web template nginx specific SSL attributes.
 | `node['ssl_certificate']['web']['compatibility']` | `nil`        | Web template SSL compatibility level (See [below](#securing-server-side-tls)).
 
 Resources
@@ -243,17 +246,17 @@ By default the resource will create a self-signed certificate, but a custom one 
   </tr>
   <tr>
     <td>cert_path</td>
-    <td>Private cert full path.</td>
+    <td>Public certificate full path.</td>
     <td><em>calculated</em></td>
   </tr>
   <tr>
     <td>cert_name</td>
-    <td>Private cert file name.</td>
+    <td>Public certiticate file name.</td>
     <td><code>"#{name}.pem"</code></td>
   </tr>
   <tr>
     <td>cert_dir</td>
-    <td>Private cert directory path.</td>
+    <td>Public certificate directory path.</td>
     <td><em>calculated</em></td>
   </tr>
   <tr>
@@ -349,6 +352,16 @@ By default the resource will create a self-signed certificate, but a custom one 
     <td><em>calculated</em></td>
   </tr>
   <tr>
+    <td>chain_combined_name</td>
+    <td>File name of intermediate certificate chain combined file (for <strong>nginx</strong>).</td>
+    <td><em>calculated</em></td>
+  </tr>
+  <tr>
+    <td>chain_combined_path</td>
+    <td>Intermediate certificate chain combined file full path (for <strong>nginx</strong>).</td>
+    <td><em>calculated</em></td>
+  </tr>
+  <tr>
     <td>ca_cert_path</td>
     <td>Certificate Authority full path.</td>
     <td><em>nil</em></td>
@@ -384,6 +397,36 @@ web_app 'my-webapp' do
   ssl_ca cert.ca_cert_path
 end
 ```
+
+## Partial Templates
+
+This cookbook contains [partial templates](http://docs.chef.io/templates.html#partial-templates) that you can include in your virtualhost templates to enable and configure the SSL protocol. These partial templates are available:
+
+* *apache.erb*: For Apache httpd web server.
+* *nginx.erb*: For nginx web server.
+
+You can include the partial template as follows:
+
+```erb
+<VirtualHost *:443>
+  ServerName <%= @params[:server_name] %>
+  DocumentRoot <%= @params[:docroot] %>
+  # [...]
+
+  <%= render 'apache.erb', cookbook: 'ssl_certificate' %>
+</VirtualHost>
+```
+
+### Partial Templates Parameters
+
+| Parameter          | Default          | Description                        |
+|:-------------------|:-----------------|:-----------------------------------|
+| ssl_cert           | `nil`            | Public SSL certificate full path.
+| ssl_key            | `nil`            | Private SSL key full path.
+| ssl_chain          | `nil`            | Intermediate SSL certificate chain full path (**apache** only) *(optional)*.
+| ssl_chain_combined | `nil`            | Intermediate SSL certificate chain combined file full path (**nginx** only) *(optional)*.
+| ssl_ca             | `nil`            | Certificate Authority full path (**apache** only) *(optional)*.
+| ssl_compatibility  | *node attribute* | SSL compatibility level (See [below](#securing-server-side-tls)).
 
 ## Securing Server Side TLS
 
@@ -663,21 +706,53 @@ cert = ssl_certificate 'my-webapp' do
   notifies :restart, 'service[nginx]'
 end
 
-# Create virtualhost for nginx
+# Create a virtualhost for nginx
 template File.join(node['nginx']['dir'], 'sites-available', 'my-webapp-ssl') do
-  # You need to create a template for nginx to enable SSL support
-  # and read the keys from ssl_key and ssl_cert attributes
-  # [...]
+  # You need to create a template for nginx to enable SSL support and read the
+  # keys from ssl_key and ssl_chain_combined attributes.
+  # You can use the *nginx.erb* partial template as shown below.
+  source 'nginx_vhost.erb'
+  mode 00644
+  owner 'root'
+  group 'root'
   variables(
+    name: 'ssl_certificate',
+    server_name: 'ssl.onddo.com',
+    docroot: '/var/www',
     # [...]
-    :ssl_key => cert.key_path,
-    :ssl_cert => cert.cert_path
+    ssl_key: cert.key_path,
+    ssl_chain_combined: cert.chain_combined_path,
   )
   notifies :reload, 'service[nginx]'
 end
 
+# Enable the virtualhost
+nginx_site 'my-webapp-ssl' do
+  enable true
+end
+
 # publish the certificate to an attribute, it may be useful
 node.set['web-app']['ssl_cert']['content'] = cert.cert_content
+```
+
+Here's a nginx template example using the [*nginx.erb* partial template](#partial-templates):
+
+```erb
+<%# nginx_vhost.erb %>
+server {
+  server_name <%= @server_name %>;
+  listen 443 ssl;
+  # Path to the root of your installation
+  root <%= @docroot %>;
+
+  access_log <%= node['nginx']['log_dir'] %>/<%= @name %>-access.log combined;
+  error_log  <%= node['nginx']['log_dir'] %>/<%= @name %>-error.log;
+
+  index index.html;
+  # [...]
+
+  <%= render 'nginx.erb', cookbook: 'ssl_certificate' %>
+}
 ```
 
 ### Reading the Certificate from Attributes

@@ -1,0 +1,69 @@
+<%
+
+web_service = 'apache'
+
+ssl_compatibility =
+  @ssl_compatibility || node['ssl_certificate']['web']['compatibility']
+
+@ssl_config = node['ssl_certificate']['web'].dup
+
+if (ssl_compatibility.is_a?(String) || ssl_compatibility.is_a?(Symbol)) &&
+  node['ssl_certificate']['web'][ssl_compatibility].is_a?(Hash)
+  Chef::Mixin::DeepMerge.hash_only_merge!(
+    @ssl_config,
+    node['ssl_certificate']['web'][ssl_compatibility]
+  )
+end
+
+if @ssl_config[web_service].is_a?(Hash)
+  web_config = @ssl_config.delete(web_service)
+  Chef::Mixin::DeepMerge.hash_only_merge!(
+    @ssl_config,
+    web_config
+ssl_compatibility =
+  @params[:ssl_compatibility] || node['ssl_certificate']['web']['compatibility']
+
+@ssl_config =
+  if ssl_compatibility.is_a?(String) ||
+     ssl_compatibility.is_a?(Symbol)
+    node['ssl_certificate']['web'][ssl_compatibility]
+  else
+    node['ssl_certificate']['web']
+  end
+
+-%>
+# ----------------- #
+  # SSL Configuration #
+  # ----------------- #
+
+  SSLEngine on
+
+  SSLCertificateFile    <%= @params[:ssl_cert] %>
+  SSLCertificateKeyFile <%= @params[:ssl_key] %>
+  <% if @params[:ssl_chain].is_a?(String) -%>
+  SSLCertificateChainFile <%= @params[:ssl_chain] %>
+  <% end -%>
+  <% if @params[:ssl_ca].is_a?(String) -%>
+  SSLCACertificateFile <%= @params[:ssl_ca] %>
+  <% end -%>
+
+  <% if @ssl_config[:description].is_a?(String) -%>
+  # <%= @ssl_config[:description] %>
+  <% end -%>
+  <% if @ssl_config[:protocols].is_a?(String) -%>
+  SSLProtocol <%= @ssl_config[:protocols] %>
+  <% end -%>
+  <% if @ssl_config[:cipher_suite].is_a?(String) -%>
+  SSLCipherSuite <%= @ssl_config[:cipher_suite] %>
+  <% end -%>
+
+  <% if @ssl_config[:hsts] -%>
+  # Enable this if your want HSTS (recommended)
+  Header add Strict-Transport-Security "max-age=15768000"
+  <% end -%>
+
+  BrowserMatch "MSIE [2-6]" \
+    nokeepalive ssl-unclean-shutdown \
+    downgrade-1.0 force-response-1.0
+  # MSIE 7 and newer should be able to use keepalive
+  BrowserMatch "MSIE [17-9]" ssl-unclean-shutdown

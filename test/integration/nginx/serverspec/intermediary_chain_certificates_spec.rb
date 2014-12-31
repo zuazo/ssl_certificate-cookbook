@@ -60,24 +60,3 @@ describe file("#{cert_dir}/chain-data-bag.pem.chained.pem") do
   it { should be_owned_by 'root' }
   it { should be_grouped_into group }
 end
-
-describe file("#{key_dir}/chain-data-bag2.key") do
-  it { should be_file }
-  it { should be_mode 600 }
-  it { should be_owned_by 'root' }
-  it { should be_grouped_into group }
-end
-
-describe file("#{cert_dir}/chain-data-bag2.pem") do
-  it { should be_file }
-  it { should be_mode 644 }
-  it { should be_owned_by 'root' }
-  it { should be_grouped_into group }
-end
-
-describe file("#{cert_dir}/chain-data-bag2.pem.chained.pem") do
-  it { should be_file }
-  it { should be_mode 644 }
-  it { should be_owned_by 'root' }
-  it { should be_grouped_into group }
-end

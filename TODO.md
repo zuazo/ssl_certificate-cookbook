@@ -3,7 +3,9 @@ TODO
 
 * [x] Fix FreeBSD support.
 * [ ] Fix CentOS `7` support.
-* [ ] Create partial templates for apache and nginx.
+* [x] Create partial templates for apache and nginx.
+* [ ] Refactor partial templates code.
+* [ ] Be able to change the certificate owner.
 * [ ] Document apache template parameters.
 * [ ] Generate a CSR.
 * [ ] Manage certificate expiration.

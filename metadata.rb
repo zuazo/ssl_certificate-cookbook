@@ -67,9 +67,20 @@ attribute 'ssl_certificate/web/cipher_suite',
           required: 'optional',
           default: nil
 
-attribute 'ssl_certificate/web/protocol',
+grouping 'ssl_certificate/web/protocols',
+         title: 'ssl_certificate web protocol',
+         description: 'ssl_certificate web template SSL protocols.'
+
+attribute 'ssl_certificate/web/protocols/nginx',
           display_name: 'ssl_certificate web protocol',
-          description: 'Web template default SSL protocols.',
+          description: 'Web template default SSL protocols for nginx.',
+          type: 'string',
+          required: 'optional',
+          default: nil
+
+attribute 'ssl_certificate/web/protocols/apache',
+          display_name: 'ssl_certificate web protocol',
+          description: 'Web template default SSL protocols for Apache httpd.',
           type: 'string',
           required: 'optional',
           default: nil

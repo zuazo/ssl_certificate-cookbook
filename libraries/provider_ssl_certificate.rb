@@ -89,6 +89,15 @@ class Chef
         )
       end
 
+      def create_chain_combined
+        combined_content = [new_resource.cert_content]
+        combined_content << new_resource.chain_content if create_chain?
+        file_create(
+          'SSL intermediary chain combined certificate',
+          new_resource.chain_combined_path, combined_content.join("\n")
+        )
+      end
+
       def current_resource_updated?(new_resource_updated)
         @current_resource.exist? &&
           @current_resource == new_resource &&
@@ -101,6 +110,7 @@ class Chef
         return if current_resource_updated?(new_resource_updated)
         create_key
         create_cert
+        create_chain_combined
         create_chain if create_chain?
       end
     end

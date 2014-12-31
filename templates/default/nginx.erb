@@ -1,0 +1,46 @@
+<%
+
+web_service = 'nginx'
+
+ssl_compatibility =
+  @ssl_compatibility || node['ssl_certificate']['web']['compatibility']
+
+@ssl_config = node['ssl_certificate']['web'].dup
+
+if (ssl_compatibility.is_a?(String) || ssl_compatibility.is_a?(Symbol)) &&
+  node['ssl_certificate']['web'][ssl_compatibility].is_a?(Hash)
+  Chef::Mixin::DeepMerge.hash_only_merge!(
+    @ssl_config,
+    node['ssl_certificate']['web'][ssl_compatibility]
+  )
+end
+
+if @ssl_config[web_service].is_a?(Hash)
+  web_config = @ssl_config.delete(web_service)
+  Chef::Mixin::DeepMerge.hash_only_merge!(
+    @ssl_config,
+    web_config
+  )
+end
+
+-%>
+# ----------------- #
+  # SSL Configuration #
+  # ----------------- #
+
+  <% if @ssl_chain_combined -%>
+  ssl_certificate <%= @ssl_chain_combined %>;
+  <% else -%>
+  ssl_certificate <%= @ssl_cert %>;
+  <% end -%>
+  ssl_certificate_key <%= @ssl_key %>;
+
+  <% if @ssl_config[:description].is_a?(String) -%>
+  # <%= @ssl_config[:description] %>
+  <% end -%>
+  <% if @ssl_config[:protocols].is_a?(String) -%>
+  ssl_protocols <%= @ssl_config[:protocols] %>;
+  <% end -%>
+  <% if @ssl_config[:cipher_suite].is_a?(String) -%>
+  ssl_ciphers <%= @ssl_config[:cipher_suite] %>;
+  <% end -%>

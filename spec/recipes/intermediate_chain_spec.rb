@@ -38,11 +38,11 @@ describe 'ssl_certificate_test::intermediate_chain', order: :random do
   end
 
   it 'includes apache2 recipe' do
-    expect(chef_run).to include_recipe 'apache2'
+    expect(chef_run).to include_recipe('apache2')
   end
 
   it 'includes apache2::mod_ssl recipe' do
-    expect(chef_run).to include_recipe 'apache2::mod_ssl'
+    expect(chef_run).to include_recipe('apache2::mod_ssl')
   end
 
   context 'web_app fqdn definition' do
@@ -65,6 +65,7 @@ describe 'ssl_certificate_test::intermediate_chain', order: :random do
     let(:db_chain) do
       '-----BEGIN CERTIFICATE-----[...] CHAIN [...]-----END CERTIFICATE-----'
     end
+    let(:db_chain_combined) { "#{db_cert}\n#{db_chain}" }
     before do
       allow(Chef::EncryptedDataBagItem).to receive(:load)
         .with('ssl', 'key', nil).and_return('content' => db_key)
@@ -106,6 +107,18 @@ describe 'ssl_certificate_test::intermediate_chain', order: :random do
         .with_content(db_chain)
     end
 
+    it 'creates chain-data-bag chain combined certificate from a data bag' do
+      expect(chef_run)
+        .to create_file(
+          'chain-data-bag SSL intermediary chain combined certificate'
+        )
+        .with_path('/etc/ssl/certs/chain-data-bag.pem.chained.pem')
+        .with_owner('root')
+        .with_group('root')
+        .with_mode(00644)
+        .with_content(db_chain_combined)
+    end
+
     it 'creates chain-data-bag2 key from node attributes' do
       expect(chef_run).to create_file('chain-data-bag2 SSL certificate key')
         .with_path('/etc/ssl/private/chain-data-bag2.key')
@@ -133,6 +146,22 @@ describe 'ssl_certificate_test::intermediate_chain', order: :random do
         .with_group('root')
         .with_mode(00644)
         .with_content(node['chain-data-bag2']['ssl_chain']['content'])
+    end
+
+    it 'creates chain-data-bag2 chain combined certificate from node '\
+       'attributes' do
+      expect(chef_run)
+        .to create_file(
+          'chain-data-bag2 SSL intermediary chain combined certificate'
+        )
+        .with_path('/etc/ssl/certs/chain-data-bag2.pem.chained.pem')
+        .with_owner('root')
+        .with_group('root')
+        .with_mode(00644)
+        .with_content([
+          node['chain-data-bag2']['ssl_cert']['content'],
+          node['chain-data-bag2']['ssl_chain']['content']
+        ].join("\n"))
     end
   end
 end

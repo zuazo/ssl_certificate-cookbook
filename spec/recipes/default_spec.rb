@@ -64,11 +64,11 @@ describe 'ssl_certificate_test::default', order: :random do
   end
 
   it 'includes apache2 recipe' do
-    expect(chef_run).to include_recipe 'apache2'
+    expect(chef_run).to include_recipe('apache2')
   end
 
   it 'includes apache2::mod_ssl recipe' do
-    expect(chef_run).to include_recipe 'apache2::mod_ssl'
+    expect(chef_run).to include_recipe('apache2::mod_ssl')
   end
 
   context 'web_app fqdn definition' do
@@ -135,6 +135,18 @@ describe 'ssl_certificate_test::default', order: :random do
         .with_content(db_cert)
     end
 
+    it 'creates dummy5 combined certificate from a data bag' do
+      expect(chef_run)
+        .to create_file(
+          'dummy5-data-bag SSL intermediary chain combined certificate'
+        )
+        .with_path('/etc/ssl/certs/dummy5-data-bag.pem.chained.pem')
+        .with_owner('root')
+        .with_group('root')
+        .with_mode(00644)
+        .with_content(db_cert)
+    end
+
     it 'creates dummy6 key from node attributes' do
       expect(chef_run).to create_file('dummy6-attributes SSL certificate key')
         .with_path('/etc/ssl/private/dummy6-attributes.key')
@@ -148,6 +160,18 @@ describe 'ssl_certificate_test::default', order: :random do
       expect(chef_run)
         .to create_file('dummy6-attributes SSL public certificate')
         .with_path('/etc/ssl/certs/dummy6-attributes.pem')
+        .with_owner('root')
+        .with_group('root')
+        .with_mode(00644)
+        .with_content(node['dummy6-attributes']['ssl_cert']['content'])
+    end
+
+    it 'creates dummy6 combined certificate from node attributes' do
+      expect(chef_run)
+        .to create_file(
+          'dummy6-attributes SSL intermediary chain combined certificate'
+        )
+        .with_path('/etc/ssl/certs/dummy6-attributes.pem.chained.pem')
         .with_owner('root')
         .with_group('root')
         .with_mode(00644)

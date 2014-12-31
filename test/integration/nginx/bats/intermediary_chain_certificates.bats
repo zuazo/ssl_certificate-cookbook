@@ -31,11 +31,3 @@ setup() {
 @test "creates chained combined certificate from a data bag" {
   openssl x509 -in "${CERT_PATH}/chain-data-bag.pem.chained.pem" -text -noout
 }
-
-@test "creates chained certificate from node attributes" {
-  openssl x509 -in "${CERT_PATH}/chain-data-bag2.pem" -text -noout
-}
-
-@test "creates chained combined certificate from node attributes" {
-  openssl x509 -in "${CERT_PATH}/chain-data-bag2.pem.chained.pem" -text -noout
-}

@@ -45,6 +45,8 @@ class Chef
             chain_encrypted
             chain_secret_file
             chain_content
+            chain_combined_path
+            chain_combined_name
           )
         end
 
@@ -101,6 +103,18 @@ class Chef
 
         def chain_content(arg = nil)
           set_or_return(:chain_content, arg, kind_of: String)
+        end
+
+        def chain_combined_name(arg = nil)
+          set_or_return(
+            :chain_combined_name, arg, kind_of: String, required: false
+          )
+        end
+
+        def chain_combined_path(arg = nil)
+          set_or_return(
+            :chain_combined_path, arg, kind_of: String, required: false
+          )
         end
 
         protected
@@ -183,6 +197,17 @@ class Chef
             )
             send("default_chain_content_from_#{source}")
           end
+        end
+
+        def default_chain_combined_path
+          lazy do
+            @default_chain_combined_path ||=
+              ::File.join(cert_dir, chain_combined_name)
+          end
+        end
+
+        def default_chain_combined_name
+          lazy { "#{cert_name}.chained.pem" }
         end
       end
     end

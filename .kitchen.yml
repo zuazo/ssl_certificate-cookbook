@@ -35,13 +35,11 @@ suites:
   encrypted_data_bag_secret_key_path: "test/encrypted_data_bag_secret"
   run_list:
   - recipe[ssl_certificate_test::default]
-  attributes:
 - name: subject_alternate_names
   data_bags_path: "test/data_bags"
   encrypted_data_bag_secret_key_path: "test/encrypted_data_bag_secret"
   run_list:
   - recipe[ssl_certificate_test::subject_alternate_names]
-  attributes:
 - name: intermediate_chain
   excludes:
   # apache2::mod_ssl not compatible
@@ -51,7 +49,6 @@ suites:
   encrypted_data_bag_secret_key_path: "test/encrypted_data_bag_secret"
   run_list:
   - recipe[ssl_certificate_test::intermediate_chain]
-  attributes:
 - name: with_ca
   excludes:
   # apache2::mod_ssl not compatible
@@ -64,4 +61,14 @@ suites:
   encrypted_data_bag_secret_key_path: "test/encrypted_data_bag_secret"
   run_list:
   - recipe[ssl_certificate_test::self_signed_with_ca_certificate]
-  attributes:
+- name: nginx
+  excludes:
+  # no TLSv1.1 support
+  - centos-5.11
+  - ubuntu-10.04
+  # nginx cookbook not compatible
+  - freebsd-10.0 # https://github.com/miketheman/nginx/issues/274
+  data_bags_path: "test/data_bags"
+  encrypted_data_bag_secret_key_path: "test/encrypted_data_bag_secret"
+  run_list:
+  - recipe[ssl_certificate_test::nginx]
