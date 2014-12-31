@@ -716,7 +716,7 @@ template File.join(node['nginx']['dir'], 'sites-available', 'my-webapp-ssl') do
   owner 'root'
   group 'root'
   variables(
-    name: 'ssl_certificate',
+    name: 'my-webapp-ssl',
     server_name: 'ssl.onddo.com',
     docroot: '/var/www',
     # [...]
