@@ -22,10 +22,20 @@ require 'spec_helper'
 describe 'ssl_certificate_test::self_signed_with_ca_certificate',
          order: :random do
   let(:chef_runner) { ChefSpec::ServerRunner.new }
+  let(:node) { chef_runner.node }
   let(:chef_run) { chef_runner.converge(described_recipe) }
-  let(:ca_key_path) { ::File.join(Chef::Config[:file_cache_path], 'CA.key') }
-  let(:ca_cert_path) { ::File.join(Chef::Config[:file_cache_path], 'CA.crt') }
+  let(:cert_dir) { node['ssl_certificate']['cert_dir'] }
+  let(:key_dir) { node['ssl_certificate']['key_dir'] }
+  let(:ca_key_path) do
+    ::File.join(node['ssl_certificate']['key_dir'], 'CA.key')
+  end
+  let(:ca_cert_path) do
+    ::File.join(node['ssl_certificate']['cert_dir'], 'CA.crt')
+  end
   before do
+    # write perms required for CA cert generation inside the test
+    node.set['ssl_certificate']['key_dir'] = Chef::Config[:file_cache_path]
+    node.set['ssl_certificate']['cert_dir'] = Chef::Config[:file_cache_path]
     stub_command('/usr/sbin/apache2 -t').and_return(true)
   end
 
@@ -65,8 +75,8 @@ describe 'ssl_certificate_test::self_signed_with_ca_certificate',
   it 'creates example.org certificate from data bag CA certificate' do
     expect(chef_run).to create_ssl_certificate('example.org')
       .with_cert_source('with_ca')
-      .with_ca_cert_path('/etc/ssl/certs/ca.example.org.pem')
-      .with_ca_key_path('/etc/ssl/private/ca.example.org.key')
+      .with_ca_cert_path(::File.join(cert_dir, 'ca.example.org.pem'))
+      .with_ca_key_path(::File.join(key_dir, 'ca.example.org.key'))
   end
 
   context 'step into ssl_certificate resource' do
@@ -140,18 +150,15 @@ describe 'ssl_certificate_test::self_signed_with_ca_certificate',
 
       allow(::File).to receive(:exist?).and_call_original
       allow(::File).to receive(:exist?)
-        .with('/etc/ssl/certs/ca.example.org.pem')
-        .and_return(true)
+        .with(::File.join(cert_dir, 'ca.example.org.pem')).and_return(true)
       allow(::File).to receive(:exist?)
-        .with('/etc/ssl/private/ca.example.org.key')
-        .and_return(true)
+        .with(::File.join(key_dir, 'ca.example.org.key')).and_return(true)
       allow(::IO).to receive(:read).and_call_original
       allow(::IO).to receive(:read)
-        .with('/etc/ssl/certs/ca.example.org.pem')
+        .with(::File.join(cert_dir, 'ca.example.org.pem'))
         .and_return(db_ca_cert)
       allow(::IO).to receive(:read)
-        .with('/etc/ssl/private/ca.example.org.key')
-        .and_return(db_ca_key)
+        .with(::File.join(key_dir, 'ca.example.org.key')).and_return(db_ca_key)
     end
 
     it 'runs without errors' do
@@ -160,7 +167,7 @@ describe 'ssl_certificate_test::self_signed_with_ca_certificate',
 
     it 'creates test.com key' do
       expect(chef_run).to create_file('test.com SSL certificate key')
-        .with_path('/etc/ssl/private/test.com.key')
+        .with_path(::File.join(key_dir, 'test.com.key'))
         .with_owner('root')
         .with_group('root')
         .with_mode(00600)
@@ -168,7 +175,7 @@ describe 'ssl_certificate_test::self_signed_with_ca_certificate',
 
     it 'creates test.com certificate' do
       expect(chef_run).to create_file('test.com SSL public certificate')
-        .with_path('/etc/ssl/certs/test.com.pem')
+        .with_path(::File.join(cert_dir, 'test.com.pem'))
         .with_owner('root')
         .with_group('root')
         .with_mode(00644)
@@ -176,7 +183,7 @@ describe 'ssl_certificate_test::self_signed_with_ca_certificate',
 
     it 'creates ca.example.org CA certificate key' do
       expect(chef_run).to create_file('ca.example.org SSL certificate key')
-        .with_path('/etc/ssl/private/ca.example.org.key')
+        .with_path(::File.join(key_dir, 'ca.example.org.key'))
         .with_owner('root')
         .with_group('root')
         .with_mode(00600)
@@ -185,7 +192,7 @@ describe 'ssl_certificate_test::self_signed_with_ca_certificate',
 
     it 'creates ca.example.org CA certificate' do
       expect(chef_run).to create_file('ca.example.org SSL public certificate')
-        .with_path('/etc/ssl/certs/ca.example.org.pem')
+        .with_path(::File.join(cert_dir, 'ca.example.org.pem'))
         .with_owner('root')
         .with_group('root')
         .with_mode(00644)
@@ -194,7 +201,7 @@ describe 'ssl_certificate_test::self_signed_with_ca_certificate',
 
     it 'creates example.org key' do
       expect(chef_run).to create_file('example.org SSL certificate key')
-        .with_path('/etc/ssl/private/example.org.key')
+        .with_path(::File.join(key_dir, 'example.org.key'))
         .with_owner('root')
         .with_group('root')
         .with_mode(00600)
@@ -202,7 +209,7 @@ describe 'ssl_certificate_test::self_signed_with_ca_certificate',
 
     it 'creates example.org certificate' do
       expect(chef_run).to create_file('example.org SSL public certificate')
-        .with_path('/etc/ssl/certs/example.org.pem')
+        .with_path(::File.join(cert_dir, 'example.org.pem'))
         .with_owner('root')
         .with_group('root')
         .with_mode(00644)
