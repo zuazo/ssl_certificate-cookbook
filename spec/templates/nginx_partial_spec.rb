@@ -51,11 +51,20 @@ describe 'ssl_certificate nginx partial template', order: :random do
   end
 
   context 'with HSTS enabled' do
-    before { node.set['ssl_certificate']['web']['hsts'] = true }
+    before { node.set['ssl_certificate']['web']['use_hsts'] = true }
 
     it 'enables HSTS' do
       expect(template.render(variables))
         .to match(/^\s*add_header Strict-Transport-Security/)
+    end
+  end
+
+  context 'with stapling' do
+    before { node.set['ssl_certificate']['web']['use_stapling'] = true }
+
+    it 'enables stapling' do
+      expect(template.render(variables))
+        .to match(/^\s*ssl_stapling on;/)
     end
   end
 

@@ -81,7 +81,8 @@ Attributes
 | `node['ssl_certificate']['web']['apache']`        | *calculated* | Web template Apache httpd specific SSL attributes.
 | `node['ssl_certificate']['web']['nginx']`         | *calculated* | Web template nginx specific SSL attributes.
 | `node['ssl_certificate']['web']['compatibility']` | `nil`        | Web template SSL compatibility level (See [below](#securing-server-side-tls)).
-| `node['ssl_certificate']['web']['hsts']`          | `false`      | Whether to enable [HSTS](http://en.wikipedia.org/wiki/HTTP_Strict_Transport_Security).
+| `node['ssl_certificate']['web']['use_hsts']`      | `false`      | Whether to enable [HSTS](http://en.wikipedia.org/wiki/HTTP_Strict_Transport_Security).
+| `node['ssl_certificate']['web']['use_stapling']`  | `false`      | Whether to enable [OCSP stapling](http://en.wikipedia.org/wiki/OCSP_stapling).
 
 Resources
 =========

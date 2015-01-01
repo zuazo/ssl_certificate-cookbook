@@ -18,8 +18,15 @@ self.class.send(:include, Chef::SslCertificateCookbook::TemplateHelpers)
   <% if @ssl_config[:cipher_suite].is_a?(String) -%>
   ssl_ciphers <%= @ssl_config[:cipher_suite] %>;
   <% end -%>
+  ssl_prefer_server_ciphers on;
 
-  <% if @ssl_config[:hsts] -%>
+  <% if @ssl_config[:use_hsts] -%>
   # Enable this if your want HSTS (recommended)
-  add_header Strict-Transport-Security "max-age=31536000; includeSubDomains; preload"
+  add_header Strict-Transport-Security "max-age=31536000; includeSubDomains; preload";
+
+  <% end -%>
+  <% if @ssl_config[:use_stapling] -%>
+  ssl_stapling on;
+  ssl_stapling_verify on;
+  resolver 8.8.8.8;
   <% end -%>
