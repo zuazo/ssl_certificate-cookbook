@@ -30,13 +30,13 @@ end
 
   SSLEngine on
 
-  SSLCertificateFile    <%= @params[:ssl_cert] %>
-  SSLCertificateKeyFile <%= @params[:ssl_key] %>
-  <% if @params[:ssl_chain].is_a?(String) -%>
-  SSLCertificateChainFile <%= @params[:ssl_chain] %>
+  SSLCertificateFile <%= @ssl_cert %>
+  SSLCertificateKeyFile <%= @ssl_key %>
+  <% if @ssl_chain.is_a?(String) -%>
+  SSLCertificateChainFile <%= @ssl_chain %>
   <% end -%>
-  <% if @params[:ssl_ca].is_a?(String) -%>
-  SSLCACertificateFile <%= @params[:ssl_ca] %>
+  <% if @ssl_ca.is_a?(String) -%>
+  SSLCACertificateFile <%= @ssl_ca %>
   <% end -%>
 
   <% if @ssl_config[:description].is_a?(String) -%>
@@ -51,7 +51,7 @@ end
 
   <% if @ssl_config[:hsts] -%>
   # Enable this if your want HSTS (recommended)
-  Header add Strict-Transport-Security "max-age=15768000"
+  Header add Strict-Transport-Security "max-age=31536000; includeSubDomains; preload"
   <% end -%>
 
   BrowserMatch "MSIE [2-6]" \

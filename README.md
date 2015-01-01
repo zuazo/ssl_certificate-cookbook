@@ -81,6 +81,7 @@ Attributes
 | `node['ssl_certificate']['web']['apache']`        | *calculated* | Web template Apache httpd specific SSL attributes.
 | `node['ssl_certificate']['web']['nginx']`         | *calculated* | Web template nginx specific SSL attributes.
 | `node['ssl_certificate']['web']['compatibility']` | `nil`        | Web template SSL compatibility level (See [below](#securing-server-side-tls)).
+| `node['ssl_certificate']['web']['hsts']`          | `false`      | Whether to enable [HSTS](http://en.wikipedia.org/wiki/HTTP_Strict_Transport_Security).
 
 Resources
 =========
@@ -405,18 +406,6 @@ This cookbook contains [partial templates](http://docs.chef.io/templates.html#pa
 * *apache.erb*: For Apache httpd web server.
 * *nginx.erb*: For nginx web server.
 
-You can include the partial template as follows:
-
-```erb
-<VirtualHost *:443>
-  ServerName <%= @params[:server_name] %>
-  DocumentRoot <%= @params[:docroot] %>
-  # [...]
-
-  <%= render 'apache.erb', cookbook: 'ssl_certificate' %>
-</VirtualHost>
-```
-
 ### Partial Templates Parameters
 
 | Parameter          | Default          | Description                        |
@@ -424,9 +413,86 @@ You can include the partial template as follows:
 | ssl_cert           | `nil`            | Public SSL certificate full path.
 | ssl_key            | `nil`            | Private SSL key full path.
 | ssl_chain          | `nil`            | Intermediate SSL certificate chain full path (**apache** only) *(optional)*.
-| ssl_chain_combined | `nil`            | Intermediate SSL certificate chain combined file full path (**nginx** only) *(optional)*.
 | ssl_ca             | `nil`            | Certificate Authority full path (**apache** only) *(optional)*.
 | ssl_compatibility  | *node attribute* | SSL compatibility level (See [below](#securing-server-side-tls)).
+
+### Apache Partial Template
+
+#### Using `web_app` Definition
+
+If you are using the `web_app` definition, you should pass the `@params` variables to the partial template:
+
+```ruby
+web_app 'my-webapp-ssl'
+  docroot node['apache']['docroot_dir']
+  server_name cert.common_name
+  # [...]
+  ssl_key cert.key_path
+  ssl_cert cert.cert_path
+  ssl_chain cert.chain_path # nil
+  ssl_ca cert.ca_cert_path # nil
+end
+```
+
+```erb
+<%# included by web_app definition %>
+<VirtualHost *:443>
+  ServerName <%= @params[:server_name] %>
+  DocumentRoot <%= @params[:docroot] %>
+  # [...]
+
+  <%= render 'apache.erb', cookbook: 'ssl_certificate', variables: @params.merge(node: node) %>
+</VirtualHost>
+```
+
+#### Using `template` Resource
+
+```ruby
+cert = ssl_certificate 'my-webapp-ssl'
+template File.join(node['apache']['dir'], 'sites-available', 'my-webapp-ssl') do
+  source 'apache_vhost.erb'
+  # [...]
+  variables(
+    # [...]
+    ssl_key: cert.key_path,
+    ssl_cert: cert.chain_combined_path,
+    ssl_chain cert.chain_path,
+    ssl_ca cert.ca_cert_path
+  )
+end
+```
+
+You can include the partial template as follows:
+
+```erb
+<%# included by template resource %>
+<VirtualHost *:443>
+  ServerName <%= @server_name %>
+  DocumentRoot <%= @docroot %>
+  # [...]
+
+  <%= render 'apache.erb', cookbook: 'ssl_certificate' %>
+</VirtualHost>
+```
+
+### Nginx Partial Template
+
+If you are using nginx template, we recommended to use the `SslCertificate#chain_combined_path` path value to set the `ssl_cert` variable instead of `SslCertificate#cert_path`. That's to ensure we [always include the chained certificate](http://nginx.org/en/docs/http/configuring_https_servers.html#chains) if there is one. This will also work when there is no chained certificate:
+
+```erb
+cert = ssl_certificate 'my-webapp-ssl'
+template File.join(node['nginx']['dir'], 'sites-available', 'my-webapp-ssl') do
+  source 'nginx_vhost.erb'
+  # [...]
+  variables(
+    # [...]
+    ssl_key: cert.key_path,
+    ssl_cert: cert.chain_combined_path
+  )
+end
+```
+
+See [examples below](#examples).
 
 ## Securing Server Side TLS
 
@@ -721,7 +787,7 @@ template File.join(node['nginx']['dir'], 'sites-available', 'my-webapp-ssl') do
     docroot: '/var/www',
     # [...]
     ssl_key: cert.key_path,
-    ssl_chain_combined: cert.chain_combined_path,
+    ssl_cert: cert.chain_combined_path
   )
   notifies :reload, 'service[nginx]'
 end

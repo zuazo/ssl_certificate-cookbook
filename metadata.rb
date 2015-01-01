@@ -91,3 +91,10 @@ attribute 'ssl_certificate/web/compatibility',
           type: 'string',
           required: 'optional',
           default: nil
+
+attribute 'ssl_certificate/web/hsts',
+          display_name: 'ssl_certificate web hsts',
+          description: 'Whether to enable HSTS.',
+          type: 'string',
+          required: 'optional',
+          default: false

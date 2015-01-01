@@ -69,7 +69,7 @@
   RewriteCond %{SCRIPT_FILENAME} !maintenance.html
   RewriteRule ^.*$ /system/maintenance.html [L]
 
-  <%= render 'apache.erb', cookbook: 'ssl_certificate' %>
+  <%= render 'apache.erb', cookbook: 'ssl_certificate', variables: @params.merge(node: node) %>
 
   <% if @params[:extra_directives].kind_of?(Hash)
        @params[:extra_directives].each do |name, value|

@@ -28,11 +28,7 @@ end
   # SSL Configuration #
   # ----------------- #
 
-  <% if @ssl_chain_combined -%>
-  ssl_certificate <%= @ssl_chain_combined %>;
-  <% else -%>
   ssl_certificate <%= @ssl_cert %>;
-  <% end -%>
   ssl_certificate_key <%= @ssl_key %>;
 
   <% if @ssl_config[:description].is_a?(String) -%>
@@ -43,4 +39,9 @@ end
   <% end -%>
   <% if @ssl_config[:cipher_suite].is_a?(String) -%>
   ssl_ciphers <%= @ssl_config[:cipher_suite] %>;
+  <% end -%>
+
+  <% if @ssl_config[:hsts] -%>
+  # Enable this if your want HSTS (recommended)
+  add_header Strict-Transport-Security "max-age=31536000; includeSubDomains; preload"
   <% end -%>

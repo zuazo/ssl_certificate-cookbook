@@ -54,7 +54,7 @@ template File.join(
     server_name: 'ssl.onddo.com',
     docroot: '/var/www',
     ssl_key: cert.key_path,
-    ssl_chain_combined: cert.chain_combined_path,
+    ssl_cert: cert.chain_combined_path,
     ssl_compatibility: :intermediate
   )
   notifies :reload, 'service[nginx]'
