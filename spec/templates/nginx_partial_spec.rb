@@ -19,6 +19,7 @@
 
 require 'spec_helper'
 require 'support/template_render'
+require 'template_helpers'
 
 describe 'ssl_certificate nginx partial template', order: :random do
   let(:web_service) { 'nginx' }

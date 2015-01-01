@@ -1,28 +1,6 @@
 <%
-
-web_service = 'nginx'
-
-ssl_compatibility =
-  @ssl_compatibility || node['ssl_certificate']['web']['compatibility']
-
-@ssl_config = node['ssl_certificate']['web'].dup
-
-if (ssl_compatibility.is_a?(String) || ssl_compatibility.is_a?(Symbol)) &&
-  node['ssl_certificate']['web'][ssl_compatibility].is_a?(Hash)
-  Chef::Mixin::DeepMerge.hash_only_merge!(
-    @ssl_config,
-    node['ssl_certificate']['web'][ssl_compatibility]
-  )
-end
-
-if @ssl_config[web_service].is_a?(Hash)
-  web_config = @ssl_config.delete(web_service)
-  Chef::Mixin::DeepMerge.hash_only_merge!(
-    @ssl_config,
-    web_config
-  )
-end
-
+self.class.send(:include, Chef::SslCertificateCookbook::TemplateHelpers)
+@ssl_config = ssl_config('nginx')
 -%>
 # ----------------- #
   # SSL Configuration #
