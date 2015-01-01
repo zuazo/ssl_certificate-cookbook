@@ -20,16 +20,8 @@ if @ssl_config[web_service].is_a?(Hash)
   Chef::Mixin::DeepMerge.hash_only_merge!(
     @ssl_config,
     web_config
-ssl_compatibility =
-  @params[:ssl_compatibility] || node['ssl_certificate']['web']['compatibility']
-
-@ssl_config =
-  if ssl_compatibility.is_a?(String) ||
-     ssl_compatibility.is_a?(Symbol)
-    node['ssl_certificate']['web'][ssl_compatibility]
-  else
-    node['ssl_certificate']['web']
-  end
+  )
+end
 
 -%>
 # ----------------- #
