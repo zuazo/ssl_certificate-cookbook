@@ -26,12 +26,17 @@ self.class.send(:include, Chef::SslCertificateCookbook::TemplateHelpers)
   <% if @ssl_config[:cipher_suite].is_a?(String) -%>
   SSLCipherSuite <%= @ssl_config[:cipher_suite] %>
   <% end -%>
+  SSLHonorCipherOrder on
 
-  <% if @ssl_config[:hsts] -%>
+  <% if @ssl_config[:use_hsts] -%>
   # Enable this if your want HSTS (recommended)
   Header add Strict-Transport-Security "max-age=31536000; includeSubDomains; preload"
-  <% end -%>
 
+  <% end -%>
+  <% if @ssl_config[:use_stapling] -%>
+  SSLUseStapling on
+
+  <% end -%>
   BrowserMatch "MSIE [2-6]" \
     nokeepalive ssl-unclean-shutdown \
     downgrade-1.0 force-response-1.0

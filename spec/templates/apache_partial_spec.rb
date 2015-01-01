@@ -64,6 +64,11 @@ describe 'ssl_certificate apache partial template', order: :random do
       .to_not match(/^\s*Header add Strict-Transport-Security/)
   end
 
+  it 'does not enable stapling' do
+    expect(template.render(variables))
+      .to_not match(/^\s*SSLUseStapling on/)
+  end
+
   context 'with SSL intermediary chain' do
     let(:ssl_chain) { '/etc/ssl/certs/chain.pem' }
     let(:variables) { minimum_variables.merge(ssl_chain: ssl_chain) }
@@ -85,11 +90,20 @@ describe 'ssl_certificate apache partial template', order: :random do
   end # context with SSL CA
 
   context 'with HSTS enabled' do
-    before { node.set['ssl_certificate']['web']['hsts'] = true }
+    before { node.set['ssl_certificate']['web']['use_hsts'] = true }
 
     it 'enables HSTS' do
       expect(template.render(variables))
         .to match(/^\s*Header add Strict-Transport-Security/)
+    end
+  end
+
+  context 'with stapling enabled' do
+    before { node.set['ssl_certificate']['web']['use_stapling'] = true }
+
+    it 'enables stapling' do
+      expect(template.render(variables))
+        .to match(/^\s*SSLUseStapling on/)
     end
   end
 
