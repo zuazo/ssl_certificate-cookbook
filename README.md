@@ -442,8 +442,8 @@ web_app 'my-webapp-ssl'
   # [...]
   ssl_key cert.key_path
   ssl_cert cert.cert_path
-  ssl_chain cert.chain_path # nil
-  ssl_ca cert.ca_cert_path # nil
+  ssl_chain cert.chain_path
+  ssl_ca cert.ca_cert_path
 end
 ```
 
@@ -452,7 +452,7 @@ end
 <VirtualHost *:443>
   ServerName <%= @params[:server_name] %>
   DocumentRoot <%= @params[:docroot] %>
-  # [...]
+  <%# [...] %>
 
   <%= render 'apache.erb', cookbook: 'ssl_certificate', variables: @params.merge(node: node) %>
 </VirtualHost>
@@ -482,7 +482,7 @@ You can include the partial template as follows:
 <VirtualHost *:443>
   ServerName <%= @server_name %>
   DocumentRoot <%= @docroot %>
-  # [...]
+  <%# [...] %>
 
   <%= render 'apache.erb', cookbook: 'ssl_certificate' %>
 </VirtualHost>
@@ -776,6 +776,8 @@ web_app 'my-webapp' do
 end
 ```
 
+See [templates documentation](#templates).
+
 ### Nginx Example
 
 Minimal `nginx` example using community [nginx](http://community.opscode.com/cookbooks/nginx) cookbook:
@@ -828,11 +830,13 @@ server {
   error_log  <%= node['nginx']['log_dir'] %>/<%= @name %>-error.log;
 
   index index.html;
-  # [...]
+  <%# [...] %>
 
   <%= render 'nginx.erb', cookbook: 'ssl_certificate' %>
 }
 ```
+
+See [templates documentation](#templates).
 
 ### Reading the Certificate from Attributes
 
