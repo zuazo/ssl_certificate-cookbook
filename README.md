@@ -3,7 +3,7 @@ Description
 [![Cookbook Version](https://img.shields.io/cookbook/v/ssl_certificate.svg?style=flat)](https://supermarket.getchef.com/cookbooks/ssl_certificate)
 [![Dependency Status](http://img.shields.io/gemnasium/onddo/ssl_certificate-cookbook.svg?style=flat)](https://gemnasium.com/onddo/ssl_certificate-cookbook)
 [![Code Climate](http://img.shields.io/codeclimate/github/onddo/ssl_certificate-cookbook.svg?style=flat)](https://codeclimate.com/github/onddo/ssl_certificate-cookbook)
-[![Build Status](http://img.shields.io/travis/onddo/ssl_certificate-cookbook.svg?style=flat)](https://travis-ci.org/onddo/ssl_certificate-cookbook)
+[![Build Status](http://img.shields.io/travis/onddo/ssl_certificate-cookbook/1.1.0.svg?style=flat)](https://travis-ci.org/onddo/ssl_certificate-cookbook)
 
 The main purpose of this cookbook is to make it easy for other cookbooks to support SSL. With the resource included, you will be able to manage certificates reading them from attributes, data bags or chef-vaults. Exposing its configuration through node attributes.
 
@@ -1162,7 +1162,7 @@ License and Author
 | **Contributor:**     | [Elliott Davis](https://github.com/elliott-davis)
 | **Contributor:**     | [Jeremy MAURO](https://github.com/jmauro)
 | **Contributor:**     | [Benjamin Nørgaard](https://github.com/blacksails)
-| **Copyright:**       | Copyright (c) 2014, Onddo Labs, SL. (www.onddo.com)
+| **Copyright:**       | Copyright (c) 2014-2015, Onddo Labs, SL. (www.onddo.com)
 | **License:**         | Apache License, Version 2.0
 
     Licensed under the Apache License, Version 2.0 (the "License");

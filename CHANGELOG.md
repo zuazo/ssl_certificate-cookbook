@@ -3,6 +3,19 @@ ssl_certificate CHANGELOG
 
 This file is used to list changes made in each version of the `ssl_certificate` cookbook.
 
+## v1.1.0 (2015-01-02)
+
+* Fix FreeBSD support.
+* Allow to change the certificate file owner.
+* Web server template improvements:
+ * Fix Apache 2.4 support.
+ * Add partial templates for Apache and nginx.
+ * Add CA certificate file support.
+ * Add adjustable SSL compatibility level.
+ * Add OCSP stapling support.
+ * Enable HSTS and stapling by default.
+* Fix all integration tests.
+
 ## v1.0.0 (2014-12-30)
 
 * Bugfix: Cannot read SSL intermediary chain from data bag.
