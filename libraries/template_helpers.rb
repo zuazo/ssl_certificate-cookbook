@@ -79,6 +79,17 @@ class Chef
       def ssl_config(web_service)
         generate_ssl_config(web_service)
       end
+
+      def nginx_version
+        return nil unless node.key?('nginx')
+        node['nginx']['version']
+      end
+
+      def nginx_version_satisfies?(requirement)
+        return false if nginx_version.nil?
+        version = Gem::Version.new(nginx_version)
+        Gem::Requirement.new(requirement).satisfied_by?(version)
+      end
     end
   end
 end

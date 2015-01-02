@@ -97,11 +97,11 @@ attribute 'ssl_certificate/web/use_hsts',
           description: 'Whether to enable HSTS.',
           type: 'string',
           required: 'optional',
-          default: false
+          default: true
 
 attribute 'ssl_certificate/web/use_stapling',
           display_name: 'ssl_certificate web use stapling',
           description: 'Whether to enable OCSP stapling.',
           type: 'string',
           required: 'optional',
-          default: false
+          calculated: true

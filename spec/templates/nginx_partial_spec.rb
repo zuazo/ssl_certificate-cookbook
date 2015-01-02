@@ -45,31 +45,44 @@ describe 'ssl_certificate nginx partial template', order: :random do
       .to match(/^\s*ssl_certificate_key\s+#{Regexp.escape(ssl_key)}/)
   end
 
-  it 'does not enable HSTS' do
+  it 'enables HSTS' do
     expect(template.render(variables))
-      .to_not match(/^\s*add_header Strict-Transport-Security/)
+      .to match(/^\s*add_header Strict-Transport-Security/)
   end
 
-  it 'does not enable stapling' do
-    expect(template.render(variables))
-      .to_not match(/^\s*ssl_stapling on;/)
-  end
-
-  context 'with HSTS enabled' do
-    before { node.set['ssl_certificate']['web']['use_hsts'] = true }
-
-    it 'enables HSTS' do
-      expect(template.render(variables))
-        .to match(/^\s*add_header Strict-Transport-Security/)
-    end
-  end
-
-  context 'with stapling' do
-    before { node.set['ssl_certificate']['web']['use_stapling'] = true }
+  context 'with nginx >= 1.3.7' do
+    before { node.set['nginx']['version'] = '1.3.7' }
 
     it 'enables stapling' do
       expect(template.render(variables))
         .to match(/^\s*ssl_stapling on;/)
+    end
+  end
+
+  context 'with nginx < 1.3.7' do
+    before { node.set['nginx']['version'] = '1.3.6' }
+
+    it 'does not enable stapling' do
+      expect(template.render(variables))
+        .to_not match(/^\s*ssl_stapling on;/)
+    end
+  end
+
+  context 'without HSTS enabled' do
+    before { node.set['ssl_certificate']['web']['use_hsts'] = false }
+
+    it 'does not enable HSTS' do
+      expect(template.render(variables))
+        .to_not match(/^\s*add_header Strict-Transport-Security/)
+    end
+  end
+
+  context 'without stapling' do
+    before { node.set['ssl_certificate']['web']['use_stapling'] = false }
+
+    it 'does not enable stapling' do
+      expect(template.render(variables))
+        .to_not match(/^\s*ssl_stapling on;/)
     end
   end
 

@@ -23,8 +23,8 @@ default['ssl_certificate']['web']['cipher_suite'] = nil
 default['ssl_certificate']['web']['protocols']['apache'] = nil
 default['ssl_certificate']['web']['protocols']['nginx'] = nil
 default['ssl_certificate']['web']['compatibility'] = nil
-default['ssl_certificate']['web']['use_hsts'] = false
-default['ssl_certificate']['web']['use_stapling'] = false
+default['ssl_certificate']['web']['use_hsts'] = true
+default['ssl_certificate']['web']['use_stapling'] = true
 
 # SSL Recommended configurations from
 # https://wiki.mozilla.org/Security/Server_Side_TLS#Recommended_configurations

@@ -81,8 +81,8 @@ Attributes
 | `node['ssl_certificate']['web']['apache']`        | *calculated* | Web template Apache httpd specific SSL attributes.
 | `node['ssl_certificate']['web']['nginx']`         | *calculated* | Web template nginx specific SSL attributes.
 | `node['ssl_certificate']['web']['compatibility']` | `nil`        | Web template SSL compatibility level (See [below](#securing-server-side-tls)).
-| `node['ssl_certificate']['web']['use_hsts']`      | `false`      | Whether to enable [HSTS](http://en.wikipedia.org/wiki/HTTP_Strict_Transport_Security).
-| `node['ssl_certificate']['web']['use_stapling']`  | `false`      | Whether to enable [OCSP stapling](http://en.wikipedia.org/wiki/OCSP_stapling).
+| `node['ssl_certificate']['web']['use_hsts']`      | `true`       | Whether to enable [HSTS](http://en.wikipedia.org/wiki/HTTP_Strict_Transport_Security).
+| `node['ssl_certificate']['web']['use_stapling']`  | *calculated* | Whether to enable [OCSP stapling](http://en.wikipedia.org/wiki/OCSP_stapling) (nginx only, use `node['apache']['mod_ssl']['use_stapling']` for apache).
 
 Resources
 =========
@@ -457,8 +457,8 @@ template File.join(node['apache']['dir'], 'sites-available', 'my-webapp-ssl') do
     # [...]
     ssl_key: cert.key_path,
     ssl_cert: cert.chain_combined_path,
-    ssl_chain cert.chain_path,
-    ssl_ca cert.ca_cert_path
+    ssl_chain: cert.chain_path,
+    ssl_ca: cert.ca_cert_path
   )
 end
 ```

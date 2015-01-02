@@ -59,14 +59,9 @@ describe 'ssl_certificate apache partial template', order: :random do
       .to_not match(/^\s*SSLCACertificateFile/)
   end
 
-  it 'does not enable HSTS' do
+  it 'enables HSTS' do
     expect(template.render(variables))
-      .to_not match(/^\s*Header add Strict-Transport-Security/)
-  end
-
-  it 'does not enable stapling' do
-    expect(template.render(variables))
-      .to_not match(/^\s*SSLUseStapling on/)
+      .to match(/^\s*Header add Strict-Transport-Security/)
   end
 
   context 'with SSL intermediary chain' do
@@ -89,21 +84,12 @@ describe 'ssl_certificate apache partial template', order: :random do
     end
   end # context with SSL CA
 
-  context 'with HSTS enabled' do
-    before { node.set['ssl_certificate']['web']['use_hsts'] = true }
+  context 'without HSTS enabled' do
+    before { node.set['ssl_certificate']['web']['use_hsts'] = false }
 
-    it 'enables HSTS' do
+    it 'does not enable HSTS' do
       expect(template.render(variables))
-        .to match(/^\s*Header add Strict-Transport-Security/)
-    end
-  end
-
-  context 'with stapling enabled' do
-    before { node.set['ssl_certificate']['web']['use_stapling'] = true }
-
-    it 'enables stapling' do
-      expect(template.render(variables))
-        .to match(/^\s*SSLUseStapling on/)
+        .to_not match(/^\s*Header add Strict-Transport-Security/)
     end
   end
 
