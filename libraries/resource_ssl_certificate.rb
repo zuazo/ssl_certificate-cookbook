@@ -60,8 +60,6 @@ class Chef
         @action = :create
         @allowed_actions.push(@action)
         @provider = Chef::Provider::SslCertificate
-
-        # default values
         @namespace = Mash.new
         initialize_defaults
       end
@@ -70,9 +68,7 @@ class Chef
 
       def initialize_attribute_defaults(attributes)
         attributes.each do |var|
-          instance_variable_set(
-            "@#{var}".to_sym, send("default_#{var}")
-          )
+          instance_variable_set("@#{var}".to_sym, send("default_#{var}"))
         end
       end
 
@@ -118,6 +114,20 @@ class Chef
         # ~ 10 years
         set_or_return(
           :time, arg, kind_of: [Fixnum, String, Time], default: 315_360_000
+        )
+      end
+
+      def owner(arg = nil)
+        set_or_return(
+          :owner, arg,
+          kind_of: String, default: node['ssl_certificate']['user']
+        )
+      end
+
+      def group(arg = nil)
+        set_or_return(
+          :group, arg,
+          kind_of: String, default: node['ssl_certificate']['group']
         )
       end
 

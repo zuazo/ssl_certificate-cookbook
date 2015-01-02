@@ -45,8 +45,8 @@ class Chef
 
       def file(name, &resource_attrs_block)
         resource = Chef::Resource::File.new(name, new_resource.run_context)
-        resource.owner(node['ssl_certificate']['user'])
-        resource.group(node['ssl_certificate']['group'])
+        resource.owner(new_resource.owner)
+        resource.group(new_resource.group)
         resource.instance_eval(&resource_attrs_block) if block_given?
         resource.action(:nothing)
         resource

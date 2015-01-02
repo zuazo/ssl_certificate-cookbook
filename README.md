@@ -74,6 +74,8 @@ Attributes
 
 | Attribute                                         | Default      | Description                        |
 |:--------------------------------------------------|:-------------|:-----------------------------------|
+| `node['ssl_certificate']['user']`                 | `'root'`     | Default SSL files owner user.
+| `node['ssl_certificate']['group']`                | *calculated* | Default SSL files owner group.
 | `node['ssl_certificate']['key_dir']`              | *calculated* | Default SSL key directory.
 | `node['ssl_certificate']['cert_dir']`             | *calculated* | Default SSL certificate directory.
 | `node['ssl_certificate']['web']['cipher_suite']`  | `nil`        | Web template default SSL cipher suite.
@@ -165,6 +167,16 @@ By default the resource will create a self-signed certificate, but a custom one 
     <td>years</td>
     <td>Write only attribute for setting self-signed certificate validity period in years.</td>
     <td><code>10</code></td>
+  </tr>
+  <tr>
+    <td>owner</td>
+    <td>Certificate files owner user.</td>
+    <td><code>node['ssl_certificate']['user']</code></td>
+  </tr>
+  <tr>
+    <td>group</td>
+    <td>Certificate files owner group.</td>
+    <td><code>node['ssl_certificate']['group']</code></td>
   </tr>
   <tr>
     <td>dir</td>
@@ -478,9 +490,9 @@ You can include the partial template as follows:
 
 ### Nginx Partial Template
 
-If you are using nginx template, we recommended to use the `SslCertificate#chain_combined_path` path value to set the `ssl_cert` variable instead of `SslCertificate#cert_path`. That's to ensure we [always include the chained certificate](http://nginx.org/en/docs/http/configuring_https_servers.html#chains) if there is one. This will also work when there is no chained certificate:
+If you are using nginx template, we recommended to use the `SslCertificate#chain_combined_path` path value to set the `ssl_cert` variable instead of `SslCertificate#cert_path`. That's to ensure we [always include the chained certificate](http://nginx.org/en/docs/http/configuring_https_servers.html#chains) if there is one. This will also work when there is no chained certificate.
 
-```erb
+```ruby
 cert = ssl_certificate 'my-webapp-ssl'
 template File.join(node['nginx']['dir'], 'sites-available', 'my-webapp-ssl') do
   source 'nginx_vhost.erb'

@@ -20,6 +20,9 @@
 # limitations under the License.
 #
 
+include_recipe 'apache2'
+include_recipe 'apache2::mod_ssl'
+
 cert1_name = 'dummy1'
 node.default[cert1_name]['ssl_cert']['source'] = 'self-signed'
 node.default[cert1_name]['ssl_key']['source'] = 'self-signed'
@@ -55,6 +58,8 @@ node.default[cert5_name]['ssl_cert']['item'] = 'cert'
 node.default[cert5_name]['ssl_cert']['item_key'] = 'content'
 ssl_certificate 'dummy5-data-bag' do
   namespace cert5_name
+  owner node['apache']['user'] # don't do this in real life, just for testing
+  group node['apache']['group'] # don't do this in real life, just for testing
 end
 
 cert6_name = 'dummy6-attributes'
@@ -110,8 +115,6 @@ cert = ssl_certificate node['fqdn'] do
   notifies :restart, 'service[apache2]'
 end
 
-include_recipe 'apache2'
-include_recipe 'apache2::mod_ssl'
 web_app node['fqdn'] do
   # this cookbook includes a virtualhost template for apache2
   cookbook 'ssl_certificate'

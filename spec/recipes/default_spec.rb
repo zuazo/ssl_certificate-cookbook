@@ -53,6 +53,8 @@ describe 'ssl_certificate_test::default', order: :random do
 
   it 'creates dummy5 certificate' do
     expect(chef_run).to create_ssl_certificate('dummy5-data-bag')
+      .with_owner('www-data')
+      .with_group('www-data')
   end
 
   it 'creates dummy6 certificate' do
@@ -120,8 +122,8 @@ describe 'ssl_certificate_test::default', order: :random do
     it 'creates dummy5 key from an encrypted data bag' do
       expect(chef_run).to create_file('dummy5-data-bag SSL certificate key')
         .with_path('/etc/ssl/private/dummy5-data-bag.key')
-        .with_owner('root')
-        .with_group('root')
+        .with_owner('www-data')
+        .with_group('www-data')
         .with_mode(00600)
         .with_content(db_key)
     end
@@ -129,8 +131,8 @@ describe 'ssl_certificate_test::default', order: :random do
     it 'creates dummy5 certificate from a data bag' do
       expect(chef_run).to create_file('dummy5-data-bag SSL public certificate')
         .with_path('/etc/ssl/certs/dummy5-data-bag.pem')
-        .with_owner('root')
-        .with_group('root')
+        .with_owner('www-data')
+        .with_group('www-data')
         .with_mode(00644)
         .with_content(db_cert)
     end
@@ -141,8 +143,8 @@ describe 'ssl_certificate_test::default', order: :random do
           'dummy5-data-bag SSL intermediary chain combined certificate'
         )
         .with_path('/etc/ssl/certs/dummy5-data-bag.pem.chained.pem')
-        .with_owner('root')
-        .with_group('root')
+        .with_owner('www-data')
+        .with_group('www-data')
         .with_mode(00644)
         .with_content(db_cert)
     end

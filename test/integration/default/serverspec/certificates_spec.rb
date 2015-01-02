@@ -31,6 +31,21 @@ key_dir, cert_dir =
     %w(/etc /etc)
   end
 
+web_user, web_group =
+  if %w(debian ubuntu).include?(family)
+    %w(www-data www-data)
+  elsif %w(redhat centos fedora scientific amazon).include?(family)
+    %w(apache apache)
+  elsif %w(suse opensuse).include?(family)
+    %w(wwwrun www)
+  elsif %w(arch).include?(family)
+    %w(http http)
+  elsif %w(freebsd).include?(family)
+    %w(www www)
+  else
+    %w(www-data www-data)
+  end
+
 group = family == 'freebsd' ? 'wheel' : 'root'
 
 (1..4).each do |i|
@@ -52,15 +67,15 @@ end
 describe file("#{key_dir}/dummy5-data-bag.key") do
   it { should be_file }
   it { should be_mode 600 }
-  it { should be_owned_by 'root' }
-  it { should be_grouped_into group }
+  it { should be_owned_by web_user }
+  it { should be_grouped_into web_group }
 end
 
 describe file("#{cert_dir}/dummy5-data-bag.pem") do
   it { should be_file }
   it { should be_mode 644 }
-  it { should be_owned_by 'root' }
-  it { should be_grouped_into group }
+  it { should be_owned_by web_user }
+  it { should be_grouped_into web_group }
 end
 
 describe file("#{key_dir}/dummy6-attributes.key") do
