@@ -6,7 +6,7 @@
 # Author:: Xabier de Zuazo (<xabier@onddo.com>)
 # Author:: Steve Meinel (<steve.meinel@caltech.edu>)
 # Author:: Jeremy MAURO (<j.mauro@criteo.com>)
-# Copyright:: Copyright (c) 2014 Onddo Labs, SL. (www.onddo.com)
+# Copyright:: Copyright (c) 2014-2015 Onddo Labs, SL. (www.onddo.com)
 # License:: Apache License, Version 2.0
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
