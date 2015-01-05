@@ -19,7 +19,7 @@
 
 require 'spec_helper'
 require 'support/template_render'
-require 'template_helpers'
+require 'service_helpers'
 
 describe 'ssl_certificate apache partial template', order: :random do
   let(:web_service) { 'apache' }
@@ -30,6 +30,26 @@ describe 'ssl_certificate apache partial template', order: :random do
   let(:ssl_cert) { '/etc/ssl/certs/cert.pem' }
   let(:minimum_variables) { { ssl_key: ssl_key, ssl_cert: ssl_cert } }
   let(:variables) { minimum_variables }
+  before { allow(Chef::Log).to receive(:warn) }
+
+  context 'with old node["ssl_certificate"]["web"] configuration' do
+    before do
+      node.set['ssl_certificate']['web']['protocols'] = 'backwards'
+    end
+
+    it 'maintains backwards compatibility' do
+      expect(template.render(variables))
+        .to match(/^\s*SSLProtocol\s+backwards/)
+    end
+
+    it 'print deprecated warning' do
+      expect(Chef::Log).to receive(:warn).with(
+        "[DEPRECATED] Use `node['ssl_certificate']['service']['compatibility']"\
+        "` instead of `node['ssl_certificate']['web']['compatibility']`."
+      )
+      template.render(variables)
+    end
+  end
 
   it 'renders without errors' do
     expect { template.render(variables) }.to_not raise_error
@@ -75,7 +95,7 @@ describe 'ssl_certificate apache partial template', order: :random do
   end # context with SSL intermediary chain
 
   context 'without HSTS enabled' do
-    before { node.set['ssl_certificate']['web']['use_hsts'] = false }
+    before { node.set['ssl_certificate']['service']['use_hsts'] = false }
 
     it 'does not enable HSTS' do
       expect(template.render(variables))
@@ -84,7 +104,7 @@ describe 'ssl_certificate apache partial template', order: :random do
   end
 
   shared_examples 'compatibility configuration' do |level|
-    let(:config) { node['ssl_certificate']['web'][level.to_s] }
+    let(:config) { node['ssl_certificate']['service'][level.to_s] }
 
     it 'contains description' do
       expect(config['description']).to be_a(String)
@@ -124,7 +144,7 @@ describe 'ssl_certificate apache partial template', order: :random do
   ).each do |level|
     context "with #{level} compatibility in attributes" do
       before do
-        node.set['ssl_certificate']['web']['compatibility'] = level.to_sym
+        node.set['ssl_certificate']['service']['compatibility'] = level.to_sym
       end
 
       it_behaves_like 'compatibility configuration', level

@@ -1,7 +1,7 @@
 # encoding: UTF-8
 #
 # Cookbook Name:: ssl_certificate
-# Attributes:: web
+# Attributes:: service
 # Author:: Xabier de Zuazo (<xabier@onddo.com>)
 # Copyright:: Copyright (c) 2014 Onddo Labs, SL. (www.onddo.com)
 # License:: Apache License, Version 2.0
@@ -19,17 +19,16 @@
 # limitations under the License.
 #
 
-default['ssl_certificate']['web']['cipher_suite'] = nil
-default['ssl_certificate']['web']['protocols']['apache'] = nil
-default['ssl_certificate']['web']['protocols']['nginx'] = nil
-default['ssl_certificate']['web']['compatibility'] = nil
-default['ssl_certificate']['web']['use_hsts'] = true
-default['ssl_certificate']['web']['use_stapling'] = true
+default['ssl_certificate']['web'] = Mash.new # for backwards compat
+
+default['ssl_certificate']['service']['compatibility'] = nil
+default['ssl_certificate']['service']['use_hsts'] = true
+default['ssl_certificate']['service']['use_stapling'] = true
 
 # SSL Recommended configurations from
 # https://wiki.mozilla.org/Security/Server_Side_TLS#Recommended_configurations
 
-old = default['ssl_certificate']['web']['old']
+old = default['ssl_certificate']['service']['old']
 old['description'] = 'Old backward compatibility: Windows XP IE6, Java 6'
 old['cipher_suite'] =
   'ECDHE-RSA-AES128-GCM-SHA256:ECDHE-ECDSA-AES128-GCM-SHA256:'\
@@ -48,10 +47,12 @@ old['cipher_suite'] =
   'HIGH:'\
   '!aNULL:!eNULL:!EXPORT:!DES:!RC4:!MD5:!PSK:!aECDH:!EDH-DSS-DES-CBC3-SHA:'\
   '!EDH-RSA-DES-CBC3-SHA:!KRB5-DES-CBC3-SHA'
+old_protocols = %w(SSLv3 TLSv1 TLSv1.1 TLSv1.2)
+old['protocols'] = old_protocols
 old['apache']['protocols'] = 'all -SSLv2'
-old['nginx']['protocols'] = 'SSLv3 TLSv1 TLSv1.1 TLSv1.2'
+old['nginx']['protocols'] = old_protocols.join(' ')
 
-intermediate = default['ssl_certificate']['web']['intermediate']
+intermediate = default['ssl_certificate']['service']['intermediate']
 intermediate['description'] =
   'Intermediate compatibility: Firefox 1, Chrome 1, IE 7, Opera 5, Safari 1, '\
   'Windows XP IE8, Android 2.3, Java 7'
@@ -70,10 +71,12 @@ intermediate['cipher_suite'] =
   'DES-CBC3-SHA:'\
   '!aNULL:!eNULL:!EXPORT:!DES:!RC4:!MD5:!PSK:!aECDH:!EDH-DSS-DES-CBC3-SHA:'\
   '!EDH-RSA-DES-CBC3-SHA:!KRB5-DES-CBC3-SHA'
+intermediate_protocols = %w(TLSv1 TLSv1.1 TLSv1.2)
+intermediate['protocols'] = intermediate_protocols
 intermediate['apache']['protocols'] = 'all -SSLv2 -SSLv3'
-intermediate['nginx']['protocols'] = 'TLSv1 TLSv1.1 TLSv1.2'
+intermediate['nginx']['protocols'] = intermediate_protocols.join(' ')
 
-modern = default['ssl_certificate']['web']['modern']
+modern = default['ssl_certificate']['service']['modern']
 modern['description'] =
   'Modern compatibility: Firefox 27, Chrome 22, IE 11, Opera 14, Safari 7, '\
   'Android 4.4, Java 8'
@@ -87,5 +90,7 @@ modern['cipher_suite'] =
   'DHE-RSA-AES128-SHA:DHE-DSS-AES128-SHA256:DHE-RSA-AES256-SHA256:'\
   'DHE-DSS-AES256-SHA:DHE-RSA-AES256-SHA:'\
   '!aNULL:!eNULL:!EXPORT:!DES:!RC4:!3DES:!MD5:!PSK'
+modern_protocols = %w(TLSv1.1 TLSv1.2)
+modern['protocols'] = modern_protocols
 modern['apache']['protocols'] = 'all -SSLv2 -SSLv3 -TLSv1'
-modern['nginx']['protocols'] = 'TLSv1.1 TLSv1.2'
+modern['nginx']['protocols'] = modern_protocols.join(' ')

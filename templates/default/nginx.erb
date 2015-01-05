@@ -1,6 +1,6 @@
 <%
-self.class.send(:include, Chef::SslCertificateCookbook::TemplateHelpers)
-@ssl_config = ssl_config('nginx')
+self.class.send(:include, Chef::SslCertificateCookbook::ServiceHelpers)
+@ssl_config = ssl_config_for_service('nginx')
 -%>
 # ----------------- #
   # SSL Configuration #

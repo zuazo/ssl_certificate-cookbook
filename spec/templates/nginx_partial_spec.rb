@@ -19,7 +19,7 @@
 
 require 'spec_helper'
 require 'support/template_render'
-require 'template_helpers'
+require 'service_helpers'
 
 describe 'ssl_certificate nginx partial template', order: :random do
   let(:web_service) { 'nginx' }
@@ -69,7 +69,7 @@ describe 'ssl_certificate nginx partial template', order: :random do
   end
 
   context 'without HSTS enabled' do
-    before { node.set['ssl_certificate']['web']['use_hsts'] = false }
+    before { node.set['ssl_certificate']['service']['use_hsts'] = false }
 
     it 'does not enable HSTS' do
       expect(template.render(variables))
@@ -78,7 +78,7 @@ describe 'ssl_certificate nginx partial template', order: :random do
   end
 
   context 'without stapling' do
-    before { node.set['ssl_certificate']['web']['use_stapling'] = false }
+    before { node.set['ssl_certificate']['service']['use_stapling'] = false }
 
     it 'does not enable stapling' do
       expect(template.render(variables))
@@ -87,7 +87,7 @@ describe 'ssl_certificate nginx partial template', order: :random do
   end
 
   shared_examples 'compatibility configuration' do |level|
-    let(:config) { node['ssl_certificate']['web'][level.to_s] }
+    let(:config) { node['ssl_certificate']['service'][level.to_s] }
 
     it 'contains description' do
       expect(config['description']).to be_a(String)
@@ -108,7 +108,9 @@ describe 'ssl_certificate nginx partial template', order: :random do
     end
 
     it 'adds protocols' do
-      protocols_regexp = Regexp.escape(config[web_service]['protocols'])
+      protocols = config[web_service]['protocols']
+      protocols = protocols.call if protocols.respond_to?(:call)
+      protocols_regexp = Regexp.escape(protocols)
       expect(template.render(variables))
         .to match(/^\s*ssl_protocols\s+#{protocols_regexp};/)
     end
@@ -127,7 +129,7 @@ describe 'ssl_certificate nginx partial template', order: :random do
   ).each do |level|
     context "with #{level} compatibility in attributes" do
       before do
-        node.set['ssl_certificate']['web']['compatibility'] = level.to_sym
+        node.set['ssl_certificate']['service']['compatibility'] = level.to_sym
       end
 
       it_behaves_like 'compatibility configuration', level

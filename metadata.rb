@@ -56,52 +56,52 @@ attribute 'ssl_certificate/cert_dir',
           required: 'optional',
           calculated: true
 
-grouping 'ssl_certificate/web',
-         title: 'ssl_certificate web',
-         description: 'ssl_certificate web template defaults.'
+grouping 'ssl_certificate/service',
+         title: 'ssl_certificate service',
+         description: 'ssl_certificate service defaults.'
 
-attribute 'ssl_certificate/web/cipher_suite',
-          display_name: 'ssl_certificate web cipher suite',
-          description: 'Web template default SSL cipher suite.',
+attribute 'ssl_certificate/service/cipher_suite',
+          display_name: 'ssl_certificate service cipher suite',
+          description: 'Service default SSL cipher suite.',
           type: 'string',
           required: 'optional',
           default: nil
 
-grouping 'ssl_certificate/web/protocols',
-         title: 'ssl_certificate web protocol',
-         description: 'ssl_certificate web template SSL protocols.'
+grouping 'ssl_certificate/service/protocols',
+         title: 'ssl_certificate service protocol',
+         description: 'ssl_certificate service SSL protocols.'
 
-attribute 'ssl_certificate/web/protocols/nginx',
+attribute 'ssl_certificate/service/protocols/nginx',
+          display_name: 'ssl_certificate service protocol',
+          description: 'nginx service default SSL protocols.',
+          type: 'string',
+          required: 'optional',
+          default: nil
+
+attribute 'ssl_certificate/service/protocols/apache',
           display_name: 'ssl_certificate web protocol',
-          description: 'Web template default SSL protocols for nginx.',
+          description: 'Apache web service default SSL protocols.',
           type: 'string',
           required: 'optional',
           default: nil
 
-attribute 'ssl_certificate/web/protocols/apache',
-          display_name: 'ssl_certificate web protocol',
-          description: 'Web template default SSL protocols for Apache httpd.',
+attribute 'ssl_certificate/service/compatibility',
+          display_name: 'ssl_certificate service compatibility',
+          description: 'Service SSL compatibility level.',
           type: 'string',
           required: 'optional',
           default: nil
 
-attribute 'ssl_certificate/web/compatibility',
-          display_name: 'ssl_certificate web compatibility',
-          description: 'Web template SSL compatibility level.',
-          type: 'string',
-          required: 'optional',
-          default: nil
-
-attribute 'ssl_certificate/web/use_hsts',
+attribute 'ssl_certificate/service/use_hsts',
           display_name: 'ssl_certificate web use hsts',
-          description: 'Whether to enable HSTS.',
+          description: 'Whether to enable HSTS in the service.',
           type: 'string',
           required: 'optional',
           default: true
 
-attribute 'ssl_certificate/web/use_stapling',
+attribute 'ssl_certificate/service/use_stapling',
           display_name: 'ssl_certificate web use stapling',
-          description: 'Whether to enable OCSP stapling.',
+          description: 'Whether to enable OCSP stapling in the service.',
           type: 'string',
           required: 'optional',
           calculated: true

@@ -72,19 +72,19 @@ Please, [let us know](https://github.com/onddo/ssl_certificate-cookbook/issues/n
 Attributes
 ==========
 
-| Attribute                                         | Default      | Description                        |
-|:--------------------------------------------------|:-------------|:-----------------------------------|
-| `node['ssl_certificate']['user']`                 | `'root'`     | Default SSL files owner user.
-| `node['ssl_certificate']['group']`                | *calculated* | Default SSL files owner group.
-| `node['ssl_certificate']['key_dir']`              | *calculated* | Default SSL key directory.
-| `node['ssl_certificate']['cert_dir']`             | *calculated* | Default SSL certificate directory.
-| `node['ssl_certificate']['web']['cipher_suite']`  | `nil`        | Web template default SSL cipher suite.
-| `node['ssl_certificate']['web']['protocols']`     | `nil`        | Web template default SSL protocols.
-| `node['ssl_certificate']['web']['apache']`        | *calculated* | Web template Apache httpd specific SSL attributes.
-| `node['ssl_certificate']['web']['nginx']`         | *calculated* | Web template nginx specific SSL attributes.
-| `node['ssl_certificate']['web']['compatibility']` | `nil`        | Web template SSL compatibility level (See [below](#securing-server-side-tls)).
-| `node['ssl_certificate']['web']['use_hsts']`      | `true`       | Whether to enable [HSTS](http://en.wikipedia.org/wiki/HTTP_Strict_Transport_Security).
-| `node['ssl_certificate']['web']['use_stapling']`  | *calculated* | Whether to enable [OCSP stapling](http://en.wikipedia.org/wiki/OCSP_stapling) (nginx only, use `node['apache']['mod_ssl']['use_stapling']` for apache).
+| Attribute                                             | Default      | Description                        |
+|:------------------------------------------------------|:-------------|:-----------------------------------|
+| `node['ssl_certificate']['user']`                     | `'root'`     | Default SSL files owner user.
+| `node['ssl_certificate']['group']`                    | *calculated* | Default SSL files owner group.
+| `node['ssl_certificate']['key_dir']`                  | *calculated* | Default SSL key directory.
+| `node['ssl_certificate']['cert_dir']`                 | *calculated* | Default SSL certificate directory.
+| `node['ssl_certificate']['service']['cipher_suite']`  | `nil`        | Service default SSL cipher suite.
+| `node['ssl_certificate']['service']['protocols']`     | `nil`        | Service default SSL protocols.
+| `node['ssl_certificate']['service']['apache']`        | *calculated* | Apache web service httpd specific SSL attributes.
+| `node['ssl_certificate']['service']['nginx']`         | *calculated* | nginx web service specific SSL attributes.
+| `node['ssl_certificate']['service']['compatibility']` | `nil`        | Service SSL compatibility level (See [below](#securing-server-side-tls)).
+| `node['ssl_certificate']['service']['use_hsts']`      | `true`       | Whether to enable [HSTS](http://en.wikipedia.org/wiki/HTTP_Strict_Transport_Security) in the service.
+| `node['ssl_certificate']['service']['use_stapling']`  | *calculated* | Whether to enable [OCSP stapling](http://en.wikipedia.org/wiki/OCSP_stapling) in the service (nginx only, use `node['apache']['mod_ssl']['use_stapling']` for apache).
 
 Resources
 =========
@@ -527,7 +527,7 @@ web_app 'my-webapp' do
 end
 ```
 
-You can also use the `node['ssl_certificate']['web']['compatibility']` node attribute to change the compatibility level used by default.
+You can also use the `node['ssl_certificate']['service']['compatibility']` node attribute to change the compatibility level used by default.
 
 Usage
 =====
