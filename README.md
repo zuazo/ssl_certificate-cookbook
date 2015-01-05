@@ -408,7 +408,6 @@ web_app 'my-webapp' do
   ssl_key cert.key_path
   ssl_cert cert.cert_path
   ssl_chain cert.chain_path
-  ssl_ca cert.ca_cert_path
 end
 ```
 
@@ -426,7 +425,6 @@ This cookbook contains [partial templates](http://docs.chef.io/templates.html#pa
 | ssl_cert           | `nil`            | Public SSL certificate full path.
 | ssl_key            | `nil`            | Private SSL key full path.
 | ssl_chain          | `nil`            | Intermediate SSL certificate chain full path (**apache** only) *(optional)*.
-| ssl_ca             | `nil`            | Certificate Authority full path (**apache** only) *(optional)*.
 | ssl_compatibility  | *node attribute* | SSL compatibility level (See [below](#securing-server-side-tls)).
 
 ### Apache Partial Template
@@ -443,7 +441,6 @@ web_app 'my-webapp-ssl'
   ssl_key cert.key_path
   ssl_cert cert.cert_path
   ssl_chain cert.chain_path
-  ssl_ca cert.ca_cert_path
 end
 ```
 
@@ -470,7 +467,6 @@ template File.join(node['apache']['dir'], 'sites-available', 'my-webapp-ssl') do
     ssl_key: cert.key_path,
     ssl_cert: cert.chain_combined_path,
     ssl_chain: cert.chain_path,
-    ssl_ca: cert.ca_cert_path
   )
 end
 ```
@@ -527,7 +523,6 @@ web_app 'my-webapp' do
   ssl_key cert.key_path
   ssl_cert cert.cert_path
   ssl_chain cert.chain_path
-  ssl_ca cert.ca_cert_path
   ssl_compatibility :modern # :modern | :intermediate | :old
 end
 ```
@@ -762,7 +757,6 @@ web_app 'my-webapp' do
   ssl_key cert.key_path
   ssl_cert cert.cert_path
   ssl_chain cert.chain_path
-  ssl_ca cert.ca_cert_path
 end
 ```
 

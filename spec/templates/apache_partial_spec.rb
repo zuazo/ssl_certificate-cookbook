@@ -74,16 +74,6 @@ describe 'ssl_certificate apache partial template', order: :random do
     end
   end # context with SSL intermediary chain
 
-  context 'with SSL CA' do
-    let(:ssl_ca) { '/etc/ssl/certs/ca.pem' }
-    let(:variables) { minimum_variables.merge(ssl_ca: ssl_ca) }
-
-    it 'sets ssl ca cert' do
-      expect(template.render(variables))
-        .to match(/^\s*SSLCACertificateFile\s+#{Regexp.escape(ssl_ca)}/)
-    end
-  end # context with SSL CA
-
   context 'without HSTS enabled' do
     before { node.set['ssl_certificate']['web']['use_hsts'] = false }
 

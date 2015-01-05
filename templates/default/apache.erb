@@ -13,9 +13,6 @@ self.class.send(:include, Chef::SslCertificateCookbook::TemplateHelpers)
   <% if @ssl_chain.is_a?(String) -%>
   SSLCertificateChainFile <%= @ssl_chain %>
   <% end -%>
-  <% if @ssl_ca.is_a?(String) -%>
-  SSLCACertificateFile <%= @ssl_ca %>
-  <% end -%>
 
   <% if @ssl_config[:description].is_a?(String) -%>
   # <%= @ssl_config[:description] %>
