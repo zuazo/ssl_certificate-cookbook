@@ -134,7 +134,8 @@ class Chef
 
         def default_cert_path
           lazy_cached_variable(:default_cert_path) do
-            ::File.join(cert_dir, cert_name)
+            read_namespace(%w(ssl_cert path)) ||
+              ::File.join(cert_dir, cert_name)
           end
         end
 

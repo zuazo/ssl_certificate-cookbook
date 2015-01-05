@@ -122,9 +122,10 @@ class Chef
         # chain private methods
 
         def default_chain_path
-          lazy do
+          lazy_cached_variable(:default_chain_path) do
             if chain_name.is_a?(String)
-              @default_chain_path ||= ::File.join(chain_dir, chain_name)
+              read_namespace(%w(ssl_chain path)) ||
+                ::File.join(chain_dir, chain_name)
             end
           end
         end

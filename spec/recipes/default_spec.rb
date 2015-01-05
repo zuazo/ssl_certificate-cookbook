@@ -24,9 +24,26 @@ describe 'ssl_certificate_test::default', order: :random do
   let(:chef_run) { chef_runner.converge(described_recipe) }
   let(:node) { chef_runner.node }
   let(:fqdn) { 'ssl-certificate.example.com' }
+  let(:dummy_key) do
+    '-----BEGIN PRIVATE KEY-----[...]-----END PRIVATE KEY-----'
+  end
+  let(:dummy_cert) do
+    '-----BEGIN CERTIFICATE-----[...]-----END CERTIFICATE-----'
+  end
   before do
     stub_command('/usr/sbin/apache2 -t').and_return(true)
     node.automatic['fqdn'] = fqdn
+
+    allow(::File).to receive(:exist?).and_call_original
+    allow(::File).to receive(:exist?)
+      .with('/etc/ssl/certs/dummy6-attributes.pem').and_return(true)
+    allow(::File).to receive(:exist?)
+      .with('/etc/ssl/private/dummy6-attributes.key').and_return(true)
+    allow(::IO).to receive(:read).and_call_original
+    allow(::IO).to receive(:read)
+      .with('/etc/ssl/certs/dummy6-attributes.pem').and_return(dummy_cert)
+    allow(::IO).to receive(:read)
+      .with('/etc/ssl/private/dummy6-attributes.key').and_return(dummy_key)
   end
 
   it 'creates dummy1 certificate' do
@@ -59,6 +76,10 @@ describe 'ssl_certificate_test::default', order: :random do
 
   it 'creates dummy6 certificate' do
     expect(chef_run).to create_ssl_certificate('dummy6-attributes')
+  end
+
+  it 'creates dummy7 certificate' do
+    expect(chef_run).to create_ssl_certificate('dummy7')
   end
 
   it 'creates FQDN certificate' do
@@ -180,6 +201,34 @@ describe 'ssl_certificate_test::default', order: :random do
         .with_content(node['dummy6-attributes']['ssl_cert']['content'])
     end
 
+    it 'creates dummy7 key from node attributes' do
+      expect(chef_run).to create_file('dummy7 SSL certificate key')
+        .with_path('/etc/ssl/private/dummy6-attributes.key')
+        .with_owner('root')
+        .with_group('root')
+        .with_mode(00600)
+    end
+
+    it 'creates dummy7 certificate from node attributes' do
+      expect(chef_run)
+        .to create_file('dummy7 SSL public certificate')
+        .with_path('/etc/ssl/certs/dummy6-attributes.pem')
+        .with_owner('root')
+        .with_group('root')
+        .with_mode(00644)
+    end
+
+    it 'creates dummy7 combined certificate from node attributes' do
+      expect(chef_run)
+        .to create_file(
+          'dummy7 SSL intermediary chain combined certificate'
+        )
+        .with_path('/etc/ssl/certs/dummy7.pem.chained.pem')
+        .with_owner('root')
+        .with_group('root')
+        .with_mode(00644)
+    end
+
     it 'creates FQDN key' do
       expect(chef_run).to create_file("#{fqdn} SSL certificate key")
         .with_path("/etc/ssl/private/#{fqdn}.key")
@@ -203,7 +252,17 @@ describe 'ssl_certificate_test::default', order: :random do
           step_into: %w(ssl_certificate), platform: 'freebsd', version: '9.2'
         )
       end
-      before { stub_command('/usr/local/sbin/httpd -t').and_return(true) }
+      before do
+        stub_command('/usr/local/sbin/httpd -t').and_return(true)
+        allow(::File).to receive(:exist?)
+          .with('/etc/ssl/dummy6-attributes.pem').and_return(true)
+        allow(::File).to receive(:exist?)
+          .with('/etc/ssl/dummy6-attributes.key').and_return(true)
+        allow(::IO).to receive(:read)
+          .with('/etc/ssl/dummy6-attributes.pem').and_return(dummy_cert)
+        allow(::IO).to receive(:read)
+          .with('/etc/ssl/dummy6-attributes.key').and_return(dummy_key)
+      end
 
       it 'creates dummy1 key for wheel group' do
         expect(chef_run).to create_file('dummy1 SSL certificate key')

@@ -632,6 +632,10 @@ When a namespace is set in the resource, it will try to read the following attri
     <td>Source type to get the SSL key from. Can be <code>'self-signed'</code>, <code>'attribute'</code>, <code>'data-bag'</code>, <code>'chef-vault'</code> or <code>'file'</code>.</td>
   </tr>
   <tr>
+    <td><code>namespace['ssl_key']['path']</code></td>
+    <td>File path of the SSL key.</td>
+  </tr>
+  <tr>
     <td><code>namespace['ssl_key']['bag']</code></td>
     <td>Name of the Data Bag where the SSL key is stored.</td>
   </tr>
@@ -658,6 +662,10 @@ When a namespace is set in the resource, it will try to read the following attri
   <tr>
     <td><code>namespace['ssl_cert']['source']</code></td>
     <td>Source type to get the SSL cert from. Can be <code>'self-signed'</code>, <code>'attribute'</code>, <code>'data-bag'</code>, <code>'chef-vault'</code> or <code>'file'</code>.</td>
+  </tr>
+  <tr>
+    <td><code>namespace['ssl_cert']['path']</code></td>
+    <td>File path of the SSL certificate.</td>
   </tr>
   <tr>
     <td><code>namespace['ssl_cert']['bag']</code></td>
@@ -694,6 +702,10 @@ When a namespace is set in the resource, it will try to read the following attri
   <tr>
     <td><code>namespace['ssl_chain']['source']</code></td>
     <td>Source type to get the intermediate certificate chain from. Can be <code>'attribute'</code>, <code>'data-bag'</code>, <code>'chef-vault'</code> or <code>'file'</code>.</td>
+  </tr>
+  <tr>
+    <td><code>namespace['ssl_chain']['path']</code></td>
+    <td>File path of the intermediate SSL certificate chain.</td>
   </tr>
   <tr>
     <td><code>namespace['ssl_chain']['bag']</code></td>

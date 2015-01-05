@@ -102,8 +102,18 @@ AHeOpZbU6ak47dHfZVevB34JUkuje+nnG01ahDqtRtIuAiXdWE8+r4XeNeQTMQMZ
 wCVUQVe2b2XgEGlbTpmzyOHrERKM2C7w0ueeOG/FU04=
 -----END CERTIFICATE-----
 EOC
-ssl_certificate cert6_name do
+cert6 = ssl_certificate cert6_name do
   namespace cert6_name
+end
+
+cert7_name = 'dummy7'
+source = 'file'
+node.default[cert7_name]['ssl_cert']['source'] = source
+node.default[cert7_name]['ssl_cert']['path'] = cert6.cert_path
+node.default[cert7_name]['ssl_key']['source'] = source
+node.default[cert7_name]['ssl_key']['path'] = cert6.key_path
+ssl_certificate cert7_name do
+  namespace node[cert7_name]
 end
 
 # Apache2 test

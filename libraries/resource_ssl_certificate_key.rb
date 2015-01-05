@@ -115,7 +115,7 @@ class Chef
 
         def default_key_path
           lazy_cached_variable(:default_key_path) do
-            ::File.join(key_dir, key_name)
+            read_namespace(%w(ssl_key path)) || ::File.join(key_dir, key_name)
           end
         end
 
