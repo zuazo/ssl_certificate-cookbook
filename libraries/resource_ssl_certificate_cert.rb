@@ -239,7 +239,7 @@ class Chef
           content = read_from_path(cert_path)
           ca_cert_content, ca_key_content = read_ca_cert
           unless content.is_a?(String) && verify_self_signed_cert(
-                   key_content, cert_content, cert_subject, ca_cert_content
+                   key_content, content, cert_subject, ca_cert_content
                  )
             content = generate_cert_with_ca(
               key_content, cert_subject, time, ca_cert_content, ca_key_content
