@@ -3,6 +3,16 @@ ssl_certificate CHANGELOG
 
 This file is used to list changes made in each version of the `ssl_certificate` cookbook.
 
+## v1.2.0 (2015-01-07)
+
+* Fix file source path in attributes.
+* Fix *"stack level too deep"* error with CA certificates.
+* Nginx template: Add `ssl on;` directive.
+* Remove setting CA in apache template (bad idea).
+* Rename template helpers to service helpers.
+ * Document *ServiceHelpers* methods.
+* README: Some small fixes.
+
 ## v1.1.0 (2015-01-02)
 
 * Fix FreeBSD support.
