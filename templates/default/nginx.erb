@@ -6,6 +6,7 @@ self.class.send(:include, Chef::SslCertificateCookbook::ServiceHelpers)
   # SSL Configuration #
   # ----------------- #
 
+  ssl on;
   ssl_certificate <%= @ssl_cert %>;
   ssl_certificate_key <%= @ssl_key %>;
 

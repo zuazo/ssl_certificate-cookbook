@@ -838,7 +838,7 @@ Here's a nginx template example using the [*nginx.erb* partial template](#partia
 <%# nginx_vhost.erb %>
 server {
   server_name <%= @server_name %>;
-  listen 443 ssl;
+  listen 443;
   # Path to the root of your installation
   root <%= @docroot %>;
 

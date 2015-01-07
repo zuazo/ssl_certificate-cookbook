@@ -1,6 +1,6 @@
 server {
   server_name <%= @server_name %>;
-  listen 443 <%= Chef::VersionConstraint.new('< 0.8.21').include?(node['nginx']['version'][/\d+\.\d+\.\d+/]) ? 'default' : '' %> ssl;
+  listen 443 <%= Chef::VersionConstraint.new('< 0.8.21').include?(node['nginx']['version'][/\d+\.\d+\.\d+/]) ? 'default' : '' %>;
 
   # Path to the root of your installation
   root <%= @docroot %>;
