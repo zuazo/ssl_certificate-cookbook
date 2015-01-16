@@ -3,7 +3,7 @@ Description
 [![Cookbook Version](https://img.shields.io/cookbook/v/ssl_certificate.svg?style=flat)](https://supermarket.getchef.com/cookbooks/ssl_certificate)
 [![Dependency Status](http://img.shields.io/gemnasium/onddo/ssl_certificate-cookbook.svg?style=flat)](https://gemnasium.com/onddo/ssl_certificate-cookbook)
 [![Code Climate](http://img.shields.io/codeclimate/github/onddo/ssl_certificate-cookbook.svg?style=flat)](https://codeclimate.com/github/onddo/ssl_certificate-cookbook)
-[![Build Status](http://img.shields.io/travis/onddo/ssl_certificate-cookbook.svg?style=flat)](https://travis-ci.org/onddo/ssl_certificate-cookbook)
+[![Build Status](http://img.shields.io/travis/onddo/ssl_certificate-cookbook/1.2.1.svg?style=flat)](https://travis-ci.org/onddo/ssl_certificate-cookbook)
 
 The main purpose of this cookbook is to make it easy for other cookbooks to support SSL. With the resource included, you will be able to manage certificates reading them from attributes, data bags or chef-vaults. Exposing its configuration through node attributes.
 
@@ -94,7 +94,7 @@ The following attributes are used to integrate SSL specific configurations with 
 | `node['ssl_certificate']['service']['use_hsts']`      | `true`       | Whether to enable [HSTS](http://en.wikipedia.org/wiki/HTTP_Strict_Transport_Security) in the service.
 | `node['ssl_certificate']['service']['use_stapling']`  | *calculated* | Whether to enable [OCSP stapling](http://en.wikipedia.org/wiki/OCSP_stapling) in the service (nginx only, use `node['apache']['mod_ssl']['use_stapling']` for apache).
 
-See the [`ServiceHelpers` class documentation](http://www.rubydoc.info/github/onddo/ssl_certificate-cookbook/master/Chef/SslCertificateCookbook/ServiceHelpers) to learn how to integrate them with new services.
+See the [`ServiceHelpers` class documentation](http://www.rubydoc.info/github/onddo/ssl_certificate-cookbook/1.2.1/Chef/SslCertificateCookbook/ServiceHelpers) to learn how to integrate them with new services.
 
 Resources
 =========

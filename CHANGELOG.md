@@ -3,6 +3,10 @@ ssl_certificate CHANGELOG
 
 This file is used to list changes made in each version of the `ssl_certificate` cookbook.
 
+## v1.2.1 (2015-01-16)
+
+* Fix *key content* when using `'file'` source.
+
 ## v1.2.0 (2015-01-07)
 
 * Fix file source path in attributes.
