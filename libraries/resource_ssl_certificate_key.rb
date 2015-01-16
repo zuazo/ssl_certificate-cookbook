@@ -168,7 +168,7 @@ class Chef
         end
 
         def default_key_content_from_file
-          safe_read_from_path('SSL key', cert_path)
+          safe_read_from_path('SSL key', key_path)
         end
 
         def default_key_content_from_self_signed
