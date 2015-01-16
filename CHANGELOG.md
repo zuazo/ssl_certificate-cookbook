@@ -3,6 +3,10 @@ ssl_certificate CHANGELOG
 
 This file is used to list changes made in each version of the `ssl_certificate` cookbook.
 
+## v1.2.2 (2015-01-16)
+
+* Fix unit tests: Run the tests agains Chef 11 and Chef 12.
+
 ## v1.2.1 (2015-01-16)
 
 * Fix *key content* when using `'file'` source.
