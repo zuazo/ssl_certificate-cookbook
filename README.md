@@ -302,8 +302,8 @@ By default the resource will create a self-signed certificate, but a custom one 
   </tr>
   <tr>
     <td>cert_item_key</td>
-    <td>Cert of the Data Bag Item where the SSL cert is stored.</td>
-    <td><code>namespace['ssl_cert']['item_cert']</code></td>
+    <td>Key of the Data Bag Item where the SSL cert is stored.</td>
+    <td><code>namespace['ssl_cert']['item_key']</code></td>
   </tr>
   <tr>
     <td>cert_encrypted</td>
@@ -356,9 +356,9 @@ By default the resource will create a self-signed certificate, but a custom one 
     <td><code>namespace['ssl_chain']['item']</code></td>
   </tr>
   <tr>
-    <td>chain_item_cert</td>
-    <td>Cert of the Data Bag Item where the intermediate certificate chain is stored.</td>
-    <td><code>namespace['ssl_chain']['item_cert']</code></td>
+    <td>chain_item_key</td>
+    <td>Key of the Data Bag Item where the intermediate certificate chain is stored.</td>
+    <td><code>namespace['ssl_chain']['item_key']</code></td>
   </tr>
   <tr>
     <td>chain_encrypted</td>
@@ -681,8 +681,8 @@ When a namespace is set in the resource, it will try to read the following attri
     <td>Name of the Data Bag Item where the SSL cert is stored.</td>
   </tr>
   <tr>
-    <td><code>namespace['ssl_cert']['item_cert']</code></td>
-    <td>Cert of the Data Bag Item where the SSL cert is stored.</td>
+    <td><code>namespace['ssl_cert']['item_key']</code></td>
+    <td>Key of the Data Bag Item where the SSL cert is stored.</td>
   </tr>
   <tr>
     <td><code>namespace['ssl_cert']['encrypted']</code></td>
@@ -721,8 +721,8 @@ When a namespace is set in the resource, it will try to read the following attri
     <td>Name of the Data Bag Item where the intermediate certificate chain is stored.</td>
   </tr>
   <tr>
-    <td><code>namespace['ssl_chain']['item_cert']</code></td>
-    <td>Cert of the Data Bag Item where the intermediate certificate chain is stored.</td>
+    <td><code>namespace['ssl_chain']['item_key']</code></td>
+    <td>Key of the Data Bag Item where the intermediate certificate chain is stored.</td>
   </tr>
   <tr>
     <td><code>namespace['ssl_chain']['encrypted']</code></td>
