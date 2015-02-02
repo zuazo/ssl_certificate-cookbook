@@ -120,7 +120,10 @@ class Chef
         end
 
         def default_key_source
-          lazy { read_namespace(%w(ssl_key source)) || default_source }
+          lazy do
+            read_namespace(%w(ssl_key source)) || read_namespace('source') ||
+              default_source
+          end
         end
 
         def default_key_bag

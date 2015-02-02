@@ -139,7 +139,10 @@ class Chef
         end
 
         def default_chain_source
-          lazy { read_namespace(%w(ssl_chain source)) }
+          lazy do
+            read_namespace(%w(ssl_chain source)) || read_namespace('source') ||
+              default_source
+          end
         end
 
         def default_chain_bag

@@ -617,6 +617,10 @@ When a namespace is set in the resource, it will try to read the following attri
     <td><em>Email</em> address, used for self-signed certificates.</td>
   </tr>
   <tr>
+    <td><code>namespace['source']</code></td>
+    <td>Attribute for setting certificate source and key source (both) to a value (<code>key_source</code> and <code>cert_source</code>).</td>
+  </tr>
+  <tr>
     <td><code>namespace['bag']</code></td>
     <td>Attribute for setting certificate bag and key bag (both) to a value (<code>key_bag</code> and <code>cert_bag</code>).</td>
   </tr>

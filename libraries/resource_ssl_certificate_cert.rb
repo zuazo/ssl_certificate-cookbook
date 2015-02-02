@@ -140,7 +140,10 @@ class Chef
         end
 
         def default_cert_source
-          lazy { read_namespace(%w(ssl_cert source)) || default_source }
+          lazy do
+            read_namespace(%w(ssl_cert source)) || read_namespace('source') ||
+              default_source
+          end
         end
 
         def default_cert_bag
