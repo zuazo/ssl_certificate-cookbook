@@ -39,7 +39,8 @@ class Chef
 
       def install_chef_vault
         return unless new_resource.depends_chef_vault?
-        r = chef_gem 'chef-vault'
+        r = Chef::Resource::ChefGem.new('chef-vault', new_resource.run_context)
+        r.after_created
         new_resource.updated_by_last_action(r.updated_by_last_action?)
       end
 
