@@ -80,7 +80,7 @@ class Chef
           data
         end
 
-        def dabagag_read_fail(desc, db, type = 'data bag')
+        def data_bag_read_fail(desc, db, type = 'data bag')
           fail "Cannot read #{desc} from #{type}: "\
             "#{db[:bag]}.#{db[:item]}[#{db[:key]}]"
         end
@@ -101,7 +101,7 @@ class Chef
           data = read_from_data_bag(
             db[:bag], db[:item], db[:key], db[:encrypt], db[:secret_file]
           )
-          dabagag_read_fail(desc, db) unless data.is_a?(String)
+          data_bag_read_fail(desc, db) unless data.is_a?(String)
           data
         end
 
@@ -115,7 +115,7 @@ class Chef
 
         def safe_read_from_chef_vault(desc, db)
           data = read_from_chef_vault(db[:bag], db[:item], db[:key])
-          dabagag_read_fail(desc, db, 'chef-vault') unless data.is_a?(String)
+          data_bag_read_fail(desc, db, 'chef-vault') unless data.is_a?(String)
           data
         end
       end
