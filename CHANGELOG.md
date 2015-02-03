@@ -3,6 +3,13 @@ ssl_certificate CHANGELOG
 
 This file is used to list changes made in each version of the `ssl_certificate` cookbook.
 
+## v1.3.0 (2015-02-03)
+
+* Add `namespace['source']` common attribute.
+* Fix chef vault source: `chef_gem` method not found error.
+* Fix `#data_bag_read_fail` method name.
+* README: Fix *item_key* attribute name.
+
 ## v1.2.2 (2015-01-16)
 
 * Fix unit tests: Run the tests agains Chef 11 and Chef 12.
