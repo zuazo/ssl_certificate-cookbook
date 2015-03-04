@@ -20,6 +20,8 @@
 #
 
 default['ssl_certificate']['user'] = 'root'
+default['ssl_certificate']['items'] = []
+
 case node['platform']
 when 'openbsd', 'freebsd', 'mac_os_x'
   default['ssl_certificate']['group'] = 'wheel'
