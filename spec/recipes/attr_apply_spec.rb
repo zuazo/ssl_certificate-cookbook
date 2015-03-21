@@ -32,10 +32,10 @@ describe 'ssl_certificate::attr_apply', order: :random do
       }
     ]
   end
-  
+
   it 'creates example self-signed certificate' do
     expect(chef_run).to create_ssl_certificate('ssl-certificate.example.com')
-                         .with_key_source('self-signed')
-                         .with_cert_source('self-signed')
+      .with_key_source('self-signed')
+      .with_cert_source('self-signed')
   end
 end
