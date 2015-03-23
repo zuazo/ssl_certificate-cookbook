@@ -1137,6 +1137,40 @@ The knife command to create the vault bag item:
 
     $ knife vault create ssl ca_cert [...]
 
+### Managing certificates via attributes/
+
+Sometimes you may want to use node attributes to manage SSL
+Certificates. For example you have web-server role and want to
+override which certificate to use in production and Staging
+environments. without changing role itself.
+
+You can do it using `ssl_certificate::attr_apply` recipe.
+
+```ruby
+run_list(
+  "recipe[ssl_certificate::attr_apply]"
+)
+override_attributes(
+  "ssl_certificate" => {
+    "items" => [
+      { "name" => "domain.com",
+        "dir" => '/etc/nginx/ssl',
+        "item" => 'domain_com',
+        "source" => 'chef-vault',
+        "bag" => 'ssl-vault',
+        "key_item_key" => 'key',
+        "cert_item_key" => 'cert',
+        "chain_item_key" => 'chain',
+        "chain_source" => 'chef-vault',
+        "chain_bag" => 'ssl-vault',
+        "chain_item" => 'domain_com',
+        "chain_name" => 'domain.com.chain.pem'
+      }
+    ]
+  }
+)
+```
+
 Testing
 =======
 
