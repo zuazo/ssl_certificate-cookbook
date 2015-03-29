@@ -40,6 +40,7 @@ Table of Contents
     * [Reading Key, Certificate and Intermediary from a Data Bag](#reading-key-certificate-and-intermediary-from-a-data-bag)
     * [Creating a Certificate from a Certificate Authority](#creating-a-certificate-from-a-certificate-authority)
     * [Reading the CA Certificate from a Chef Vault Bag](#reading-the-ca-certificate-from-a-chef-vault-bag)
+    * [Managing Certificates Via Attributes](#managing-certificates-via-attributes)
 * [Testing](#testing)
   * [ChefSpec Matchers](#chefspec-matchers)
     * [ssl_certificate(name)](#ssl_certificatename)
@@ -1137,34 +1138,30 @@ The knife command to create the vault bag item:
 
     $ knife vault create ssl ca_cert [...]
 
-### Managing certificates via attributes/
+### Managing Certificates Via Attributes
 
-Sometimes you may want to use node attributes to manage SSL
-Certificates. For example you have web-server role and want to
-override which certificate to use in production and Staging
-environments. without changing role itself.
-
-You can do it using `ssl_certificate::attr_apply` recipe.
+Sometimes you may want to use only node attributes to manage some of your SSL Certificates (instead of [the `ssl_certificate` resource](#ssl_certificate)). You can do it using the `ssl_certificate::attr_apply` recipe and configuring them inside the `node['ssl_certificate']['items']` array:
 
 ```ruby
 run_list(
-  "recipe[ssl_certificate::attr_apply]"
+  'recipe[ssl_certificate::attr_apply]'
 )
 override_attributes(
-  "ssl_certificate" => {
-    "items" => [
-      { "name" => "domain.com",
-        "dir" => '/etc/nginx/ssl',
-        "item" => 'domain_com',
-        "source" => 'chef-vault',
-        "bag" => 'ssl-vault',
-        "key_item_key" => 'key',
-        "cert_item_key" => 'cert',
-        "chain_item_key" => 'chain',
-        "chain_source" => 'chef-vault',
-        "chain_bag" => 'ssl-vault',
-        "chain_item" => 'domain_com',
-        "chain_name" => 'domain.com.chain.pem'
+  'ssl_certificate' => {
+    'items' => [
+      {
+        'name' => 'domain.com',
+        'dir' => '/etc/nginx/ssl',
+        'item' => 'domain_com',
+        'source' => 'chef-vault',
+        'bag' => 'ssl-vault',
+        'key_item_key' => 'key',
+        'cert_item_key' => 'cert',
+        'chain_item_key' => 'chain',
+        'chain_source' => 'chef-vault',
+        'chain_bag' => 'ssl-vault',
+        'chain_item' => 'domain_com',
+        'chain_name' => 'domain.com.chain.pem'
       }
     ]
   }

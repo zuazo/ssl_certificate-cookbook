@@ -27,7 +27,8 @@ describe 'ssl_certificate::attr_apply', order: :random do
   before do
     node.automatic['fqdn'] = fqdn
     node.override['ssl_certificate']['items'] = [
-      { 'name' => 'ssl-certificate.example.com',
+      {
+        'name' => 'ssl-certificate.example.com',
         'source' => 'self-signed'
       }
     ]
