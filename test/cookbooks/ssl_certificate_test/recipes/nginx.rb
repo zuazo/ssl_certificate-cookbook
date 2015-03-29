@@ -42,9 +42,9 @@ end
 
 include_recipe 'nginx'
 
-template File.join(
-    node['nginx']['dir'], 'sites-available', 'ssl_certificate'
-  ) do
+vhost_file =
+  File.join(node['nginx']['dir'], 'sites-available', 'ssl_certificate')
+template vhost_file do
   source 'nginx_vhost.erb'
   mode 00644
   owner 'root'
