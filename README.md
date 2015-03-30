@@ -1218,6 +1218,7 @@ License and Author
 | **Contributor:**     | [Jeremy MAURO](https://github.com/jmauro)
 | **Contributor:**     | [Benjamin Nørgaard](https://github.com/blacksails)
 | **Contributor:**     | [Stanislav Bogatyrev](https://github.com/realloc)
+| **Contributor:**     | [Karl Svec](https://github.com/karlsvec)
 | **Copyright:**       | Copyright (c) 2014-2015, Onddo Labs, SL. (www.onddo.com)
 | **License:**         | Apache License, Version 2.0
 
