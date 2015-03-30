@@ -97,7 +97,7 @@ attribute 'ssl_certificate/service/use_hsts',
           description: 'Whether to enable HSTS in the service.',
           type: 'string',
           required: 'optional',
-          default: true
+          default: 'true'
 
 attribute 'ssl_certificate/service/use_stapling',
           display_name: 'ssl_certificate web use stapling',
