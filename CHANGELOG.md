@@ -3,6 +3,12 @@ ssl_certificate CHANGELOG
 
 This file is used to list changes made in each version of the `ssl_certificate` cookbook.
 
+## v1.4.0 (2015-04-05)
+
+* Add `attr_apply` recipe: Create a certificate list from attributes ([issue #10](https://github.com/onddo/ssl_certificate-cookbook/pull/10), thanks [Stanislav Bogatyrev](https://github.com/realloc)).
+* Fix invalid metadata ([issue #11](https://github.com/onddo/ssl_certificate-cookbook/pull/11), thanks [Karl Svec](https://github.com/karlsvec)).
+* Update RuboCop to `0.29.1` (fix some new offenses).
+
 ## v1.3.0 (2015-02-03)
 
 * Add `namespace['source']` common attribute.
