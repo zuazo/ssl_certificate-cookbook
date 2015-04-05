@@ -445,7 +445,7 @@ This cookbook contains [partial templates](http://docs.chef.io/templates.html#pa
 If you are using the `web_app` definition, you should pass the `@params` variables to the partial template:
 
 ```ruby
-web_app 'my-webapp-ssl'
+web_app 'my-webapp-ssl' do
   docroot node['apache']['docroot_dir']
   server_name cert.common_name
   # [...]
@@ -477,7 +477,7 @@ template File.join(node['apache']['dir'], 'sites-available', 'my-webapp-ssl') do
     # [...]
     ssl_key: cert.key_path,
     ssl_cert: cert.chain_combined_path,
-    ssl_chain: cert.chain_path,
+    ssl_chain: cert.chain_path
   )
 end
 ```
@@ -550,9 +550,8 @@ You need to include this recipe in your `run_list` before using the  `ssl_certif
 ```json
 {
   "name": "onddo.com",
-  [...]
+  "[...]": "[...]",
   "run_list": [
-    [...]
     "recipe[ssl_certificate]"
   ]
 }
@@ -573,7 +572,8 @@ One of the two is enough. No need to do anything else. Only use the `ssl_certifi
 cert = ssl_certificate 'webapp1' do
   namespace node['webapp1'] # optional but recommended
 end
-# you can now use the #cert_path and #key_path methods to use in your web/mail/ftp service configurations
+# you can now use the #cert_path and #key_path methods to use in your
+# web/mail/ftp service configurations
 log "WebApp1 certificate is here: #{cert.cert_path}"
 log "WebApp1 private key is here: #{cert.key_path}"
 ```
@@ -754,7 +754,8 @@ node.default['my-webapp']['common_name'] = 'onddo.com'
 node.default['my-webapp']['ssl_cert']['source'] = 'self-signed'
 node.default['my-webapp']['ssl_key']['source'] = 'self-signed'
 
-# we need to save the resource variable to get the key and certificate file paths
+# we need to save the resource variable to get the key and certificate file
+# paths
 cert = ssl_certificate 'my-webapp' do
   # we want to be able to use node['my-webapp'] to configure the certificate
   namespace node['my-webapp']
@@ -781,7 +782,8 @@ Using custom paths:
 my_key_path = '/etc/keys/my-webapp.key'
 my_cert_path = '/etc/certs/my-webapp.pem'
 
-# there is no need to save the resource in a variable in this case because we know the paths
+# there is no need to save the resource in a variable in this case because we
+# know the paths
 ssl_certificate 'my-webapp' do
   key_path my_key_path
   cert_path my_cert_path
@@ -865,14 +867,17 @@ The SSL certificate can be read from an attribute directly:
 
 ```ruby
 # Setting the attributes
-node.default['mysite']['ssl_key']['content'] = '-----BEGIN PRIVATE KEY-----[...]'
-node.default['mysite']['ssl_cert']['content'] = '-----BEGIN CERTIFICATE-----[...]'
+node.default['mysite']['ssl_key']['content'] =
+  '-----BEGIN PRIVATE KEY-----[...]'
+node.default['mysite']['ssl_cert']['content'] =
+  '-----BEGIN CERTIFICATE-----[...]'
 
 # Creating the certificate
 ssl_certificate 'mysite' do
   common_name 'cloud.mysite.com'
   namespace node['mysite']
-  # this will read the node['mysite']['ssl_key']['content'] and node['mysite']['ssl_cert']['content'] keys
+  # this will read the node['mysite']['ssl_key']['content'] and
+  # node['mysite']['ssl_cert']['content'] keys
   source 'attribute'
 end
 ```
@@ -883,9 +888,11 @@ Alternative example using a namespace and node attributes:
 # Setting the attributes
 node.default['mysite']['common_name'] = 'cloud.mysite.com'
 node.default['mysite']['ssl_key']['source'] = 'attribute'
-node.default['mysite']['ssl_key']['content'] = '-----BEGIN PRIVATE KEY-----[...]'
+node.default['mysite']['ssl_key']['content'] =
+  '-----BEGIN PRIVATE KEY-----[...]'
 node.default['mysite']['ssl_cert']['source'] = 'attribute'
-node.default['mysite']['ssl_cert']['content'] = '-----BEGIN CERTIFICATE-----[...]'
+node.default['mysite']['ssl_cert']['content'] =
+  '-----BEGIN CERTIFICATE-----[...]'
 
 # Creating the certificate
 ssl_certificate 'mysite' do
@@ -1053,10 +1060,11 @@ end
 ```ruby
 domain = 'mysite.com'
 # SAN for mysite.com, foo.mysite.com, bar.mysite.com, www.mysite.com
-node.default[ domain ]['ssl_cert']['subject_alternate_names'] = [ domain, 'foo.'+domain, 'bar.'+domain, 'www.' + domain ]
+node.default[domain]['ssl_cert']['subject_alternate_names'] =
+  [domain, "foo.#{domain}", "bar.#{domain}", "www.#{domain}"]
 
 ssl_certificate 'mysite.com' do
-  namespace node[ domain ]
+  namespace node[domain]
   key_source 'self-signed'
   cert_source 'self-signed'
 end
