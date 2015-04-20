@@ -129,6 +129,7 @@ describe 'ssl_certificate_test::default', order: :random do
           .with_owner('root')
           .with_group('root')
           .with_mode(00600)
+          .with_sensitive(true)
       end
 
       it "creates dummy#{i} certificate" do
@@ -137,6 +138,7 @@ describe 'ssl_certificate_test::default', order: :random do
           .with_owner('root')
           .with_group('root')
           .with_mode(00644)
+          .with_sensitive(true)
       end
     end # (1..4).step.each
 
@@ -146,6 +148,7 @@ describe 'ssl_certificate_test::default', order: :random do
         .with_owner('www-data')
         .with_group('www-data')
         .with_mode(00600)
+        .with_sensitive(true)
         .with_content(db_key)
     end
 
@@ -155,6 +158,7 @@ describe 'ssl_certificate_test::default', order: :random do
         .with_owner('www-data')
         .with_group('www-data')
         .with_mode(00644)
+        .with_sensitive(true)
         .with_content(db_cert)
     end
 
@@ -167,6 +171,7 @@ describe 'ssl_certificate_test::default', order: :random do
         .with_owner('www-data')
         .with_group('www-data')
         .with_mode(00644)
+        .with_sensitive(true)
         .with_content(db_cert)
     end
 
@@ -176,6 +181,7 @@ describe 'ssl_certificate_test::default', order: :random do
         .with_owner('root')
         .with_group('root')
         .with_mode(00600)
+        .with_sensitive(true)
         .with_content(node['dummy6-attributes']['ssl_key']['content'])
     end
 
@@ -186,6 +192,7 @@ describe 'ssl_certificate_test::default', order: :random do
         .with_owner('root')
         .with_group('root')
         .with_mode(00644)
+        .with_sensitive(true)
         .with_content(node['dummy6-attributes']['ssl_cert']['content'])
     end
 
@@ -198,6 +205,7 @@ describe 'ssl_certificate_test::default', order: :random do
         .with_owner('root')
         .with_group('root')
         .with_mode(00644)
+        .with_sensitive(true)
         .with_content(node['dummy6-attributes']['ssl_cert']['content'])
     end
 
@@ -207,6 +215,7 @@ describe 'ssl_certificate_test::default', order: :random do
         .with_owner('root')
         .with_group('root')
         .with_mode(00600)
+        .with_sensitive(true)
     end
 
     it 'creates dummy7 certificate from node attributes' do
@@ -216,6 +225,7 @@ describe 'ssl_certificate_test::default', order: :random do
         .with_owner('root')
         .with_group('root')
         .with_mode(00644)
+        .with_sensitive(true)
     end
 
     it 'creates dummy7 combined certificate from node attributes' do
@@ -227,6 +237,7 @@ describe 'ssl_certificate_test::default', order: :random do
         .with_owner('root')
         .with_group('root')
         .with_mode(00644)
+        .with_sensitive(true)
     end
 
     it 'creates FQDN key' do
@@ -235,6 +246,7 @@ describe 'ssl_certificate_test::default', order: :random do
         .with_owner('root')
         .with_group('root')
         .with_mode(00600)
+        .with_sensitive(true)
     end
 
     it 'creates FQDN certificate' do
@@ -244,6 +256,7 @@ describe 'ssl_certificate_test::default', order: :random do
         .with_owner('root')
         .with_group('root')
         .with_mode(00644)
+        .with_sensitive(true)
     end
 
     context 'with FreeBSD' do
@@ -270,6 +283,7 @@ describe 'ssl_certificate_test::default', order: :random do
           .with_owner('root')
           .with_group('wheel')
           .with_mode(00600)
+          .with_sensitive(true)
       end
 
       it 'creates dummy1 certificate for wheel group' do
@@ -278,6 +292,7 @@ describe 'ssl_certificate_test::default', order: :random do
           .with_owner('root')
           .with_group('wheel')
           .with_mode(00644)
+          .with_sensitive(true)
       end
     end # context with FreeBSD
   end # context step into ssl_certificate resource

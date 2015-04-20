@@ -171,6 +171,7 @@ describe 'ssl_certificate_test::self_signed_with_ca_certificate',
         .with_owner('root')
         .with_group('root')
         .with_mode(00600)
+        .with_sensitive(true)
     end
 
     it 'creates test.com certificate' do
@@ -179,6 +180,7 @@ describe 'ssl_certificate_test::self_signed_with_ca_certificate',
         .with_owner('root')
         .with_group('root')
         .with_mode(00644)
+        .with_sensitive(true)
     end
 
     it 'creates ca.example.org CA certificate key' do
@@ -187,6 +189,7 @@ describe 'ssl_certificate_test::self_signed_with_ca_certificate',
         .with_owner('root')
         .with_group('root')
         .with_mode(00600)
+        .with_sensitive(true)
         .with_content(db_ca_key)
     end
 
@@ -196,6 +199,7 @@ describe 'ssl_certificate_test::self_signed_with_ca_certificate',
         .with_owner('root')
         .with_group('root')
         .with_mode(00644)
+        .with_sensitive(true)
         .with_content(db_ca_cert)
     end
 
@@ -205,6 +209,7 @@ describe 'ssl_certificate_test::self_signed_with_ca_certificate',
         .with_owner('root')
         .with_group('root')
         .with_mode(00600)
+        .with_sensitive(true)
     end
 
     it 'creates example.org certificate' do
@@ -213,6 +218,7 @@ describe 'ssl_certificate_test::self_signed_with_ca_certificate',
         .with_owner('root')
         .with_group('root')
         .with_mode(00644)
+        .with_sensitive(true)
     end
   end
 end

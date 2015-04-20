@@ -51,6 +51,7 @@ describe 'ssl_certificate_test::subject_alternate_names', order: :random do
         .with_owner('root')
         .with_group('root')
         .with_mode(00600)
+        .with_sensitive(true)
     end
 
     it 'creates subject_alternate_names certificate from a data bag' do
@@ -60,6 +61,7 @@ describe 'ssl_certificate_test::subject_alternate_names', order: :random do
         .with_owner('root')
         .with_group('root')
         .with_mode(00644)
+        .with_sensitive(true)
     end
 
     it 'creates subject_alternate_names2 key from an encrypted data bag' do
@@ -69,6 +71,7 @@ describe 'ssl_certificate_test::subject_alternate_names', order: :random do
         .with_owner('root')
         .with_group('root')
         .with_mode(00600)
+        .with_sensitive(true)
     end
 
     it 'creates subject_alternate_names2 certificate from a data bag' do
@@ -78,6 +81,7 @@ describe 'ssl_certificate_test::subject_alternate_names', order: :random do
         .with_owner('root')
         .with_group('root')
         .with_mode(00644)
+        .with_sensitive(true)
     end
   end
 end

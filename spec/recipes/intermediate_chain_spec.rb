@@ -85,6 +85,7 @@ describe 'ssl_certificate_test::intermediate_chain', order: :random do
         .with_owner('root')
         .with_group('root')
         .with_mode(00600)
+        .with_sensitive(true)
         .with_content(db_key)
     end
 
@@ -94,6 +95,7 @@ describe 'ssl_certificate_test::intermediate_chain', order: :random do
         .with_owner('root')
         .with_group('root')
         .with_mode(00644)
+        .with_sensitive(true)
         .with_content(db_cert)
     end
 
@@ -104,6 +106,7 @@ describe 'ssl_certificate_test::intermediate_chain', order: :random do
         .with_owner('root')
         .with_group('root')
         .with_mode(00644)
+        .with_sensitive(true)
         .with_content(db_chain)
     end
 
@@ -116,6 +119,7 @@ describe 'ssl_certificate_test::intermediate_chain', order: :random do
         .with_owner('root')
         .with_group('root')
         .with_mode(00644)
+        .with_sensitive(true)
         .with_content(db_chain_combined)
     end
 
@@ -125,6 +129,7 @@ describe 'ssl_certificate_test::intermediate_chain', order: :random do
         .with_owner('root')
         .with_group('root')
         .with_mode(00600)
+        .with_sensitive(true)
         .with_content(node['chain-data-bag2']['ssl_key']['content'])
     end
 
@@ -135,6 +140,7 @@ describe 'ssl_certificate_test::intermediate_chain', order: :random do
         .with_owner('root')
         .with_group('root')
         .with_mode(00644)
+        .with_sensitive(true)
         .with_content(node['chain-data-bag2']['ssl_cert']['content'])
     end
 
@@ -145,6 +151,7 @@ describe 'ssl_certificate_test::intermediate_chain', order: :random do
         .with_owner('root')
         .with_group('root')
         .with_mode(00644)
+        .with_sensitive(true)
         .with_content(node['chain-data-bag2']['ssl_chain']['content'])
     end
 
@@ -158,6 +165,7 @@ describe 'ssl_certificate_test::intermediate_chain', order: :random do
         .with_owner('root')
         .with_group('root')
         .with_mode(00644)
+        .with_sensitive(true)
         .with_content([
           node['chain-data-bag2']['ssl_cert']['content'],
           node['chain-data-bag2']['ssl_chain']['content']
