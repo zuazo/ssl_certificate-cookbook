@@ -23,14 +23,20 @@ describe 'ssl_certificate_test::subject_alternate_names', order: :random do
   let(:chef_runner) { ChefSpec::ServerRunner.new }
   let(:chef_run) { chef_runner.converge(described_recipe) }
 
-  it 'creates subject_alternate_names certificate' do
-    expect(chef_run).to create_ssl_certificate('subject_alternate_names')
+  it 'creates subject_alternate_names1 certificate' do
+    expect(chef_run).to create_ssl_certificate('subject_alternate_names1')
       .with_key_source('self-signed')
       .with_cert_source('self-signed')
   end
 
   it 'creates subject_alternate_names2 certificate' do
     expect(chef_run).to create_ssl_certificate('subject_alternate_names2')
+      .with_key_source('self-signed')
+      .with_cert_source('self-signed')
+  end
+
+  it 'creates subject_alternate_names3 certificate' do
+    expect(chef_run).to create_ssl_certificate('subject_alternate_names3')
       .with_key_source('self-signed')
       .with_cert_source('self-signed')
   end
@@ -44,20 +50,20 @@ describe 'ssl_certificate_test::subject_alternate_names', order: :random do
       expect { chef_run }.to_not raise_error
     end
 
-    it 'creates subject_alternate_names key from an encrypted data bag' do
+    it 'creates subject_alternate_names1 key from an encrypted data bag' do
       expect(chef_run)
-        .to create_file('subject_alternate_names SSL certificate key')
-        .with_path('/etc/ssl/private/subject_alternate_names.key')
+        .to create_file('subject_alternate_names1 SSL certificate key')
+        .with_path('/etc/ssl/private/subject_alternate_names1.key')
         .with_owner('root')
         .with_group('root')
         .with_mode(00600)
         .with_sensitive(true)
     end
 
-    it 'creates subject_alternate_names certificate from a data bag' do
+    it 'creates subject_alternate_names1 certificate from a data bag' do
       expect(chef_run)
-        .to create_file('subject_alternate_names SSL public certificate')
-        .with_path('/etc/ssl/certs/subject_alternate_names.pem')
+        .to create_file('subject_alternate_names1 SSL public certificate')
+        .with_path('/etc/ssl/certs/subject_alternate_names1.pem')
         .with_owner('root')
         .with_group('root')
         .with_mode(00644)
@@ -78,6 +84,26 @@ describe 'ssl_certificate_test::subject_alternate_names', order: :random do
       expect(chef_run)
         .to create_file('subject_alternate_names2 SSL public certificate')
         .with_path('/etc/ssl/certs/subject_alternate_names2.pem')
+        .with_owner('root')
+        .with_group('root')
+        .with_mode(00644)
+        .with_sensitive(true)
+    end
+
+    it 'creates subject_alternate_names3 key from an encrypted data bag' do
+      expect(chef_run)
+        .to create_file('subject_alternate_names3 SSL certificate key')
+        .with_path('/etc/ssl/private/subject_alternate_names3.key')
+        .with_owner('root')
+        .with_group('root')
+        .with_mode(00600)
+        .with_sensitive(true)
+    end
+
+    it 'creates subject_alternate_names3 certificate from a data bag' do
+      expect(chef_run)
+        .to create_file('subject_alternate_names3 SSL public certificate')
+        .with_path('/etc/ssl/certs/subject_alternate_names3.pem')
         .with_owner('root')
         .with_group('root')
         .with_mode(00644)

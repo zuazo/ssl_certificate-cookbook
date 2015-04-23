@@ -33,14 +33,14 @@ key_dir, cert_dir =
 
 group = family == 'freebsd' ? 'wheel' : 'root'
 
-describe file("#{key_dir}/subject_alternate_names.key") do
+describe file("#{key_dir}/subject_alternate_names1.key") do
   it { should be_file }
   it { should be_mode 600 }
   it { should be_owned_by 'root' }
   it { should be_grouped_into group }
 end
 
-describe file("#{cert_dir}/subject_alternate_names.pem") do
+describe file("#{cert_dir}/subject_alternate_names1.pem") do
   it { should be_file }
   it { should be_mode 644 }
   it { should be_owned_by 'root' }
@@ -55,6 +55,20 @@ describe file("#{key_dir}/subject_alternate_names2.key") do
 end
 
 describe file("#{cert_dir}/subject_alternate_names2.pem") do
+  it { should be_file }
+  it { should be_mode 644 }
+  it { should be_owned_by 'root' }
+  it { should be_grouped_into group }
+end
+
+describe file("#{key_dir}/subject_alternate_names3.key") do
+  it { should be_file }
+  it { should be_mode 600 }
+  it { should be_owned_by 'root' }
+  it { should be_grouped_into group }
+end
+
+describe file("#{cert_dir}/subject_alternate_names3.pem") do
   it { should be_file }
   it { should be_mode 644 }
   it { should be_owned_by 'root' }

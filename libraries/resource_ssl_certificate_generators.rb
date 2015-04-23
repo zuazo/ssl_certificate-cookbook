@@ -210,7 +210,8 @@ class Chef
         def handle_subject_alternative_names(cert, factory, alt_names)
           fail 'alt_names must be an Array' unless alt_names.is_a?(Array)
 
-          name_list = alt_names.map { |m| "DNS:#{m}" }.join(',')
+          name_list =
+            alt_names.map { |m| m.include?(':') ? m : "DNS:#{m}" }.join(',')
           ext = factory.create_ext('subjectAltName', name_list, false)
           cert.add_extension(ext)
         end

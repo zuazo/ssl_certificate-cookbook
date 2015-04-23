@@ -1070,6 +1070,31 @@ ssl_certificate 'mysite.com' do
 end
 ```
 
+The *subject_alternate_names* parameter adds *DNS* values by default. You can also include other kind of values using a colon to separate the type from the value:
+
+```ruby
+domain = 'mysite.com'
+node.default[domain]['email'] = 'email@example.com'
+node.default[domain]['ssl_cert']['subject_alternate_names'] =
+  [
+    'email:copy',
+    "email:my@#{domain}",
+    "URI:http://#{domain}/",
+    'IP:192.168.7.1',
+    'IP:13::17',
+    'RID:1.2.3.4',
+    'otherName:1.2.3.4;UTF8:some other identifier'
+  ]
+
+ssl_certificate 'mysite.com' do
+  namespace node[domain]
+  key_source 'self-signed'
+  cert_source 'self-signed'
+end
+```
+
+See the [x509v3_config manual page](https://www.openssl.org/docs/apps/x509v3_config.html#Subject-Alternative-Name) for more information.
+
 ### Reading Key, Certificate and Intermediary from a Data Bag
 
 ```ruby

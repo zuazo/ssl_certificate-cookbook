@@ -37,20 +37,24 @@ setup() {
 }
 
 @test "creates a non-SAN certificate" {
-  [ -f "${CERT_PATH}/subject_alternate_names.pem" ]
+  [ -f "${CERT_PATH}/subject_alternate_names1.pem" ]
 }
 
 @test "creates a SAN certificate" {
   [ -f "${CERT_PATH}/subject_alternate_names2.pem" ]
 }
 
-@test "the non-SAN certificate has no Subject Alternative Name line" {
-  ! openssl x509 -in "${CERT_PATH}/subject_alternate_names.pem" -text -noout \
-    | grep -F 'X509v3 Subject Alternative Name'
+@test "creates a second SAN certificate" {
+  [ -f "${CERT_PATH}/subject_alternate_names3.pem" ]
 }
 
 @test "creates the non-SAN certificate key" {
-  openssl rsa -in "${KEY_PATH}/subject_alternate_names.key" -text -noout
+  openssl rsa -in "${KEY_PATH}/subject_alternate_names1.key" -text -noout
+}
+
+@test "the non-SAN certificate has no Subject Alternative Name line" {
+  ! openssl x509 -in "${CERT_PATH}/subject_alternate_names1.pem" -text -noout \
+    | grep -F 'X509v3 Subject Alternative Name'
 }
 
 @test "the SAN certificate has a Subject Alternative Name line" {
@@ -79,5 +83,49 @@ setup() {
 }
 
 @test "creates the SAN certificate key" {
-  openssl rsa -in "${KEY_PATH}/subject_alternate_names2.key" -text -noout
+  openssl rsa -in "${KEY_PATH}/subject_alternate_names3.key" -text -noout
+}
+
+@test "the second SAN certificate has a Subject Alternative Name line" {
+  openssl x509 -in "${CERT_PATH}/subject_alternate_names3.pem" -text -noout \
+    | grep -F 'X509v3 Subject Alternative Name'
+}
+
+@test "the second SAN certificate has the copied email entry" {
+  openssl x509 -in "${CERT_PATH}/subject_alternate_names3.pem" -text -noout \
+    | grep -F 'email:email@example.com'
+}
+
+@test "the second SAN certificate has another email entry" {
+  openssl x509 -in "${CERT_PATH}/subject_alternate_names3.pem" -text -noout \
+    | grep -F 'email:my@'
+}
+
+@test "the second SAN certificate has an email entry" {
+  openssl x509 -in "${CERT_PATH}/subject_alternate_names3.pem" -text -noout \
+    | grep -F 'URI:http://'
+}
+
+@test "the second SAN certificate has an IP entry" {
+  openssl x509 -in "${CERT_PATH}/subject_alternate_names3.pem" -text -noout \
+    | grep -F 'IP Address:192.168.7.1'
+}
+
+@test "the second SAN certificate has an IPv6 entry" {
+  openssl x509 -in "${CERT_PATH}/subject_alternate_names3.pem" -text -noout \
+    | grep -F 'IP Address:13:0:0:0:0:0:0:17'
+}
+
+@test "the second SAN certificate has an RID entry" {
+  openssl x509 -in "${CERT_PATH}/subject_alternate_names3.pem" -text -noout \
+    | grep -F 'Registered ID:1.2.3.4'
+}
+
+@test "the second SAN certificate has an otherName entry" {
+  openssl x509 -in "${CERT_PATH}/subject_alternate_names3.pem" -text -noout \
+    | grep -F 'othername:'
+}
+
+@test "creates the second SAN certificate key" {
+  openssl rsa -in "${KEY_PATH}/subject_alternate_names3.key" -text -noout
 }

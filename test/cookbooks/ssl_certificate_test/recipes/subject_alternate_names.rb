@@ -20,17 +20,37 @@
 # limitations under the License.
 #
 
-ssl_certificate 'subject_alternate_names' do
+ssl_certificate 'subject_alternate_names1' do
   key_source 'self-signed'
   cert_source 'self-signed'
 end
 
-domain = node['fqdn']
-node.default[domain]['ssl_cert']['subject_alternate_names'] =
-  [domain, 'foo', 'bar', 'foo.' + domain]
+email = 'email@example.com'
+domain1 = node['fqdn']
+node.default[domain1]['ssl_cert']['subject_alternate_names'] =
+  [domain1, 'foo', 'bar', 'foo.' + domain1]
 
 ssl_certificate 'subject_alternate_names2' do
-  namespace node[domain]
+  namespace node[domain1]
+  key_source 'self-signed'
+  cert_source 'self-signed'
+end
+
+domain2 = "www1.#{node['fqdn']}"
+node.default[domain2]['email'] = email
+node.default[domain2]['ssl_cert']['subject_alternate_names'] =
+  [
+    'email:copy',
+    "email:my@#{domain2}",
+    "URI:http://#{domain2}/",
+    'IP:192.168.7.1',
+    'IP:13::17',
+    'RID:1.2.3.4',
+    'otherName:1.2.3.4;UTF8:some other identifier'
+  ]
+
+ssl_certificate 'subject_alternate_names3' do
+  namespace node[domain2]
   key_source 'self-signed'
   cert_source 'self-signed'
 end
