@@ -26,12 +26,13 @@ group :unit do
   gem 'should_not', '~> 1.1'
   gem 'chefspec', '~> 4.1'
   gem 'chef-vault', '~> 2.4'
+  gem 'ohai', '~> 7.4' if RUBY_VERSION < '2'
 end
 
 group :integration do
   gem 'vagrant-wrapper', '~> 2.0'
   gem 'test-kitchen', '~> 1.2'
-  gem 'kitchen-vagrant', '~> 0.10'
+  gem 'kitchen-vagrant', '~> 0.16'
 end
 
 group :integration, :integration_cloud do

@@ -13,10 +13,8 @@ platforms:
 - name: centos-6.6
 - name: debian-7.8
   run_list: [ "recipe[apt]" ]
-- name: fedora-19
 - name: fedora-20
 - name: fedora-21
-- name: freebsd-10.0
 - name: ubuntu-10.04
   run_list: [ "recipe[apt]" ]
 - name: ubuntu-12.04
@@ -56,8 +54,8 @@ suites:
   - centos-5.11
   - freebsd-10.0
   # TLS 1.2 not supported (modern compatibility)
-  - ubuntu-1004
-  - ubuntu-1204
+  - ubuntu-10.04
+  - ubuntu-12.04
   data_bags_path: "test/data_bags"
   encrypted_data_bag_secret_key_path: "test/encrypted_data_bag_secret"
   run_list:
