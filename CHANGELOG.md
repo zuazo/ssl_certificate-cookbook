@@ -3,6 +3,14 @@ ssl_certificate CHANGELOG
 
 This file is used to list changes made in each version of the `ssl_certificate` cookbook.
 
+## v1.5.0 (2015-04-25)
+
+* Add sensitive true to the created files ([issue #12](https://github.com/onddo/ssl_certificate-cookbook/issues/12), thanks [Jonathan Chauncey](https://github.com/jchauncey) for reporting).
+* Add support for different types in Subject Alternative Names ([issue #13](https://github.com/onddo/ssl_certificate-cookbook/issues/13), thanks [Jonathan Chauncey](https://github.com/jchauncey) for reporting).
+* README: Fix all RuboCop offenses in examples.
+* Update Gemfile and kitchen.yml files.
+  * Gemfile: Update RuboCop to `0.30.1`.
+
 ## v1.4.0 (2015-04-05)
 
 * Add `attr_apply` recipe: Create a certificate list from attributes ([issue #10](https://github.com/onddo/ssl_certificate-cookbook/pull/10), thanks [Stanislav Bogatyrev](https://github.com/realloc)).
