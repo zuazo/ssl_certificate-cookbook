@@ -118,285 +118,64 @@ By default the resource will create a self-signed certificate, but a custom one 
 
 ### ssl_certificate Parameters
 
-<table>
-  <tr>
-    <th>Parameter</th>
-    <th>Description</th>
-    <th>Default</th>
-  </tr>
-  <tr>
-    <td>namespace</td>
-    <td>Node namespace to read the default values from, something like <code>node['myapp']</code>. See the documentation below for more information on how to use the namespace.</td>
-    <td><code>{}</code></td>
-  </tr>
-  <tr>
-    <td>common_name</td>
-    <td>Server name or <em>Common Name</em>, used for self-signed certificates.</td>
-    <td><code>namespace['common_name']</code></td>
-  </tr>
-  <tr>
-    <td>domain</td>
-    <td><code>common_name</code> method alias.</td>
-    <td><code>namespace['common_name']</code></td>
-  </tr>
-  <tr>
-    <td>country</td>
-    <td><em>Country</em>, used for self-signed certificates.</td>
-    <td><code>namespace['country']</code></td>
-  </tr>
-  <tr>
-    <td>city</td>
-    <td><em>City</em>, used for self-signed certificates.</td>
-    <td><code>namespace['city']</code></td>
-  </tr>
-  <tr>
-    <td>state</td>
-    <td><em>State</em> or <em>Province</em> name, used for self-signed certificates.</td>
-    <td><code>namespace['state']</code></td>
-  </tr>
-  <tr>
-    <td>organization</td>
-    <td><em>Organization</em> or <em>Company</em> name, used for self-signed certificates.</td>
-    <td><code>namespace['city']</code></td>
-  </tr>
-  <tr>
-    <td>department</td>
-    <td>Department or <em>Organizational Unit</em>, used for self-signed certificates.</td>
-    <td><code>namespace['city']</code></td>
-  </tr>
-  <tr>
-    <td>email</td>
-    <td><em>Email</em> address, used for self-signed certificates.</td>
-    <td><code>namespace['email']</code></td>
-  </tr>
-  <tr>
-    <td>time</td>
-    <td>Attribute for setting self-signed certificate validity time in seconds or <code>Time</code> object instance.</td>
-    <td><code>10 * 365 * 24 * 60 * 60</code></td>
-  </tr>
-  <tr>
-    <td>years</td>
-    <td>Write only attribute for setting self-signed certificate validity period in years.</td>
-    <td><code>10</code></td>
-  </tr>
-  <tr>
-    <td>owner</td>
-    <td>Certificate files owner user.</td>
-    <td><code>node['ssl_certificate']['user']</code></td>
-  </tr>
-  <tr>
-    <td>group</td>
-    <td>Certificate files owner group.</td>
-    <td><code>node['ssl_certificate']['group']</code></td>
-  </tr>
-  <tr>
-    <td>dir</td>
-    <td>Write only attribute for setting certificate path and key path (both) to a directory (<code>key_dir</code> and <code>cert_dir</code>).</td>
-    <td><code>nil</code></td>
-  </tr>
-  <tr>
-    <td>source</td>
-    <td>Write only attribute for setting certificate source and key source (both) to a value (<code>key_source</code> and <code>cert_source</code>). Can be <code>'self-signed'</code>, <code>'attribute'</code>, <code>'data-bag'</code>, <code>'chef-vault'</code> or <code>'file'</code>.</td>
-    <td><code>nil</code></td>
-  </tr>
-  <tr>
-    <td>bag</td>
-    <td>Write only attribute for setting certificate bag and key bag (both) to a value (<code>key_bag</code> and <code>cert_bag</code>).</td>
-    <td><code>nil</code></td>
-  </tr>
-  <tr>
-    <td>item</td>
-    <td>Write only attribute for setting certificate item name and key bag item name (both) to a value (<code>key_item</code> and <code>cert_item</code>).</td>
-    <td><code>nil</code></td>
-  </tr>
-  <tr>
-    <td>encrypted</td>
-    <td>Write only attribute for setting certificate encryption and key encryption (both) to a value (<code>key_encrypted</code> and <code>cert_encrypted</code>).</td>
-    <td><code>nil</code></td>
-  </tr>
-  <tr>
-    <td>secret_file</td>
-    <td>Write only attribute for setting certificate chef secret file and key chef secret file (both) to a value (<code>key_secret_file</code> and <code>cert_secret_file</code>).</td>
-    <td><code>nil</code></td>
-  </tr>
-  <tr>
-    <td>key_path</td>
-    <td>Private key full path.</td>
-    <td><em>calculated</em></td>
-  </tr>
-  <tr>
-    <td>key_name</td>
-    <td>Private key file name.</td>
-    <td><code>"#{name}.key"</code></td>
-  </tr>
-  <tr>
-    <td>key_dir</td>
-    <td>Private key directory path.</td>
-    <td><em>calculated</em></td>
-  </tr>
-  <tr>
-    <td>key_source</td>
-    <td>Source type to get the SSL key from. Can be <code>'self-signed'</code>, <code>'attribute'</code>, <code>'data-bag'</code>, <code>'chef-vault'</code> or <code>'file'</code>.</td>
-    <td><code>'self-signed'</code></td>
-  </tr>
-  <tr>
-    <td>key_bag</td>
-    <td>Name of the Data Bag where the SSL key is stored.</td>
-    <td><code>namespace['ssl_key']['bag']</code></td>
-  </tr>
-  <tr>
-    <td>key_item</td>
-    <td>Name of the Data Bag Item where the SSL key is stored.</td>
-    <td><code>namespace['ssl_key']['item']</code></td>
-  </tr>
-  <tr>
-    <td>key_item_key</td>
-    <td>Key of the Data Bag Item where the SSL key is stored.</td>
-    <td><code>namespace['ssl_key']['item_key']</code></td>
-  </tr>
-  <tr>
-    <td>key_encrypted</td>
-    <td>Whether the Data Bag where the SSL key is stored is encrypted.</td>
-    <td><code>false</code></td>
-  </tr>
-  <tr>
-    <td>key_secret_file</td>
-    <td>Secret file used to decrypt the Data Bag where the SSL key is stored.</td>
-    <td><code>nil</code></td>
-  </tr>
-  <tr>
-    <td>key_content</td>
-    <td>SSL key file content in clear. <strong>Be careful when using it.<strong></td>
-    <td><em>calculated</em></td>
-  </tr>
-  <tr>
-    <td>cert_path</td>
-    <td>Public certificate full path.</td>
-    <td><em>calculated</em></td>
-  </tr>
-  <tr>
-    <td>cert_name</td>
-    <td>Public certiticate file name.</td>
-    <td><code>"#{name}.pem"</code></td>
-  </tr>
-  <tr>
-    <td>cert_dir</td>
-    <td>Public certificate directory path.</td>
-    <td><em>calculated</em></td>
-  </tr>
-  <tr>
-    <td>cert_source</td>
-    <td>Source type to get the SSL cert from. Can be <code>'self-signed'</code>,
-    <code>'with_ca'</code>, <code>'attribute'</code>, <code>'data-bag'</code>,
-    <code>'chef-vault'</code> or <code>'file'</code>.</td>
-    <td><code>'self-signed'</code></td>
-  </tr>
-  <tr>
-    <td>cert_bag</td>
-    <td>Name of the Data Bag where the SSL cert is stored.</td>
-    <td><code>namespace['ssl_cert']['bag']</code></td>
-  </tr>
-  <tr>
-    <td>cert_item</td>
-    <td>Name of the Data Bag Item where the SSL cert is stored.</td>
-    <td><code>namespace['ssl_cert']['item']</code></td>
-  </tr>
-  <tr>
-    <td>cert_item_key</td>
-    <td>Key of the Data Bag Item where the SSL cert is stored.</td>
-    <td><code>namespace['ssl_cert']['item_key']</code></td>
-  </tr>
-  <tr>
-    <td>cert_encrypted</td>
-    <td>Whether the Data Bag where the SSL cert is stored is encrypted.</td>
-    <td><code>false</code></td>
-  </tr>
-  <tr>
-    <td>cert_secret_file</td>
-    <td>Secret file used to decrypt the Data Bag where the SSL cert is stored.</td>
-    <td><code>nil</code></td>
-  </tr>
-  <tr>
-    <td>cert_content</td>
-    <td>SSL cert file content in clear.</td>
-    <td><em>calculated</em></td>
-  </tr>
-  <tr>
-    <td>subject_alternate_names</td>
-    <td>Subject Alternate Names for the cert.</td>
-    <td><code>nil</code></td>
-  </tr>
-  <tr>
-    <td>chain_path</td>
-    <td>Intermediate certificate chain full path.</td>
-    <td><em>calculated</em></td>
-  </tr>
-  <tr>
-    <td>chain_name</td>
-    <td>File name of intermediate certificate chain file.</td>
-    <td><code>nil</code></td>
-  </tr>
-  <tr>
-    <td>chain_dir</td>
-    <td>Intermediate certificate chain directory path.</td>
-    <td><em>calculated</em></td>
-  </tr>
-  <tr>
-    <td>chain_source</td>
-    <td>Source type to get the intermediate certificate chain from. Can be <code>'attribute'</code>, <code>'data-bag'</code>, <code>'chef-vault'</code> or <code>'file'</code>.</td>
-    <td><code>nil</code></td>
-  </tr>
-  <tr>
-    <td>chain_bag</td>
-    <td>Name of the Data Bag where the intermediate certificate chain is stored.</td>
-    <td><code>namespace['ssl_chain']['bag']</code></td>
-  </tr>
-  <tr>
-    <td>chain_item</td>
-    <td>Name of the Data Bag Item where the intermediate certificate chain is stored.</td>
-    <td><code>namespace['ssl_chain']['item']</code></td>
-  </tr>
-  <tr>
-    <td>chain_item_key</td>
-    <td>Key of the Data Bag Item where the intermediate certificate chain is stored.</td>
-    <td><code>namespace['ssl_chain']['item_key']</code></td>
-  </tr>
-  <tr>
-    <td>chain_encrypted</td>
-    <td>Whether the Data Bag where the intermediate certificate chain is stored is encrypted.</td>
-    <td><code>false</code></td>
-  </tr>
-  <tr>
-    <td>chain_secret_file</td>
-    <td>Secret file used to decrypt the Data Bag where the intermediate certificate chain is stored.</td>
-    <td><code>nil</code></td>
-  </tr>
-  <tr>
-    <td>chain_content</td>
-    <td>Intermediate certificate chain file content in clear.</td>
-    <td><em>calculated</em></td>
-  </tr>
-  <tr>
-    <td>chain_combined_name</td>
-    <td>File name of intermediate certificate chain combined file (for <strong>nginx</strong>).</td>
-    <td><em>calculated</em></td>
-  </tr>
-  <tr>
-    <td>chain_combined_path</td>
-    <td>Intermediate certificate chain combined file full path (for <strong>nginx</strong>).</td>
-    <td><em>calculated</em></td>
-  </tr>
-  <tr>
-    <td>ca_cert_path</td>
-    <td>Certificate Authority full path.</td>
-    <td><em>nil</em></td>
-  </tr>
-  <tr>
-    <td>ca_key_path</td>
-    <td>Key Authority full path.</td>
-    <td><em>nil</em></td>
-  </tr>
-</table>
+| Parameter               | Default                        | Description                    |
+|:------------------------|:-------------------------------|:-------------------------------|
+| namespace               | `{}`                           | Node namespace to read the default values from, something like `node['myapp']`. See the documentation below for more information on how to use the namespace.
+| common_name             | `namespace['common_name']`     | Server name or *Common Name*, used for self-signed certificates.
+| domain                  | `namespace['common_name']`     | `common_name` method alias.
+| country                 | `namespace['country']`         | *Country*, used for self-signed certificates.
+| city                    | `namespace['city']`            | *City*, used for self-signed certificates.
+| state                   | `namespace['state']`           | *State* or *Province* name, used for self-signed certificates.
+| organization            | `namespace['city']`            | *Organization* or *Company* name, used for self-signed certificates.
+| department              | `namespace['city']`            | Department or *Organizational Unit*, used for self-signed certificates.
+| email                   | `namespace['email']`           | *Email* address, used for self-signed certificates.
+| time                    | `10 * 365 * 24 * 60 * 60`      | Attribute for setting self-signed certificate validity time in seconds or `Time` object instance.
+| years                   | `10`                           | Write only attribute for setting self-signed certificate validity period in years.
+| owner                   | *calculated*                   | Certificate files owner user.
+| group                   | *calculated*                   | Certificate files owner group.
+| dir                     | `nil`                          | Write only attribute for setting certificate path and key path (both) to a directory (`key_dir` and `cert_dir`).
+| source                  | `nil`                          | Write only attribute for setting certificate source and key source (both) to a value (`key_source` and `cert_source`). Can be `'self-signed'`, `'attribute'`, `'data-bag'`, `'chef-vault'` or `'file'`.
+| bag                     | `nil`                          | Write only attribute for setting certificate bag and key bag (both) to a value (`key_bag` and `cert_bag`).
+| item                    | `nil`                          | Write only attribute for setting certificate item name and key bag item name (both) to a value (`key_item` and `cert_item`).
+| encrypted               | `nil`                          | Write only attribute for setting certificate encryption and key encryption (both) to a value (`key_encrypted` and `cert_encrypted`).
+| secret_file             | `nil`                          | Write only attribute for setting certificate chef secret file and key chef secret file (both) to a value (`key_secret_file` and `cert_secret_file`).
+| key_path                | *calculated*                   | Private key full path.
+| key_name                | `"#{name}.key"`                | Private key file name.
+| key_dir                 | *calculated*                   | Private key directory path.
+| key_source              | `'self-signed'`                | Source type to get the SSL key from. Can be `'self-signed'`, `'attribute'`, `'data-bag'`, `'chef-vault'` or `'file'`.
+| key_bag                 | `namespace['ssl_key']['bag']`  | Name of the Data Bag where the SSL key is stored.
+| key_item                | `namespace['ssl_key']['item']` | Name of the Data Bag Item where the SSL key is stored.
+| key_item_key            | *calculated*                   | Key of the Data Bag Item where the SSL key is stored.
+| key_encrypted           | `false`                        | Whether the Data Bag where the SSL key is stored is encrypted.
+| key_secret_file         | `nil`                          | Secret file used to decrypt the Data Bag where the SSL key is stored.
+| key_content             | *calculated*                   | SSL key file content in clear. **Be careful when using it.******
+| cert_path               | *calculated*                   | Public certificate full path.
+| cert_name               | `"#{name}.pem"`                | Public certiticate file name.
+| cert_dir                | *calculated*                   | Public certificate directory path.
+| cert_source             | `'self-signed'`                | Source type to get the SSL cert from. Can be `'self-signed'`,
+    `'with_ca'`, `'attribute'`, `'data-bag'`,
+    `'chef-vault'` or `'file'`.
+| cert_bag                | `namespace['ssl_cert']['bag']` | Name of the Data Bag where the SSL cert is stored.
+| cert_item               | *calculated*                   | Name of the Data Bag Item where the SSL cert is stored.
+| cert_item_key           | *calculated*                   | Key of the Data Bag Item where the SSL cert is stored.
+| cert_encrypted          | `false`                        | Whether the Data Bag where the SSL cert is stored is encrypted.
+| cert_secret_file        | `nil`                          | Secret file used to decrypt the Data Bag where the SSL cert is stored.
+| cert_content            | *calculated*                   | SSL cert file content in clear.
+| subject_alternate_names | `nil`                          | Subject Alternate Names for the cert.
+| chain_path              | *calculated*                   | Intermediate certificate chain full path.
+| chain_name              | `nil`                          | File name of intermediate certificate chain file.
+| chain_dir               | *calculated*                   | Intermediate certificate chain directory path.
+| chain_source            | `nil`                          | Source type to get the intermediate certificate chain from. Can be `'attribute'`, `'data-bag'`, `'chef-vault'` or `'file'`.
+| chain_bag               | *calculated*                   | Name of the Data Bag where the intermediate certificate chain is stored.
+| chain_item              | *calculated*                   | Name of the Data Bag Item where the intermediate certificate chain is stored.
+| chain_item_key          | *calculated*                   | Key of the Data Bag Item where the intermediate certificate chain is stored.
+| chain_encrypted         | `false`                        | Whether the Data Bag where the intermediate certificate chain is stored is encrypted.
+| chain_secret_file       | `nil`                          | Secret file used to decrypt the Data Bag where the intermediate certificate chain is stored.
+| chain_content           | *calculated*                   | Intermediate certificate chain file content in clear.
+| chain_combined_name     | *calculated*                   | File name of intermediate certificate chain combined file (for **nginx**).
+| chain_combined_path     | *calculated*                   | Intermediate certificate chain combined file full path (for **nginx**).
+| ca_cert_path            | *nil*                          | Certificate Authority full path.
+| ca_key_path             | *nil*                          | Key Authority full path.
 
 Templates
 =========
@@ -584,164 +363,46 @@ The `ssl_certificate` **namespace** attribute is a node attribute path, like for
 
 When a namespace is set in the resource, it will try to read the following attributes below the namespace (all attributes are **optional**):
 
-<table>
-  <tr>
-    <th>Attribute</th>
-    <th>Description</th>
-  </tr>
-  <tr>
-    <td><code>namespace['common_name']</code></td>
-    <td>Server name or *Common Name*, used for self-signed certificates (uses <code>node['fqdn']</code> by default).</td>
-  </tr>
-  <tr>
-    <td><code>namespace['country']</code></td>
-    <td><em>Country</em>, used for self-signed certificates.</td>
-  </tr>
-  <tr>
-    <td><code>namespace['city']</code></td>
-    <td><em>City</em>, used for self-signed certificates.</td>
-  </tr>
-  <tr>
-    <td><code>namespace['state']</code></td>
-    <td><em>State</em> or <em>Province</em> name, used for self-signed certificates.</td>
-  </tr>
-  <tr>
-    <td><code>namespace['organization']</code></td>
-    <td><em>Organization</em> or <em>Company</em> name, used for self-signed certificates.</td>
-  </tr>
-  <tr>
-    <td><code>namespace['department']</code></td>
-    <td>Department or <em>Organizational Unit</em>, used for self-signed certificates.</td>
-  </tr>
-  <tr>
-    <td><code>namespace['email']</code></td>
-    <td><em>Email</em> address, used for self-signed certificates.</td>
-  </tr>
-  <tr>
-    <td><code>namespace['source']</code></td>
-    <td>Attribute for setting certificate source and key source (both) to a value (<code>key_source</code> and <code>cert_source</code>).</td>
-  </tr>
-  <tr>
-    <td><code>namespace['bag']</code></td>
-    <td>Attribute for setting certificate bag and key bag (both) to a value (<code>key_bag</code> and <code>cert_bag</code>).</td>
-  </tr>
-  <tr>
-    <td><code>namespace['item']</code></td>
-    <td>Attribute for setting certificate item name and key bag item name (both) to a value (<code>key_item</code> and <code>cert_item</code>).</td>
-  </tr>
-  <tr>
-    <td><code>namespace['encrypted']</code></td>
-    <td>Attribute for setting certificate encryption and key encryption (both) to a value (<code>key_encryption</code> and <code>cert_encryption</code>).</td>
-  </tr>
-  <tr>
-    <td><code>namespace['secret_file']</code></td>
-    <td>Attribute for setting certificate chef secret file and key chef secret file (both) to a value (<code>key_secret_file</code> and <code>cert_secret_file</code>).</td>
-  </tr>
-  <tr>
-    <td><code>namespace['ssl_key']['source']</code></td>
-    <td>Source type to get the SSL key from. Can be <code>'self-signed'</code>, <code>'attribute'</code>, <code>'data-bag'</code>, <code>'chef-vault'</code> or <code>'file'</code>.</td>
-  </tr>
-  <tr>
-    <td><code>namespace['ssl_key']['path']</code></td>
-    <td>File path of the SSL key.</td>
-  </tr>
-  <tr>
-    <td><code>namespace['ssl_key']['bag']</code></td>
-    <td>Name of the Data Bag where the SSL key is stored.</td>
-  </tr>
-  <tr>
-    <td><code>namespace['ssl_key']['item']</code></td>
-    <td>Name of the Data Bag Item where the SSL key is stored.</td>
-  </tr>
-  <tr>
-    <td><code>namespace['ssl_key']['item_key']</code></td>
-    <td>Key of the Data Bag Item where the SSL key is stored.</td>
-  </tr>
-  <tr>
-    <td><code>namespace['ssl_key']['encrypted']</code></td>
-    <td>Whether the Data Bag where the SSL key is stored is encrypted.</td>
-  </tr>
-  <tr>
-    <td><code>namespace['ssl_key']['secret_file']</code></td>
-    <td>Secret file used to decrypt the Data Bag where the SSL key is stored.</td>
-  </tr>
-  <tr>
-    <td><code>namespace['ssl_key']['content']</code></td>
-    <td>SSL key content used when reading from attributes.</td>
-  </tr>
-  <tr>
-    <td><code>namespace['ssl_cert']['source']</code></td>
-    <td>Source type to get the SSL cert from. Can be <code>'self-signed'</code>, <code>'attribute'</code>, <code>'data-bag'</code>, <code>'chef-vault'</code> or <code>'file'</code>.</td>
-  </tr>
-  <tr>
-    <td><code>namespace['ssl_cert']['path']</code></td>
-    <td>File path of the SSL certificate.</td>
-  </tr>
-  <tr>
-    <td><code>namespace['ssl_cert']['bag']</code></td>
-    <td>Name of the Data Bag where the SSL cert is stored.</td>
-  </tr>
-  <tr>
-    <td><code>namespace['ssl_cert']['item']</code></td>
-    <td>Name of the Data Bag Item where the SSL cert is stored.</td>
-  </tr>
-  <tr>
-    <td><code>namespace['ssl_cert']['item_key']</code></td>
-    <td>Key of the Data Bag Item where the SSL cert is stored.</td>
-  </tr>
-  <tr>
-    <td><code>namespace['ssl_cert']['encrypted']</code></td>
-    <td>Whether the Data Bag where the SSL cert is stored is encrypted.</td>
-  </tr>
-  <tr>
-    <td><code>namespace['ssl_cert']['secret_file']</code></td>
-    <td>Secret file used to decrypt the Data Bag where the SSL cert is stored.</td>
-  </tr>
-  <tr>
-    <td><code>namespace['ssl_cert']['content']</code></td>
-    <td>SSL cert content used when reading from attributes.</td>
-  </tr>
-  <tr>
-    <td><code>namespace['ssl_cert']['subject_alternate_names']</code></td>
-    <td>An array of Subject Alternate Names for the SSL cert. Needed if your site has multiple domain names on the same cert.</td>
-  </tr>
-  <tr>
-    <td><code>namespace['ssl_chain']['name']</code></td>
-    <td>File name to be used for the intermediate certificate chain file. <em>If this is not present, no chain file will be written.</em></td>
-  </tr>
-  <tr>
-    <td><code>namespace['ssl_chain']['source']</code></td>
-    <td>Source type to get the intermediate certificate chain from. Can be <code>'attribute'</code>, <code>'data-bag'</code>, <code>'chef-vault'</code> or <code>'file'</code>.</td>
-  </tr>
-  <tr>
-    <td><code>namespace['ssl_chain']['path']</code></td>
-    <td>File path of the intermediate SSL certificate chain.</td>
-  </tr>
-  <tr>
-    <td><code>namespace['ssl_chain']['bag']</code></td>
-    <td>Name of the Data Bag where the intermediate certificate chain is stored.</td>
-  </tr>
-  <tr>
-    <td><code>namespace['ssl_chain']['item']</code></td>
-    <td>Name of the Data Bag Item where the intermediate certificate chain is stored.</td>
-  </tr>
-  <tr>
-    <td><code>namespace['ssl_chain']['item_key']</code></td>
-    <td>Key of the Data Bag Item where the intermediate certificate chain is stored.</td>
-  </tr>
-  <tr>
-    <td><code>namespace['ssl_chain']['encrypted']</code></td>
-    <td>Whether the Data Bag where the intermediate certificate chain is stored is encrypted.</td>
-  </tr>
-  <tr>
-    <td><code>namespace['ssl_chain']['secret_file']</code></td>
-    <td>Secret file used to decrypt the Data Bag where the intermediate certificate chain is stored.</td>
-  </tr>
-  <tr>
-    <td><code>namespace['ssl_chain']['content']</code></td>
-    <td>Intermediate certificate chain content used when reading from attributes.</td>
-  </tr>
-</table>
+| Attribute                                          | Description                    |
+|:---------------------------------------------------|:-------------------------------|
+| `namespace['common_name']`                         | Server name or *Common Name*, used for self-signed certificates (uses `node['fqdn']` by default).
+| `namespace['country']`                             | *Country*, used for self-signed certificates.
+| `namespace['city']`                                | *City*, used for self-signed certificates.
+| `namespace['state']`                               | *State* or *Province* name, used for self-signed certificates.
+| `namespace['organization']`                        | *Organization* or *Company* name, used for self-signed certificates.
+| `namespace['department']`                          | Department or *Organizational Unit*, used for self-signed certificates.
+| `namespace['email']`                               | *Email* address, used for self-signed certificates.
+| `namespace['source']`                              | Attribute for setting certificate source and key source (both) to a value (`key_source` and `cert_source`).
+| `namespace['bag']`                                 | Attribute for setting certificate bag and key bag (both) to a value (`key_bag` and `cert_bag`).
+| `namespace['item']`                                | Attribute for setting certificate item name and key bag item name (both) to a value (`key_item` and `cert_item`).
+| `namespace['encrypted']`                           | Attribute for setting certificate encryption and key encryption (both) to a value (`key_encryption` and `cert_encryption`).
+| `namespace['secret_file']`                         | Attribute for setting certificate chef secret file and key chef secret file (both) to a value (`key_secret_file` and `cert_secret_file`).
+| `namespace['ssl_key']['source']`                   | Source type to get the SSL key from. Can be `'self-signed'`, `'attribute'`, `'data-bag'`, `'chef-vault'` or `'file'`.
+| `namespace['ssl_key']['path']`                     | File path of the SSL key.
+| `namespace['ssl_key']['bag']`                      | Name of the Data Bag where the SSL key is stored.
+| `namespace['ssl_key']['item']`                     | Name of the Data Bag Item where the SSL key is stored.
+| `namespace['ssl_key']['item_key']`                 | Key of the Data Bag Item where the SSL key is stored.
+| `namespace['ssl_key']['encrypted']`                | Whether the Data Bag where the SSL key is stored is encrypted.
+| `namespace['ssl_key']['secret_file']`              | Secret file used to decrypt the Data Bag where the SSL key is stored.
+| `namespace['ssl_key']['content']`                  | SSL key content used when reading from attributes.
+| `namespace['ssl_cert']['source']`                  | Source type to get the SSL cert from. Can be `'self-signed'`, `'attribute'`, `'data-bag'`, `'chef-vault'` or `'file'`.
+| `namespace['ssl_cert']['path']`                    | File path of the SSL certificate.
+| `namespace['ssl_cert']['bag']`                     | Name of the Data Bag where the SSL cert is stored.
+| `namespace['ssl_cert']['item']`                    | Name of the Data Bag Item where the SSL cert is stored.
+| `namespace['ssl_cert']['item_key']`                | Key of the Data Bag Item where the SSL cert is stored.
+| `namespace['ssl_cert']['encrypted']`               | Whether the Data Bag where the SSL cert is stored is encrypted.
+| `namespace['ssl_cert']['secret_file']`             | Secret file used to decrypt the Data Bag where the SSL cert is stored.
+| `namespace['ssl_cert']['content']`                 | SSL cert content used when reading from attributes.
+| `namespace['ssl_cert']['subject_alternate_names']` | An array of Subject Alternate Names for the SSL cert. Needed if your site has multiple domain names on the same cert.
+| `namespace['ssl_chain']['name']`                   | File name to be used for the intermediate certificate chain file. *If this is not present, no chain file will be written.*
+| `namespace['ssl_chain']['source']`                 | Source type to get the intermediate certificate chain from. Can be `'attribute'`, `'data-bag'`, `'chef-vault'` or `'file'`.
+| `namespace['ssl_chain']['path']`                   | File path of the intermediate SSL certificate chain.
+| `namespace['ssl_chain']['bag']`                    | Name of the Data Bag where the intermediate certificate chain is stored.
+| `namespace['ssl_chain']['item']`                   | Name of the Data Bag Item where the intermediate certificate chain is stored.
+| `namespace['ssl_chain']['item_key']`               | Key of the Data Bag Item where the intermediate certificate chain is stored.
+| `namespace['ssl_chain']['encrypted']`              | Whether the Data Bag where the intermediate certificate chain is stored is encrypted.
+| `namespace['ssl_chain']['secret_file']`            | Secret file used to decrypt the Data Bag where the intermediate certificate chain is stored.
+| `namespace['ssl_chain']['content']`                | Intermediate certificate chain content used when reading from attributes.
 
 ## Examples
 
