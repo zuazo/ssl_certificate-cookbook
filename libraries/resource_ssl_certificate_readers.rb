@@ -85,11 +85,15 @@ class Chef
             "#{db[:bag]}.#{db[:item]}[#{db[:key]}]"
         end
 
+        def read_secret(secret)
+          Chef::EncryptedDataBagItem.load_secret(secret) unless secret.nil?
+        end
+
         def read_from_data_bag(bag, item, key, encrypt = false, secret = nil)
           unsafe_no_exceptions_block do
             data =
               if encrypt
-                Chef::EncryptedDataBagItem.load(bag, item, secret)
+                Chef::EncryptedDataBagItem.load(bag, item, read_secret(secret))
               else
                 Chef::DataBagItem.load(bag, item)
               end
