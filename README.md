@@ -1,6 +1,7 @@
 Description
 ===========
 [![Cookbook Version](https://img.shields.io/cookbook/v/ssl_certificate.svg?style=flat)](https://supermarket.getchef.com/cookbooks/ssl_certificate)
+[![GitHub Source](https://img.shields.io/badge/source-GitHub-blue.svg?style=flat)](https://github.com/onddo/ssl_certificate-cookbook)
 [![Dependency Status](http://img.shields.io/gemnasium/onddo/ssl_certificate-cookbook.svg?style=flat)](https://gemnasium.com/onddo/ssl_certificate-cookbook)
 [![Code Climate](http://img.shields.io/codeclimate/github/onddo/ssl_certificate-cookbook.svg?style=flat)](https://codeclimate.com/github/onddo/ssl_certificate-cookbook)
 [![Build Status](http://img.shields.io/travis/onddo/ssl_certificate-cookbook.svg?style=flat)](https://travis-ci.org/onddo/ssl_certificate-cookbook)
