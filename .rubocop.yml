@@ -1,0 +1,5 @@
+AllCops:
+  Exclude:
+  - '.kitchen'
+Metrics/ModuleLength:
+  Max: 194
