@@ -3,6 +3,14 @@ ssl_certificate CHANGELOG
 
 This file is used to list changes made in each version of the `ssl_certificate` cookbook.
 
+## v1.6.0 (2015-08-02)
+
+* Load encrypted secret before passing to the `EncryptedDataBagItem.load` ([issue #14](https://github.com/onddo/ssl_certificate-cookbook/pull/14), thanks [Nikita Borzykh](https://github.com/sample)).
+* Update RuboCop to `0.32.1`.
+* README:
+ * Use markdown tables.
+ * Add GitHub badge.
+
 ## v1.5.0 (2015-04-25)
 
 * Add sensitive true to the created files ([issue #12](https://github.com/onddo/ssl_certificate-cookbook/issues/12), thanks [Jonathan Chauncey](https://github.com/jchauncey) for reporting).
