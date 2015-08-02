@@ -16,42 +16,42 @@ env:
   - TESTS="style unit"  CHEF_VERSION="~> 12.0"
 # Split up the test-kitchen run to avoid exceeding 50 minutes:
   - TESTS="integration" KITCHEN_REGEXP=default-centos-6
-  - TESTS="integration" KITCHEN_REGEXP=default-debian-6
-  - TESTS="integration" KITCHEN_REGEXP=default-debian-7
-  - TESTS="integration" KITCHEN_REGEXP=default-debian-8
-  - TESTS="integration" KITCHEN_REGEXP=default-ubuntu-1204
-  - TESTS="integration" KITCHEN_REGEXP=default-ubuntu-1404
-  - TESTS="integration" KITCHEN_REGEXP=default-ubuntu-1410
-  - TESTS="integration" KITCHEN_REGEXP=default-ubuntu-1504
-  - TESTS="integration" KITCHEN_REGEXP=subject-alternate-names-centos-6
-  - TESTS="integration" KITCHEN_REGEXP=subject-alternate-names-debian-6
-  - TESTS="integration" KITCHEN_REGEXP=subject-alternate-names-debian-7
-  - TESTS="integration" KITCHEN_REGEXP=subject-alternate-names-debian-8
-  - TESTS="integration" KITCHEN_REGEXP=subject-alternate-names-ubuntu-1204
-  - TESTS="integration" KITCHEN_REGEXP=subject-alternate-names-ubuntu-1404
-  - TESTS="integration" KITCHEN_REGEXP=subject-alternate-names-ubuntu-1410
-  - TESTS="integration" KITCHEN_REGEXP=subject-alternate-names-ubuntu-1504
-  - TESTS="integration" KITCHEN_REGEXP=intermediate-chain-centos-6
-  - TESTS="integration" KITCHEN_REGEXP=intermediate-chain-debian-6
-  - TESTS="integration" KITCHEN_REGEXP=intermediate-chain-debian-7
-  - TESTS="integration" KITCHEN_REGEXP=intermediate-chain-debian-8
-  - TESTS="integration" KITCHEN_REGEXP=intermediate-chain-ubuntu-1204
-  - TESTS="integration" KITCHEN_REGEXP=intermediate-chain-ubuntu-1404
-  - TESTS="integration" KITCHEN_REGEXP=intermediate-chain-ubuntu-1410
-  - TESTS="integration" KITCHEN_REGEXP=intermediate-chain-ubuntu-1504
-  - TESTS="integration" KITCHEN_REGEXP=with-ca-centos-6
-  - TESTS="integration" KITCHEN_REGEXP=with-ca-debian-7
-  - TESTS="integration" KITCHEN_REGEXP=with-ca-debian-8
-  - TESTS="integration" KITCHEN_REGEXP=with-ca-ubuntu-1404
-  - TESTS="integration" KITCHEN_REGEXP=with-ca-ubuntu-1410
-  - TESTS="integration" KITCHEN_REGEXP=with-ca-ubuntu-1504
-  - TESTS="integration" KITCHEN_REGEXP=nginx-centos-6
-  - TESTS="integration" KITCHEN_REGEXP=nginx-debian-7
-  - TESTS="integration" KITCHEN_REGEXP=nginx-debian-8
-  - TESTS="integration" KITCHEN_REGEXP=nginx-ubuntu-1204
-  - TESTS="integration" KITCHEN_REGEXP=nginx-ubuntu-1404
-  - TESTS="integration" KITCHEN_REGEXP=nginx-ubuntu-1410
-  - TESTS="integration" KITCHEN_REGEXP=nginx-ubuntu-1504
+#   - TESTS="integration" KITCHEN_REGEXP=default-debian-6
+#   - TESTS="integration" KITCHEN_REGEXP=default-debian-7
+#   - TESTS="integration" KITCHEN_REGEXP=default-debian-8
+#   - TESTS="integration" KITCHEN_REGEXP=default-ubuntu-1204
+#   - TESTS="integration" KITCHEN_REGEXP=default-ubuntu-1404
+#   - TESTS="integration" KITCHEN_REGEXP=default-ubuntu-1410
+#   - TESTS="integration" KITCHEN_REGEXP=default-ubuntu-1504
+#   - TESTS="integration" KITCHEN_REGEXP=subject-alternate-names-centos-6
+#   - TESTS="integration" KITCHEN_REGEXP=subject-alternate-names-debian-6
+#   - TESTS="integration" KITCHEN_REGEXP=subject-alternate-names-debian-7
+#   - TESTS="integration" KITCHEN_REGEXP=subject-alternate-names-debian-8
+#   - TESTS="integration" KITCHEN_REGEXP=subject-alternate-names-ubuntu-1204
+#   - TESTS="integration" KITCHEN_REGEXP=subject-alternate-names-ubuntu-1404
+#   - TESTS="integration" KITCHEN_REGEXP=subject-alternate-names-ubuntu-1410
+#   - TESTS="integration" KITCHEN_REGEXP=subject-alternate-names-ubuntu-1504
+#   - TESTS="integration" KITCHEN_REGEXP=intermediate-chain-centos-6
+#   - TESTS="integration" KITCHEN_REGEXP=intermediate-chain-debian-6
+#   - TESTS="integration" KITCHEN_REGEXP=intermediate-chain-debian-7
+#   - TESTS="integration" KITCHEN_REGEXP=intermediate-chain-debian-8
+#   - TESTS="integration" KITCHEN_REGEXP=intermediate-chain-ubuntu-1204
+#   - TESTS="integration" KITCHEN_REGEXP=intermediate-chain-ubuntu-1404
+#   - TESTS="integration" KITCHEN_REGEXP=intermediate-chain-ubuntu-1410
+#   - TESTS="integration" KITCHEN_REGEXP=intermediate-chain-ubuntu-1504
+#   - TESTS="integration" KITCHEN_REGEXP=with-ca-centos-6
+#   - TESTS="integration" KITCHEN_REGEXP=with-ca-debian-7
+#   - TESTS="integration" KITCHEN_REGEXP=with-ca-debian-8
+#   - TESTS="integration" KITCHEN_REGEXP=with-ca-ubuntu-1404
+#   - TESTS="integration" KITCHEN_REGEXP=with-ca-ubuntu-1410
+#   - TESTS="integration" KITCHEN_REGEXP=with-ca-ubuntu-1504
+#   - TESTS="integration" KITCHEN_REGEXP=nginx-centos-6
+#   - TESTS="integration" KITCHEN_REGEXP=nginx-debian-7
+#   - TESTS="integration" KITCHEN_REGEXP=nginx-debian-8
+#   - TESTS="integration" KITCHEN_REGEXP=nginx-ubuntu-1204
+#   - TESTS="integration" KITCHEN_REGEXP=nginx-ubuntu-1404
+#   - TESTS="integration" KITCHEN_REGEXP=nginx-ubuntu-1410
+#   - TESTS="integration" KITCHEN_REGEXP=nginx-ubuntu-1504
 
 matrix:
   exclude:
@@ -288,7 +288,8 @@ matrix:
 bundler_args: --without doc integration_vagrant integration_cloud guard
 
 before_script:
-- source <(curl -sL https://raw.githubusercontent.com/zuazo/kitchen-in-travis/0.1.0/scripts/start_docker.sh)
+# - source <(curl -sL https://raw.githubusercontent.com/zuazo/kitchen-in-travis/0.1.0/scripts/start_docker.sh)
+- source <(curl -sL https://github.com/zuazo/kitchen-in-travis/blob/fix-travis-201508/scripts/start_docker.sh)
 
 script:
 - travis_retry bundle exec rake $TESTS
