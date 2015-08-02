@@ -289,7 +289,7 @@ bundler_args: --without doc integration_vagrant integration_cloud guard
 
 before_script:
 # - source <(curl -sL https://raw.githubusercontent.com/zuazo/kitchen-in-travis/0.1.0/scripts/start_docker.sh)
-- source <(curl -sL https://github.com/zuazo/kitchen-in-travis/blob/fix-travis-201508/scripts/start_docker.sh)
+- source <(curl -sL https://raw.githubusercontent.com/zuazo/kitchen-in-travis/fix-travis-201508/scripts/start_docker.sh)
 
 script:
 - travis_retry bundle exec rake $TESTS
