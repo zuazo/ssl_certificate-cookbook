@@ -153,9 +153,7 @@ By default the resource will create a self-signed certificate, but a custom one 
 | cert_path               | *calculated*                   | Public certificate full path.
 | cert_name               | `"#{name}.pem"`                | Public certiticate file name.
 | cert_dir                | *calculated*                   | Public certificate directory path.
-| cert_source             | `'self-signed'`                | Source type to get the SSL cert from. Can be `'self-signed'`,
-    `'with_ca'`, `'attribute'`, `'data-bag'`,
-    `'chef-vault'` or `'file'`.
+| cert_source             | `'self-signed'`                | Source type to get the SSL cert from. Can be `'self-signed'`, `'with_ca'`, `'attribute'`, `'data-bag'`, `'chef-vault'` or `'file'`.
 | cert_bag                | `namespace['ssl_cert']['bag']` | Name of the Data Bag where the SSL cert is stored.
 | cert_item               | *calculated*                   | Name of the Data Bag Item where the SSL cert is stored.
 | cert_item_key           | *calculated*                   | Key of the Data Bag Item where the SSL cert is stored.
