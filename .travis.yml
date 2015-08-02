@@ -1,15 +1,296 @@
 rvm:
-  - 1.9.3
-  - 2.0.0
-  - 2.1
-sudo: false
+- 1.9.3
+- 2.0.0
+- 2.1
+- 2.2
+
+sudo: true
+
 env:
-  - CHEF_VERSION="~> 11.0"
-  - CHEF_VERSION="~> 12.0"
+  global:
+  - KITCHEN_ARGS="--destroy=always"
+  - KITCHEN_LOCAL_YAML=.kitchen.docker.yml
+  matrix:
+# CHEF_VERSION is only for unit tests, no for test-kitchen:
+  - TESTS="style unit"  CHEF_VERSION="~> 11.0"
+  - TESTS="style unit"  CHEF_VERSION="~> 12.0"
+# Split up the test-kitchen run to avoid exceeding 50 minutes:
+  - TESTS="integration" KITCHEN_REGEXP=default-centos-6
+  - TESTS="integration" KITCHEN_REGEXP=default-debian-6
+  - TESTS="integration" KITCHEN_REGEXP=default-debian-7
+  - TESTS="integration" KITCHEN_REGEXP=default-debian-8
+  - TESTS="integration" KITCHEN_REGEXP=default-ubuntu-1204
+  - TESTS="integration" KITCHEN_REGEXP=default-ubuntu-1404
+  - TESTS="integration" KITCHEN_REGEXP=default-ubuntu-1410
+  - TESTS="integration" KITCHEN_REGEXP=default-ubuntu-1504
+  - TESTS="integration" KITCHEN_REGEXP=subject-alternate-names-centos-6
+  - TESTS="integration" KITCHEN_REGEXP=subject-alternate-names-debian-6
+  - TESTS="integration" KITCHEN_REGEXP=subject-alternate-names-debian-7
+  - TESTS="integration" KITCHEN_REGEXP=subject-alternate-names-debian-8
+  - TESTS="integration" KITCHEN_REGEXP=subject-alternate-names-ubuntu-1204
+  - TESTS="integration" KITCHEN_REGEXP=subject-alternate-names-ubuntu-1404
+  - TESTS="integration" KITCHEN_REGEXP=subject-alternate-names-ubuntu-1410
+  - TESTS="integration" KITCHEN_REGEXP=subject-alternate-names-ubuntu-1504
+  - TESTS="integration" KITCHEN_REGEXP=intermediate-chain-centos-6
+  - TESTS="integration" KITCHEN_REGEXP=intermediate-chain-debian-6
+  - TESTS="integration" KITCHEN_REGEXP=intermediate-chain-debian-7
+  - TESTS="integration" KITCHEN_REGEXP=intermediate-chain-debian-8
+  - TESTS="integration" KITCHEN_REGEXP=intermediate-chain-ubuntu-1204
+  - TESTS="integration" KITCHEN_REGEXP=intermediate-chain-ubuntu-1404
+  - TESTS="integration" KITCHEN_REGEXP=intermediate-chain-ubuntu-1410
+  - TESTS="integration" KITCHEN_REGEXP=intermediate-chain-ubuntu-1504
+  - TESTS="integration" KITCHEN_REGEXP=with-ca-centos-6
+  - TESTS="integration" KITCHEN_REGEXP=with-ca-debian-7
+  - TESTS="integration" KITCHEN_REGEXP=with-ca-debian-8
+  - TESTS="integration" KITCHEN_REGEXP=with-ca-ubuntu-1404
+  - TESTS="integration" KITCHEN_REGEXP=with-ca-ubuntu-1410
+  - TESTS="integration" KITCHEN_REGEXP=with-ca-ubuntu-1504
+  - TESTS="integration" KITCHEN_REGEXP=nginx-centos-6
+  - TESTS="integration" KITCHEN_REGEXP=nginx-debian-7
+  - TESTS="integration" KITCHEN_REGEXP=nginx-debian-8
+  - TESTS="integration" KITCHEN_REGEXP=nginx-ubuntu-1204
+  - TESTS="integration" KITCHEN_REGEXP=nginx-ubuntu-1404
+  - TESTS="integration" KITCHEN_REGEXP=nginx-ubuntu-1410
+  - TESTS="integration" KITCHEN_REGEXP=nginx-ubuntu-1504
+
 matrix:
   exclude:
-    - rvm: 1.9.3
-      env: CHEF_VERSION="~> 12.0"
-bundler_args: --without doc integration integration_cloud guard
+# Chef 12 requires Ruby 2:
+  - rvm: 1.9.3
+    env: TESTS="style unit"  CHEF_VERSION="~> 12.0"
+# Chef 11 cannot resolve dependencies in Ruby 2.2 (mixlib-shellout):
+  - rvm: 2.2
+    env: TESTS="style unit"  CHEF_VERSION="~> 11.0"
+# Disable integration tests in old Ruby versions:
+  - rvm: 1.9.3
+    env: TESTS="integration" KITCHEN_REGEXP=default-centos-6
+  - rvm: 2.0.0
+    env: TESTS="integration" KITCHEN_REGEXP=default-centos-6
+  - rvm: 2.1
+    env: TESTS="integration" KITCHEN_REGEXP=default-centos-6
+  - rvm: 1.9.3
+    env: TESTS="integration" KITCHEN_REGEXP=default-debian-6
+  - rvm: 2.0.0
+    env: TESTS="integration" KITCHEN_REGEXP=default-debian-6
+  - rvm: 2.1
+    env: TESTS="integration" KITCHEN_REGEXP=default-debian-6
+  - rvm: 1.9.3
+    env: TESTS="integration" KITCHEN_REGEXP=default-debian-7
+  - rvm: 2.0.0
+    env: TESTS="integration" KITCHEN_REGEXP=default-debian-7
+  - rvm: 2.1
+    env: TESTS="integration" KITCHEN_REGEXP=default-debian-7
+  - rvm: 1.9.3
+    env: TESTS="integration" KITCHEN_REGEXP=default-debian-8
+  - rvm: 2.0.0
+    env: TESTS="integration" KITCHEN_REGEXP=default-debian-8
+  - rvm: 2.1
+    env: TESTS="integration" KITCHEN_REGEXP=default-debian-8
+  - rvm: 1.9.3
+    env: TESTS="integration" KITCHEN_REGEXP=default-ubuntu-1204
+  - rvm: 2.0.0
+    env: TESTS="integration" KITCHEN_REGEXP=default-ubuntu-1204
+  - rvm: 2.1
+    env: TESTS="integration" KITCHEN_REGEXP=default-ubuntu-1204
+  - rvm: 1.9.3
+    env: TESTS="integration" KITCHEN_REGEXP=default-ubuntu-1404
+  - rvm: 2.0.0
+    env: TESTS="integration" KITCHEN_REGEXP=default-ubuntu-1404
+  - rvm: 2.1
+    env: TESTS="integration" KITCHEN_REGEXP=default-ubuntu-1404
+  - rvm: 1.9.3
+    env: TESTS="integration" KITCHEN_REGEXP=default-ubuntu-1410
+  - rvm: 2.0.0
+    env: TESTS="integration" KITCHEN_REGEXP=default-ubuntu-1410
+  - rvm: 2.1
+    env: TESTS="integration" KITCHEN_REGEXP=default-ubuntu-1410
+  - rvm: 1.9.3
+    env: TESTS="integration" KITCHEN_REGEXP=default-ubuntu-1504
+  - rvm: 2.0.0
+    env: TESTS="integration" KITCHEN_REGEXP=default-ubuntu-1504
+  - rvm: 2.1
+    env: TESTS="integration" KITCHEN_REGEXP=default-ubuntu-1504
+  - rvm: 1.9.3
+    env: TESTS="integration" KITCHEN_REGEXP=subject-alternate-names-centos-6
+  - rvm: 2.0.0
+    env: TESTS="integration" KITCHEN_REGEXP=subject-alternate-names-centos-6
+  - rvm: 2.1
+    env: TESTS="integration" KITCHEN_REGEXP=subject-alternate-names-centos-6
+  - rvm: 1.9.3
+    env: TESTS="integration" KITCHEN_REGEXP=subject-alternate-names-debian-6
+  - rvm: 2.0.0
+    env: TESTS="integration" KITCHEN_REGEXP=subject-alternate-names-debian-6
+  - rvm: 2.1
+    env: TESTS="integration" KITCHEN_REGEXP=subject-alternate-names-debian-6
+  - rvm: 1.9.3
+    env: TESTS="integration" KITCHEN_REGEXP=subject-alternate-names-debian-7
+  - rvm: 2.0.0
+    env: TESTS="integration" KITCHEN_REGEXP=subject-alternate-names-debian-7
+  - rvm: 2.1
+    env: TESTS="integration" KITCHEN_REGEXP=subject-alternate-names-debian-7
+  - rvm: 1.9.3
+    env: TESTS="integration" KITCHEN_REGEXP=subject-alternate-names-debian-8
+  - rvm: 2.0.0
+    env: TESTS="integration" KITCHEN_REGEXP=subject-alternate-names-debian-8
+  - rvm: 2.1
+    env: TESTS="integration" KITCHEN_REGEXP=subject-alternate-names-debian-8
+  - rvm: 1.9.3
+    env: TESTS="integration" KITCHEN_REGEXP=subject-alternate-names-ubuntu-1204
+  - rvm: 2.0.0
+    env: TESTS="integration" KITCHEN_REGEXP=subject-alternate-names-ubuntu-1204
+  - rvm: 2.1
+    env: TESTS="integration" KITCHEN_REGEXP=subject-alternate-names-ubuntu-1204
+  - rvm: 1.9.3
+    env: TESTS="integration" KITCHEN_REGEXP=subject-alternate-names-ubuntu-1404
+  - rvm: 2.0.0
+    env: TESTS="integration" KITCHEN_REGEXP=subject-alternate-names-ubuntu-1404
+  - rvm: 2.1
+    env: TESTS="integration" KITCHEN_REGEXP=subject-alternate-names-ubuntu-1404
+  - rvm: 1.9.3
+    env: TESTS="integration" KITCHEN_REGEXP=subject-alternate-names-ubuntu-1410
+  - rvm: 2.0.0
+    env: TESTS="integration" KITCHEN_REGEXP=subject-alternate-names-ubuntu-1410
+  - rvm: 2.1
+    env: TESTS="integration" KITCHEN_REGEXP=subject-alternate-names-ubuntu-1410
+  - rvm: 1.9.3
+    env: TESTS="integration" KITCHEN_REGEXP=subject-alternate-names-ubuntu-1504
+  - rvm: 2.0.0
+    env: TESTS="integration" KITCHEN_REGEXP=subject-alternate-names-ubuntu-1504
+  - rvm: 2.1
+    env: TESTS="integration" KITCHEN_REGEXP=subject-alternate-names-ubuntu-1504
+  - rvm: 1.9.3
+    env: TESTS="integration" KITCHEN_REGEXP=intermediate-chain-centos-6
+  - rvm: 2.0.0
+    env: TESTS="integration" KITCHEN_REGEXP=intermediate-chain-centos-6
+  - rvm: 2.1
+    env: TESTS="integration" KITCHEN_REGEXP=intermediate-chain-centos-6
+  - rvm: 1.9.3
+    env: TESTS="integration" KITCHEN_REGEXP=intermediate-chain-debian-6
+  - rvm: 2.0.0
+    env: TESTS="integration" KITCHEN_REGEXP=intermediate-chain-debian-6
+  - rvm: 2.1
+    env: TESTS="integration" KITCHEN_REGEXP=intermediate-chain-debian-6
+  - rvm: 1.9.3
+    env: TESTS="integration" KITCHEN_REGEXP=intermediate-chain-debian-7
+  - rvm: 2.0.0
+    env: TESTS="integration" KITCHEN_REGEXP=intermediate-chain-debian-7
+  - rvm: 2.1
+    env: TESTS="integration" KITCHEN_REGEXP=intermediate-chain-debian-7
+  - rvm: 1.9.3
+    env: TESTS="integration" KITCHEN_REGEXP=intermediate-chain-debian-8
+  - rvm: 2.0.0
+    env: TESTS="integration" KITCHEN_REGEXP=intermediate-chain-debian-8
+  - rvm: 2.1
+    env: TESTS="integration" KITCHEN_REGEXP=intermediate-chain-debian-8
+  - rvm: 1.9.3
+    env: TESTS="integration" KITCHEN_REGEXP=intermediate-chain-ubuntu-1204
+  - rvm: 2.0.0
+    env: TESTS="integration" KITCHEN_REGEXP=intermediate-chain-ubuntu-1204
+  - rvm: 2.1
+    env: TESTS="integration" KITCHEN_REGEXP=intermediate-chain-ubuntu-1204
+  - rvm: 1.9.3
+    env: TESTS="integration" KITCHEN_REGEXP=intermediate-chain-ubuntu-1404
+  - rvm: 2.0.0
+    env: TESTS="integration" KITCHEN_REGEXP=intermediate-chain-ubuntu-1404
+  - rvm: 2.1
+    env: TESTS="integration" KITCHEN_REGEXP=intermediate-chain-ubuntu-1404
+  - rvm: 1.9.3
+    env: TESTS="integration" KITCHEN_REGEXP=intermediate-chain-ubuntu-1410
+  - rvm: 2.0.0
+    env: TESTS="integration" KITCHEN_REGEXP=intermediate-chain-ubuntu-1410
+  - rvm: 2.1
+    env: TESTS="integration" KITCHEN_REGEXP=intermediate-chain-ubuntu-1410
+  - rvm: 1.9.3
+    env: TESTS="integration" KITCHEN_REGEXP=intermediate-chain-ubuntu-1504
+  - rvm: 2.0.0
+    env: TESTS="integration" KITCHEN_REGEXP=intermediate-chain-ubuntu-1504
+  - rvm: 2.1
+    env: TESTS="integration" KITCHEN_REGEXP=intermediate-chain-ubuntu-1504
+  - rvm: 1.9.3
+    env: TESTS="integration" KITCHEN_REGEXP=with-ca-centos-6
+  - rvm: 2.0.0
+    env: TESTS="integration" KITCHEN_REGEXP=with-ca-centos-6
+  - rvm: 2.1
+    env: TESTS="integration" KITCHEN_REGEXP=with-ca-centos-6
+  - rvm: 1.9.3
+    env: TESTS="integration" KITCHEN_REGEXP=with-ca-debian-7
+  - rvm: 2.0.0
+    env: TESTS="integration" KITCHEN_REGEXP=with-ca-debian-7
+  - rvm: 2.1
+    env: TESTS="integration" KITCHEN_REGEXP=with-ca-debian-7
+  - rvm: 1.9.3
+    env: TESTS="integration" KITCHEN_REGEXP=with-ca-debian-8
+  - rvm: 2.0.0
+    env: TESTS="integration" KITCHEN_REGEXP=with-ca-debian-8
+  - rvm: 2.1
+    env: TESTS="integration" KITCHEN_REGEXP=with-ca-debian-8
+  - rvm: 1.9.3
+    env: TESTS="integration" KITCHEN_REGEXP=with-ca-ubuntu-1404
+  - rvm: 2.0.0
+    env: TESTS="integration" KITCHEN_REGEXP=with-ca-ubuntu-1404
+  - rvm: 2.1
+    env: TESTS="integration" KITCHEN_REGEXP=with-ca-ubuntu-1404
+  - rvm: 1.9.3
+    env: TESTS="integration" KITCHEN_REGEXP=with-ca-ubuntu-1410
+  - rvm: 2.0.0
+    env: TESTS="integration" KITCHEN_REGEXP=with-ca-ubuntu-1410
+  - rvm: 2.1
+    env: TESTS="integration" KITCHEN_REGEXP=with-ca-ubuntu-1410
+  - rvm: 1.9.3
+    env: TESTS="integration" KITCHEN_REGEXP=with-ca-ubuntu-1504
+  - rvm: 2.0.0
+    env: TESTS="integration" KITCHEN_REGEXP=with-ca-ubuntu-1504
+  - rvm: 2.1
+    env: TESTS="integration" KITCHEN_REGEXP=with-ca-ubuntu-1504
+  - rvm: 1.9.3
+    env: TESTS="integration" KITCHEN_REGEXP=nginx-centos-6
+  - rvm: 2.0.0
+    env: TESTS="integration" KITCHEN_REGEXP=nginx-centos-6
+  - rvm: 2.1
+    env: TESTS="integration" KITCHEN_REGEXP=nginx-centos-6
+  - rvm: 1.9.3
+    env: TESTS="integration" KITCHEN_REGEXP=nginx-debian-7
+  - rvm: 2.0.0
+    env: TESTS="integration" KITCHEN_REGEXP=nginx-debian-7
+  - rvm: 2.1
+    env: TESTS="integration" KITCHEN_REGEXP=nginx-debian-7
+  - rvm: 1.9.3
+    env: TESTS="integration" KITCHEN_REGEXP=nginx-debian-8
+  - rvm: 2.0.0
+    env: TESTS="integration" KITCHEN_REGEXP=nginx-debian-8
+  - rvm: 2.1
+    env: TESTS="integration" KITCHEN_REGEXP=nginx-debian-8
+  - rvm: 1.9.3
+    env: TESTS="integration" KITCHEN_REGEXP=nginx-ubuntu-1204
+  - rvm: 2.0.0
+    env: TESTS="integration" KITCHEN_REGEXP=nginx-ubuntu-1204
+  - rvm: 2.1
+    env: TESTS="integration" KITCHEN_REGEXP=nginx-ubuntu-1204
+  - rvm: 1.9.3
+    env: TESTS="integration" KITCHEN_REGEXP=nginx-ubuntu-1404
+  - rvm: 2.0.0
+    env: TESTS="integration" KITCHEN_REGEXP=nginx-ubuntu-1404
+  - rvm: 2.1
+    env: TESTS="integration" KITCHEN_REGEXP=nginx-ubuntu-1404
+  - rvm: 1.9.3
+    env: TESTS="integration" KITCHEN_REGEXP=nginx-ubuntu-1410
+  - rvm: 2.0.0
+    env: TESTS="integration" KITCHEN_REGEXP=nginx-ubuntu-1410
+  - rvm: 2.1
+    env: TESTS="integration" KITCHEN_REGEXP=nginx-ubuntu-1410
+  - rvm: 1.9.3
+    env: TESTS="integration" KITCHEN_REGEXP=nginx-ubuntu-1504
+  - rvm: 2.0.0
+    env: TESTS="integration" KITCHEN_REGEXP=nginx-ubuntu-1504
+  - rvm: 2.1
+    env: TESTS="integration" KITCHEN_REGEXP=nginx-ubuntu-1504
+
+bundler_args: --without doc integration_vagrant integration_cloud guard
+
+before_script:
+- source <(curl -sL https://raw.githubusercontent.com/zuazo/kitchen-in-travis/0.1.0/scripts/start_docker.sh)
+
 script:
-  - bundle exec rake travis:ci
+- travis_retry bundle exec rake $TESTS
+
+after_failure: cat docker_daemon.log

@@ -17,7 +17,7 @@
 # limitations under the License.
 #
 
-require 'spec_helper'
+require_relative '../spec_helper'
 
 describe 'ssl_certificate_test::self_signed_with_ca_certificate',
          order: :random do

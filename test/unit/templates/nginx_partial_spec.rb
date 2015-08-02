@@ -17,8 +17,8 @@
 # limitations under the License.
 #
 
-require 'spec_helper'
-require 'support/template_render'
+require_relative '../spec_helper'
+require_relative '../support/template_render'
 require 'service_helpers'
 
 describe 'ssl_certificate nginx partial template', order: :random do

@@ -17,7 +17,7 @@
 # limitations under the License.
 #
 
-require 'spec_helper'
+require_relative '../spec_helper'
 
 describe 'ssl_certificate_test::subject_alternate_names', order: :random do
   let(:chef_runner) { ChefSpec::ServerRunner.new }

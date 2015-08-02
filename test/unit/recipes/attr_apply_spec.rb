@@ -16,7 +16,7 @@
 # limitations under the License.
 #
 
-require 'spec_helper'
+require_relative '../spec_helper'
 
 describe 'ssl_certificate::attr_apply', order: :random do
   let(:chef_runner) { ChefSpec::ServerRunner.new }
