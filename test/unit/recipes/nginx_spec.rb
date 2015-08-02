@@ -1,6 +1,7 @@
+# encoding: UTF-8
 #
-# Author:: Stanislav Bogatyrev (<realloc@realloc.spb.ru>)
-# Copyright:: Copyright (c) 2015 Stanislav Bogatyrev
+# Author:: Xabier de Zuazo (<xabier@zuazo.org>)
+# Copyright:: Copyright (c) 2014 Onddo Labs, SL.
 # License:: Apache License, Version 2.0
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -16,27 +17,36 @@
 # limitations under the License.
 #
 
-require 'spec_helper'
+require_relative '../spec_helper'
 
-describe 'ssl_certificate::attr_apply', order: :random do
+describe 'ssl_certificate_test::nginx', order: :random do
   let(:chef_runner) { ChefSpec::SoloRunner.new }
   let(:chef_run) { chef_runner.converge(described_recipe) }
   let(:node) { chef_runner.node }
   let(:fqdn) { 'ssl-certificate.example.com' }
-
   before do
     node.automatic['fqdn'] = fqdn
-    node.override['ssl_certificate']['items'] = [
-      {
-        'name' => 'ssl-certificate.example.com',
-        'source' => 'self-signed'
-      }
-    ]
+    stub_command('which nginx').and_return(true)
   end
 
-  it 'creates example self-signed certificate' do
-    expect(chef_run).to create_ssl_certificate('ssl-certificate.example.com')
-      .with_key_source('self-signed')
-      .with_cert_source('self-signed')
+  it 'creates chain-data-bag certificate' do
+    expect(chef_run).to create_ssl_certificate('chain-data-bag')
+  end
+
+  it 'includes nginx recipe' do
+    expect(chef_run).to include_recipe('nginx')
+  end
+
+  it 'creates nginx virtualhost template' do
+    expect(chef_run)
+      .to create_template('/etc/nginx/sites-available/ssl_certificate')
+      .with_source('nginx_vhost.erb')
+      .with_mode(00644)
+      .with_owner('root')
+      .with_group('root')
+  end
+
+  it 'enables nginx virtualhost' do
+    expect(chef_run).to run_execute('nxensite ssl_certificate')
   end
 end

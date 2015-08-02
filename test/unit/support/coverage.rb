@@ -25,11 +25,12 @@ else
   SimpleCov.start do
     add_group 'Libraries', '/libraries'
     add_group 'ChefSpec' do |src|
-      %r{/spec/(recipes|resources|providers)}.match(src.filename)
+      %r{/test/unit/(recipes|resources|providers|templates|templates)}
+        .match(src.filename)
     end
     add_group 'RSpec' do |src|
-      %r{/spec/(unit|functional|integration|libraries)}.match(src.filename)
+      %r{/test/unit/(unit|functional|integration|libraries)}.match(src.filename)
     end
-    add_group 'RSpec Support', '/spec/support'
+    add_group 'RSpec Support', '/test/unit/support'
   end
 end
