@@ -12,8 +12,8 @@ env:
   - KITCHEN_LOCAL_YAML=.kitchen.docker.yml
   matrix:
 # CHEF_VERSION is only for unit tests, no for test-kitchen:
-  - TESTS="style unit"  CHEF_VERSION="~> 11.0"
-  - TESTS="style unit"  CHEF_VERSION="~> 12.0"
+#   - TESTS="style unit"  CHEF_VERSION="~> 11.0"
+#   - TESTS="style unit"  CHEF_VERSION="~> 12.0"
 # Split up the test-kitchen run to avoid exceeding 50 minutes:
   - TESTS="integration" KITCHEN_REGEXP=default-centos-6
 #   - TESTS="integration" KITCHEN_REGEXP=default-debian-6
