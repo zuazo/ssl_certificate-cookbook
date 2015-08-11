@@ -95,7 +95,7 @@ class Chef
         end
 
         def filter_source(desc, source, valid_sources)
-          source = source.gsub('-', '_')
+          source = source.tr('-', '_')
           assert_source!(desc, source, valid_sources)
           source
         end
