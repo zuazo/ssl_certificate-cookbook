@@ -1,10 +1,10 @@
 Description
 ===========
 [![Cookbook Version](https://img.shields.io/cookbook/v/ssl_certificate.svg?style=flat)](https://supermarket.getchef.com/cookbooks/ssl_certificate)
-[![GitHub Source](https://img.shields.io/badge/source-GitHub-blue.svg?style=flat)](https://github.com/onddo/ssl_certificate-cookbook)
-[![Dependency Status](http://img.shields.io/gemnasium/onddo/ssl_certificate-cookbook.svg?style=flat)](https://gemnasium.com/onddo/ssl_certificate-cookbook)
-[![Code Climate](http://img.shields.io/codeclimate/github/onddo/ssl_certificate-cookbook.svg?style=flat)](https://codeclimate.com/github/onddo/ssl_certificate-cookbook)
-[![Build Status](http://img.shields.io/travis/onddo/ssl_certificate-cookbook.svg?style=flat)](https://travis-ci.org/onddo/ssl_certificate-cookbook)
+[![GitHub Source](https://img.shields.io/badge/source-GitHub-blue.svg?style=flat)](https://github.com/zuazo/ssl_certificate-cookbook)
+[![Dependency Status](http://img.shields.io/gemnasium/zuazo/ssl_certificate-cookbook.svg?style=flat)](https://gemnasium.com/zuazo/ssl_certificate-cookbook)
+[![Code Climate](http://img.shields.io/codeclimate/github/zuazo/ssl_certificate-cookbook.svg?style=flat)](https://codeclimate.com/github/zuazo/ssl_certificate-cookbook)
+[![Build Status](http://img.shields.io/travis/zuazo/ssl_certificate-cookbook.svg?style=flat)](https://travis-ci.org/zuazo/ssl_certificate-cookbook)
 
 The main purpose of this cookbook is to make it easy for other cookbooks to support SSL. With the resource included, you will be able to manage certificates reading them from attributes, data bags or chef-vaults. Exposing its configuration through node attributes.
 
@@ -65,7 +65,7 @@ This cookbook has been tested on the following platforms:
 * RedHat
 * Ubuntu
 
-Please, [let us know](https://github.com/onddo/ssl_certificate-cookbook/issues/new?title=I%20have%20used%20it%20successfully%20on%20...) if you use it successfully on any other platform.
+Please, [let us know](https://github.com/zuazo/ssl_certificate-cookbook/issues/new?title=I%20have%20used%20it%20successfully%20on%20...) if you use it successfully on any other platform.
 
 ## Required Applications
 
@@ -96,7 +96,7 @@ The following attributes are used to integrate SSL specific configurations with 
 | `node['ssl_certificate']['service']['use_hsts']`      | `true`       | Whether to enable [HSTS](http://en.wikipedia.org/wiki/HTTP_Strict_Transport_Security) in the service.
 | `node['ssl_certificate']['service']['use_stapling']`  | *calculated* | Whether to enable [OCSP stapling](http://en.wikipedia.org/wiki/OCSP_stapling) in the service (nginx only, use `node['apache']['mod_ssl']['use_stapling']` for apache).
 
-See the [`ServiceHelpers` class documentation](http://www.rubydoc.info/github/onddo/ssl_certificate-cookbook/master/Chef/SslCertificateCookbook/ServiceHelpers) to learn how to integrate them with new services.
+See the [`ServiceHelpers` class documentation](http://www.rubydoc.info/github/zuazo/ssl_certificate-cookbook/master/Chef/SslCertificateCookbook/ServiceHelpers) to learn how to integrate them with new services.
 
 Resources
 =========
@@ -327,7 +327,7 @@ You need to include this recipe in your `run_list` before using the  `ssl_certif
 
 ```json
 {
-  "name": "onddo.com",
+  "name": "example.com",
   "[...]": "[...]",
   "run_list": [
     "recipe[ssl_certificate]"
@@ -358,7 +358,7 @@ log "WebApp1 private key is here: #{cert.key_path}"
 
 ## Namespaces
 
-The `ssl_certificate` **namespace** attribute is a node attribute path, like for example `node['onddo.com']`, used to configure SSL certificate defaults. This will make easier to *integrate the node attributes* with the certificate creation matters. This means you can configure the certificate creation through node attributes.
+The `ssl_certificate` **namespace** attribute is a node attribute path, like for example `node['example.com']`, used to configure SSL certificate defaults. This will make easier to *integrate the node attributes* with the certificate creation matters. This means you can configure the certificate creation through node attributes.
 
 When a namespace is set in the resource, it will try to read the following attributes below the namespace (all attributes are **optional**):
 
@@ -410,7 +410,7 @@ When a namespace is set in the resource, it will try to read the following attri
 Apache `web_app` example using community [apache2](http://community.opscode.com/cookbooks/apache2) cookbook and node attributes:
 
 ```ruby
-node.default['my-webapp']['common_name'] = 'onddo.com'
+node.default['my-webapp']['common_name'] = 'example.com'
 node.default['my-webapp']['ssl_cert']['source'] = 'self-signed'
 node.default['my-webapp']['ssl_key']['source'] = 'self-signed'
 
@@ -481,7 +481,7 @@ template File.join(node['nginx']['dir'], 'sites-available', 'my-webapp-ssl') do
   group 'root'
   variables(
     name: 'my-webapp-ssl',
-    server_name: 'ssl.onddo.com',
+    server_name: 'ssl.example.com',
     docroot: '/var/www',
     # [...]
     ssl_key: cert.key_path,
@@ -864,7 +864,7 @@ override_attributes(
 Testing
 =======
 
-See [TESTING.md](https://github.com/onddo/ssl_certificate-cookbook/blob/master/TESTING.md).
+See [TESTING.md](https://github.com/zuazo/ssl_certificate-cookbook/blob/master/TESTING.md).
 
 ## ChefSpec Matchers
 
@@ -888,14 +888,14 @@ expect(chef_run).to create_ssl_certificate('cloud.mysite.com')
 Contributing
 ============
 
-Please do not hesitate to [open an issue](https://github.com/onddo/ssl_certificate-cookbook/issues/new) with any questions or problems.
+Please do not hesitate to [open an issue](https://github.com/zuazo/ssl_certificate-cookbook/issues/new) with any questions or problems.
 
-See [CONTRIBUTING.md](https://github.com/onddo/ssl_certificate-cookbook/blob/master/CONTRIBUTING.md).
+See [CONTRIBUTING.md](https://github.com/zuazo/ssl_certificate-cookbook/blob/master/CONTRIBUTING.md).
 
 TODO
 ====
 
-See [TODO.md](https://github.com/onddo/ssl_certificate-cookbook/blob/master/TODO.md).
+See [TODO.md](https://github.com/zuazo/ssl_certificate-cookbook/blob/master/TODO.md).
 
 
 License and Author
@@ -903,8 +903,8 @@ License and Author
 
 |                      |                                          |
 |:---------------------|:-----------------------------------------|
-| **Author:**          | [Raul Rodriguez](https://github.com/raulr) (<raul@onddo.com>)
-| **Author:**          | [Xabier de Zuazo](https://github.com/zuazo) (<xabier@onddo.com>)
+| **Author:**          | [Raul Rodriguez](https://github.com/raulr) (<raul@raulr.com>)
+| **Author:**          | [Xabier de Zuazo](https://github.com/zuazo) (<xabier@zuazo.org>)
 | **Contributor:**     | [Steve Meinel](https://github.com/smeinel)
 | **Contributor:**     | [Djuri Baars](https://github.com/dsbaars)
 | **Contributor:**     | [Elliott Davis](https://github.com/elliott-davis)
@@ -913,7 +913,8 @@ License and Author
 | **Contributor:**     | [Stanislav Bogatyrev](https://github.com/realloc)
 | **Contributor:**     | [Karl Svec](https://github.com/karlsvec)
 | **Contributor:**     | [Nikita Borzykh](https://github.com/sample)
-| **Copyright:**       | Copyright (c) 2014-2015, Onddo Labs, SL. (www.onddo.com)
+| **Copyright:**       | Copyright (c) 2015, Xabier de Zuazo
+| **Copyright:**       | Copyright (c) 2014-2015, Onddo Labs, SL.
 | **License:**         | Apache License, Version 2.0
 
     Licensed under the Apache License, Version 2.0 (the "License");

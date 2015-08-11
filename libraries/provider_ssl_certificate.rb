@@ -2,10 +2,10 @@
 #
 # Cookbook Name:: ssl_certificate
 # Provider:: ssl_certificate
-# Author:: Raul Rodriguez (<raul@onddo.com>)
-# Author:: Xabier de Zuazo (<xabier@onddo.com>)
+# Author:: Raul Rodriguez (<raul@raulr.net>)
+# Author:: Xabier de Zuazo (<xabier@zuazo.org>)
 # Author:: Steve Meinel (<steve.meinel@caltech.edu>)
-# Copyright:: Copyright (c) 2014-2015 Onddo Labs, SL. (www.onddo.com)
+# Copyright:: Copyright (c) 2014-2015 Onddo Labs, SL.
 # License:: Apache License, Version 2.0
 #
 # Licensed under the Apache License, Version 2.0 (the "License");

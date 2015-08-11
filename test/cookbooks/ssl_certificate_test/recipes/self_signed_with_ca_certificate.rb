@@ -4,8 +4,8 @@
 # Recipe:: self_signed_with_ca_certificate
 # Description::	 Test kitchen test for testing self-signed host with CA.
 # Author:: Jeremy MAURO (<j.mauro@criteo.com>)
-# Author:: Xabier de Zuazo (<xabier@onddo.com>)
-# Copyright:: Copyright (c) 2014-2015 Onddo Labs, SL. (www.onddo.com)
+# Author:: Xabier de Zuazo (<xabier@zuazo.org>)
+# Copyright:: Copyright (c) 2014-2015 Onddo Labs, SL.
 # License:: Apache License, Version 2.0
 #
 # Licensed under the Apache License, Version 2.0 (the "License");

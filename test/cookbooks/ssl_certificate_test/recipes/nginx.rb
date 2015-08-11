@@ -2,8 +2,8 @@
 #
 # Cookbook Name:: ssl_certificate_test
 # Recipe:: nginx
-# Author:: Xabier de Zuazo (<xabier@onddo.com>)
-# Copyright:: Copyright (c) 2014-2015 Onddo Labs, SL. (www.onddo.com)
+# Author:: Xabier de Zuazo (<xabier@zuazo.org>)
+# Copyright:: Copyright (c) 2014-2015 Onddo Labs, SL.
 # License:: Apache License, Version 2.0
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -51,7 +51,7 @@ template vhost_file do
   group 'root'
   variables(
     name: 'ssl_certificate',
-    server_name: 'ssl.onddo.com',
+    server_name: 'ssl.example.com',
     docroot: '/var/www',
     ssl_key: cert.key_path,
     ssl_cert: cert.chain_combined_path,

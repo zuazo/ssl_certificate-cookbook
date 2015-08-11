@@ -5,7 +5,7 @@ This file is used to list changes made in each version of the `ssl_certificate` 
 
 ## v1.6.0 (2015-08-02)
 
-* Load encrypted secret before passing to the `EncryptedDataBagItem.load` ([issue #14](https://github.com/onddo/ssl_certificate-cookbook/pull/14), thanks [Nikita Borzykh](https://github.com/sample)).
+* Load encrypted secret before passing to the `EncryptedDataBagItem.load` ([issue #14](https://github.com/zuazo/ssl_certificate-cookbook/pull/14), thanks [Nikita Borzykh](https://github.com/sample)).
 * Update RuboCop to `0.32.1`.
 * README:
  * Use markdown tables.
@@ -13,16 +13,16 @@ This file is used to list changes made in each version of the `ssl_certificate` 
 
 ## v1.5.0 (2015-04-25)
 
-* Add sensitive true to the created files ([issue #12](https://github.com/onddo/ssl_certificate-cookbook/issues/12), thanks [Jonathan Chauncey](https://github.com/jchauncey) for reporting).
-* Add support for different types in Subject Alternative Names ([issue #13](https://github.com/onddo/ssl_certificate-cookbook/issues/13), thanks [Jonathan Chauncey](https://github.com/jchauncey) for reporting).
+* Add sensitive true to the created files ([issue #12](https://github.com/zuazo/ssl_certificate-cookbook/issues/12), thanks [Jonathan Chauncey](https://github.com/jchauncey) for reporting).
+* Add support for different types in Subject Alternative Names ([issue #13](https://github.com/zuazo/ssl_certificate-cookbook/issues/13), thanks [Jonathan Chauncey](https://github.com/jchauncey) for reporting).
 * README: Fix all RuboCop offenses in examples.
 * Update Gemfile and kitchen.yml files.
   * Gemfile: Update RuboCop to `0.30.1`.
 
 ## v1.4.0 (2015-04-05)
 
-* Add `attr_apply` recipe: Create a certificate list from attributes ([issue #10](https://github.com/onddo/ssl_certificate-cookbook/pull/10), thanks [Stanislav Bogatyrev](https://github.com/realloc)).
-* Fix invalid metadata ([issue #11](https://github.com/onddo/ssl_certificate-cookbook/pull/11), thanks [Karl Svec](https://github.com/karlsvec)).
+* Add `attr_apply` recipe: Create a certificate list from attributes ([issue #10](https://github.com/zuazo/ssl_certificate-cookbook/pull/10), thanks [Stanislav Bogatyrev](https://github.com/realloc)).
+* Fix invalid metadata ([issue #11](https://github.com/zuazo/ssl_certificate-cookbook/pull/11), thanks [Karl Svec](https://github.com/karlsvec)).
 * Update RuboCop to `0.29.1` (fix some new offenses).
 
 ## v1.3.0 (2015-02-03)
@@ -66,8 +66,8 @@ This file is used to list changes made in each version of the `ssl_certificate` 
 ## v1.0.0 (2014-12-30)
 
 * Bugfix: Cannot read SSL intermediary chain from data bag.
-* Fix Directory Permissions for Apache `2.4` ([issue #7](https://github.com/onddo/ssl_certificate-cookbook/pull/7), thanks [Elliott Davis](https://github.com/elliott-davis)).
-* Add CA support for self signed certificates ([issue #8](https://github.com/onddo/ssl_certificate-cookbook/pull/8), thanks [Jeremy MAURO](https://github.com/jmauro)).
+* Fix Directory Permissions for Apache `2.4` ([issue #7](https://github.com/zuazo/ssl_certificate-cookbook/pull/7), thanks [Elliott Davis](https://github.com/elliott-davis)).
+* Add CA support for self signed certificates ([issue #8](https://github.com/zuazo/ssl_certificate-cookbook/pull/8), thanks [Jeremy MAURO](https://github.com/jmauro)).
 * Apache template:
   * Disable `SSLv3` by default (**breaking change**).
   * Add chained certificate support.
@@ -85,7 +85,7 @@ This file is used to list changes made in each version of the `ssl_certificate` 
 * Update Gemfile and Berksfile files.
 * Add Guardfile.
 * README:
-  * Multiple fixes and improvements ([issue #9](https://github.com/onddo/ssl_certificate-cookbook/pull/9), thanks [Benjamin Nørgaard](https://github.com/blacksails)).
+  * Multiple fixes and improvements ([issue #9](https://github.com/zuazo/ssl_certificate-cookbook/pull/9), thanks [Benjamin Nørgaard](https://github.com/blacksails)).
   * Split in multiple files.
   * Add TOC.
   * Add badges.
@@ -93,7 +93,7 @@ This file is used to list changes made in each version of the `ssl_certificate` 
 
 ## v0.4.0 (2014-11-19)
 
-* Add Apache 2.4 support ([issue #4](https://github.com/onddo/ssl_certificate-cookbook/pull/4), thanks [Djuri Baars](https://github.com/dsbaars)).
+* Add Apache 2.4 support ([issue #4](https://github.com/zuazo/ssl_certificate-cookbook/pull/4), thanks [Djuri Baars](https://github.com/dsbaars)).
 * Add supported platform list.
 * kitchen.yml completed and updated.
 
@@ -101,15 +101,15 @@ This file is used to list changes made in each version of the `ssl_certificate` 
 
 Special thanks to [Steve Meinel](https://github.com/smeinel) for his great contributions.
 
-* Add Subject Alternate Names support for certs ([issue #2](https://github.com/onddo/ssl_certificate-cookbook/pull/2), thanks [Steve Meinel](https://github.com/smeinel)).
-* Add support for deploying an intermediate cert chain file ([issue #3](https://github.com/onddo/ssl_certificate-cookbook/pull/3), thanks [Steve Meinel](https://github.com/smeinel)).
+* Add Subject Alternate Names support for certs ([issue #2](https://github.com/zuazo/ssl_certificate-cookbook/pull/2), thanks [Steve Meinel](https://github.com/smeinel)).
+* Add support for deploying an intermediate cert chain file ([issue #3](https://github.com/zuazo/ssl_certificate-cookbook/pull/3), thanks [Steve Meinel](https://github.com/smeinel)).
 * ChefSpec matchers: add helper methods to locate LWRP resources.
 * README: Chef `11.14.2` required.
 * TODO: complete it with more tasks and use checkboxes.
 
 ## v0.2.1 (2014-09-14)
 
-* `ssl_certificate` resource notifications fixed (issue [#1](https://github.com/onddo/ssl_certificate-cookbook/pull/1), thanks [Matt Graham](https://github.com/gadgetmg) for reporting)
+* `ssl_certificate` resource notifications fixed (issue [#1](https://github.com/zuazo/ssl_certificate-cookbook/pull/1), thanks [Matt Graham](https://github.com/gadgetmg) for reporting)
 
 ## v0.2.0 (2014-08-13)
 
