@@ -1,7 +1,6 @@
 TODO
 ====
 
-* [ ] Update links Chef to *chef.io*.
 * [ ] Add implementation example links.
 * [ ] Fix CentOS `7` support.
 * [ ] Generate a CSR.
