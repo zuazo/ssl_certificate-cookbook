@@ -3,6 +3,13 @@ ssl_certificate CHANGELOG
 
 This file is used to list changes made in each version of the `ssl_certificate` cookbook.
 
+## v1.7.0 (2015-08-12)
+
+* Fix README tables.
+* Update contact information and links after migration.
+* Gemfile: Update RuboCop to `0.33.0`.
+* Update chef links to use *chef.io*.
+
 ## v1.6.0 (2015-08-02)
 
 * Load encrypted secret before passing to the `EncryptedDataBagItem.load` ([issue #14](https://github.com/zuazo/ssl_certificate-cookbook/pull/14), thanks [Nikita Borzykh](https://github.com/sample)).
