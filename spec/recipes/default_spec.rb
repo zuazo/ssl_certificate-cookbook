@@ -20,7 +20,7 @@
 require 'spec_helper'
 
 describe 'ssl_certificate_test::default', order: :random do
-  let(:chef_runner) { ChefSpec::ServerRunner.new }
+  let(:chef_runner) { ChefSpec::SoloRunner.new }
   let(:chef_run) { chef_runner.converge(described_recipe) }
   let(:node) { chef_runner.node }
   let(:fqdn) { 'ssl-certificate.example.com' }
@@ -103,7 +103,7 @@ describe 'ssl_certificate_test::default', order: :random do
 
   context 'step into ssl_certificate resource' do
     let(:chef_runner) do
-      ChefSpec::ServerRunner.new(step_into: %w(ssl_certificate))
+      ChefSpec::SoloRunner.new(step_into: %w(ssl_certificate))
     end
     let(:db_key) do
       '-----BEGIN PRIVATE KEY-----[...]-----END PRIVATE KEY-----'
@@ -261,7 +261,7 @@ describe 'ssl_certificate_test::default', order: :random do
 
     context 'with FreeBSD' do
       let(:chef_runner) do
-        ChefSpec::ServerRunner.new(
+        ChefSpec::SoloRunner.new(
           step_into: %w(ssl_certificate), platform: 'freebsd', version: '9.2'
         )
       end

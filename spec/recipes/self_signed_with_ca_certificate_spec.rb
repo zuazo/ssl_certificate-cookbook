@@ -21,7 +21,7 @@ require 'spec_helper'
 
 describe 'ssl_certificate_test::self_signed_with_ca_certificate',
          order: :random do
-  let(:chef_runner) { ChefSpec::ServerRunner.new }
+  let(:chef_runner) { ChefSpec::SoloRunner.new }
   let(:node) { chef_runner.node }
   let(:chef_run) { chef_runner.converge(described_recipe) }
   let(:cert_dir) { node['ssl_certificate']['cert_dir'] }
@@ -81,7 +81,7 @@ describe 'ssl_certificate_test::self_signed_with_ca_certificate',
 
   context 'step into ssl_certificate resource' do
     let(:chef_runner) do
-      ChefSpec::ServerRunner.new(step_into: %w(ssl_certificate))
+      ChefSpec::SoloRunner.new(step_into: %w(ssl_certificate))
     end
     let(:db_ca_key) do
       [

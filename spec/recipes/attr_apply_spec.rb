@@ -19,7 +19,7 @@
 require 'spec_helper'
 
 describe 'ssl_certificate::attr_apply', order: :random do
-  let(:chef_runner) { ChefSpec::ServerRunner.new }
+  let(:chef_runner) { ChefSpec::SoloRunner.new }
   let(:chef_run) { chef_runner.converge(described_recipe) }
   let(:node) { chef_runner.node }
   let(:fqdn) { 'ssl-certificate.example.com' }

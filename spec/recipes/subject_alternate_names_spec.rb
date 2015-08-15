@@ -20,7 +20,7 @@
 require 'spec_helper'
 
 describe 'ssl_certificate_test::subject_alternate_names', order: :random do
-  let(:chef_runner) { ChefSpec::ServerRunner.new }
+  let(:chef_runner) { ChefSpec::SoloRunner.new }
   let(:chef_run) { chef_runner.converge(described_recipe) }
 
   it 'creates subject_alternate_names1 certificate' do
@@ -43,7 +43,7 @@ describe 'ssl_certificate_test::subject_alternate_names', order: :random do
 
   context 'step into ssl_certificate resource' do
     let(:chef_runner) do
-      ChefSpec::ServerRunner.new(step_into: %w(ssl_certificate))
+      ChefSpec::SoloRunner.new(step_into: %w(ssl_certificate))
     end
 
     it 'runs without errors' do
