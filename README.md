@@ -8,7 +8,7 @@ Description
 
 The main purpose of this cookbook is to make it easy for other cookbooks to support SSL. With the resource included, you will be able to manage certificates reading them from attributes, data bags or chef-vaults. Exposing its configuration through node attributes.
 
-Much of the code in this cookbook is heavily based on the SSL implementation from the [owncloud](http://community.chef.io/cookbooks/owncloud) cookbook.
+Much of the code in this cookbook is heavily based on the SSL implementation from the [owncloud](https://supermarket.chef.io/cookbooks/owncloud) cookbook.
 
 Table of Contents
 =================
@@ -179,7 +179,7 @@ By default the resource will create a self-signed certificate, but a custom one 
 Templates
 =========
 
-This cookbook includes a simple VirtualHost template which can be used by the `web_app` definition from the [apache2](http://community.chef.io/cookbooks/apache2) cookbook:
+This cookbook includes a simple VirtualHost template which can be used by the `web_app` definition from the [apache2](https://supermarket.chef.io/cookbooks/apache2) cookbook:
 
 ```ruby
 cert = ssl_certificate 'my-webapp' do
@@ -407,7 +407,7 @@ When a namespace is set in the resource, it will try to read the following attri
 
 ### Apache Examples
 
-Apache `web_app` example using community [apache2](http://community.chef.io/cookbooks/apache2) cookbook and node attributes:
+Apache `web_app` example using community [apache2](https://supermarket.chef.io/cookbooks/apache2) cookbook and node attributes:
 
 ```ruby
 node.default['my-webapp']['common_name'] = 'example.com'
@@ -463,7 +463,7 @@ See [templates documentation](#templates).
 
 ### Nginx Example
 
-Minimal `nginx` example using community [nginx](http://community.chef.io/cookbooks/nginx) cookbook:
+Minimal `nginx` example using community [nginx](https://supermarket.chef.io/cookbooks/nginx) cookbook:
 
 ```ruby
 cert = ssl_certificate 'my-webapp' do
