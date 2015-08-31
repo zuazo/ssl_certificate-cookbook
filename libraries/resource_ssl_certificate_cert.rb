@@ -48,6 +48,7 @@ class Chef
             subject_alternate_names
             ca_cert_path
             ca_key_path
+            ca_key_passphrase
           )
         end
 
@@ -120,6 +121,10 @@ class Chef
 
         def ca_key_path(arg = nil)
           set_or_return(:ca_key_path, arg, kind_of: String)
+        end
+
+        def ca_key_passphrase(arg = nil)
+          set_or_return(:ca_key_passphrase, arg, kind_of: String)
         end
 
         protected
@@ -232,7 +237,8 @@ class Chef
             "Generating new certificate: #{name} from the given CA."
           )
           content = generate_cert(
-            key_content, cert_subject, time, ca_cert_content, ca_key_content
+            key_content, cert_subject, time, ca_cert_content, ca_key_content,
+            ca_key_passphrase
           )
           updated_by_last_action(true)
           content
@@ -268,6 +274,10 @@ class Chef
 
         def default_ca_key_path
           lazy { read_namespace(%w(ca_key_path)) }
+        end
+
+        def default_ca_key_passphrase
+          lazy { read_namespace(%w(ca_key_passphrase)) }
         end
       end
     end
