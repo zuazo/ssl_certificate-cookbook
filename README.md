@@ -178,6 +178,7 @@ By default the resource will create a self-signed certificate, but a custom one 
 | chain_combined_path     | *calculated*                   | Intermediate certificate chain combined file full path (for **nginx**).
 | ca_cert_path            | *nil*                          | Certificate Authority full path.
 | ca_key_path             | *nil*                          | Key Authority full path.
+| ca_key_passphrase       | *nil*                          | Key Authority passphrase.
 | pkcs12_path             | *nil*                          | Optional PKCS12 full path.
 | pkcs12_passphrase       | *nil*                          | Optional PKCS12 passphrase.
 
@@ -812,6 +813,7 @@ cert = ssl_certificate 'test' do
   cert_source 'with_ca'
   ca_cert_path ca_cert
   ca_key_path ca_key
+  ca_key_passphrase ca_key_passphrase
 end
 ```
 
