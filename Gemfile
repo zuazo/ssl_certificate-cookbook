@@ -36,7 +36,7 @@ group :integration do
 end
 
 group :integration_docker do
-  gem 'kitchen-docker', '~> 2.1.0'
+  gem 'kitchen-docker', '~> 2.1'
 end
 
 group :integration_vagrant do
