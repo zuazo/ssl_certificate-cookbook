@@ -80,7 +80,7 @@ Attributes
 
 | Attribute                                             | Default      | Description                        |
 |:------------------------------------------------------|:-------------|:-----------------------------------|
-| `node['ssl_certificate']['user']`                     | `'root'`     | Default SSL files owner user.
+| `node['ssl_certificate']['user']`                     | *calculated* | Default SSL files owner user.
 | `node['ssl_certificate']['group']`                    | *calculated* | Default SSL files owner group.
 | `node['ssl_certificate']['key_dir']`                  | *calculated* | Default SSL key directory.
 | `node['ssl_certificate']['cert_dir']`                 | *calculated* | Default SSL certificate directory.
