@@ -74,12 +74,12 @@ setup() {
 
 @test "the SAN certificate has a DNS:FQDN entry" {
   openssl x509 -in "${CERT_PATH}/subject_alternate_names2.pem" -text -noout \
-    | grep -F 'DNS:ssl-certificate.local'
+    | grep -F "DNS:$(hostname)"
 }
 
 @test "the SAN certificate has a DNS:foo.FQDN entry" {
   openssl x509 -in "${CERT_PATH}/subject_alternate_names2.pem" -text -noout \
-    | grep -F 'DNS:foo.ssl-certificate.local'
+    | grep -F "DNS:foo.$(hostname)"
 }
 
 @test "creates the SAN certificate key" {

@@ -1,13 +1,42 @@
 # encoding: UTF-8
 # -*- mode: ruby -*-
 # vi: set ft=ruby :
-# Based on magic_shell cookbook code, thanks @sethvargo.
 
-# More info at https://github.com/jimweirich/rake/blob/master/doc/rakefile.rdoc
+#
+# Available Rake tasks:
+#
+# $ rake -T
+# rake default                  # Run doc, style, unit and integration tests
+# rake doc                      # Generate Ruby documentation
+# rake integration              # Run Test Kitchen integration tests
+# rake integration:cloud        # Run Test Kitchen integration tests in the
+#                                 cloud
+# rake integration:docker       # Run Test Kitchen integration tests using
+#                                 docker
+# rake integration:vagrant      # Run Test Kitchen integration tests using
+#                                 vagrant
+# rake style                    # Run all style checks
+# rake style:chef               # Run Chef style checks using foodcritic
+# rake style:ruby               # Run Ruby style checks using rubocop
+# rake style:ruby:auto_correct  # Auto-correct RuboCop offenses
+# rake unit                     # Run ChefSpec unit tests
+# rake yard                     # Generate Ruby documentation using yard
+#
+# More info at https://github.com/ruby/rake/blob/master/doc/rakefile.rdoc
+#
 
 require 'bundler/setup'
 
-desc 'Generate Ruby documentation'
+# Checks if we are inside Travis CI.
+#
+# @return [Boolean] whether we are inside Travis CI.
+# @example
+#   travis? #=> false
+def travis?
+  ENV['TRAVIS'] == 'true'
+end
+
+desc 'Generate Ruby documentation using yard'
 task :yard do
   require 'yard'
   YARD::Rake::YardocTask.new do |t|
@@ -15,15 +44,16 @@ task :yard do
   end
 end
 
+desc 'Generate Ruby documentation'
 task doc: %w(yard)
 
 namespace :style do
   require 'rubocop/rake_task'
-  desc 'Run Ruby style checks'
+  desc 'Run Ruby style checks using rubocop'
   RuboCop::RakeTask.new(:ruby)
 
   require 'foodcritic'
-  desc 'Run Chef style checks'
+  desc 'Run Chef style checks using foodcritic'
   FoodCritic::Rake::LintTask.new(:chef)
 end
 
@@ -39,18 +69,32 @@ task :unit do
   end
 end
 
-desc 'Run Test Kitchen integration tests'
-task :integration do
-  require 'kitchen'
-  Kitchen.logger = Kitchen.default_file_logger
-  Kitchen::Config.new.instances.each do |instance|
-    instance.test(:always)
+namespace :integration do
+  def run_kitchen
+    sh "kitchen test #{ENV['KITCHEN_ARGS']} #{ENV['KITCHEN_REGEXP']}"
+  end
+
+  desc 'Run Test Kitchen integration tests using vagrant'
+  task :vagrant do
+    ENV.delete('KITCHEN_LOCAL_YAML')
+    run_kitchen
+  end
+
+  desc 'Run Test Kitchen integration tests using docker'
+  task :docker do
+    ENV['KITCHEN_LOCAL_YAML'] = '.kitchen.docker.yml'
+    run_kitchen
+  end
+
+  desc 'Run Test Kitchen integration tests in the cloud'
+  task :cloud do
+    ENV['KITCHEN_LOCAL_YAML'] = '.kitchen.cloud.yml'
+    run_kitchen
   end
 end
 
-namespace :travis do
-  desc 'Run tests on Travis'
-  task ci: %w(style unit)
-end
+desc 'Run Test Kitchen integration tests'
+task integration: travis? ? %w(integration:docker) : %w(integration:vagrant)
 
+desc 'Run doc, style, unit and integration tests'
 task default: %w(doc style unit integration)

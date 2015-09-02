@@ -29,11 +29,11 @@ else
   default['ssl_certificate']['group'] = 'root'
 end
 
-case node['platform']
-when 'debian', 'ubuntu'
+case node['platform_family']
+when 'debian'
   default['ssl_certificate']['key_dir'] = '/etc/ssl/private'
   default['ssl_certificate']['cert_dir'] = '/etc/ssl/certs'
-when 'redhat', 'centos', 'fedora', 'scientific', 'amazon'
+when 'rhel', 'fedora'
   default['ssl_certificate']['key_dir'] = '/etc/pki/tls/private'
   default['ssl_certificate']['cert_dir'] = '/etc/pki/tls/certs'
 when 'openbsd', 'freebsd', 'mac_os_x'

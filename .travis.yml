@@ -12,4 +12,4 @@ matrix:
       env: CHEF_VERSION="~> 12.0"
 bundler_args: --without doc integration integration_cloud guard
 script:
-  - bundle exec rake travis:ci
+  - bundle exec rake style unit

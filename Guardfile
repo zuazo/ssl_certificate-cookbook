@@ -46,6 +46,7 @@ end # group style
 # - test/unit/libraries/${library}_spec.rb: Unit tests for libraries.
 # - test/unit/recipes/${recipe}_spec.rb: ChefSpec tests for recipes.
 # - test/unit/resources/${resource}_spec.rb: ChefSpec tests for resources.
+# - test/unit/templates/${template}_spec.rb: ChefSpec tests for templates.
 
 group :unit do
   guard :rspec,
@@ -58,6 +59,7 @@ group :unit do
     watch(%r{^(?:providers|resources)/(.+)\.rb$}) do |m|
       "test/unit/resources/#{m[1]}_spec.rb"
     end
+    watch(%r{^templates/(.+)\.rb$}) { 'test/unit/templates' }
     watch(%r{^test/unit/.+_spec\.rb$})
     watch('test/unit/spec_helper.rb') { 'spec' }
   end

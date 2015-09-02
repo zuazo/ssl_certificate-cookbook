@@ -2,6 +2,8 @@
 # -*- mode: ruby -*-
 # vi: set ft=ruby :
 
+# More info at http://bundler.io/gemfile.html
+
 source 'https://rubygems.org'
 
 chef_version = ENV.key?('CHEF_VERSION') ? ENV['CHEF_VERSION'] : nil
@@ -30,22 +32,30 @@ group :unit do
 end
 
 group :integration do
-  gem 'vagrant-wrapper', '~> 2.0'
-  gem 'test-kitchen', '~> 1.2'
-  gem 'kitchen-vagrant', '~> 0.16'
+  gem 'test-kitchen', '~> 1.4'
 end
 
-group :integration, :integration_cloud do
+group :integration_docker do
+  gem 'kitchen-docker', '~> 2.1.0'
+end
+
+group :integration_vagrant do
+  gem 'vagrant-wrapper', '~> 2.0'
+  gem 'kitchen-vagrant', '~> 0.10'
+end
+
+group :integration_cloud do
   gem 'kitchen-ec2', '~> 0.8'
   gem 'kitchen-digitalocean', '~> 0.8'
 end
 
 group :guard do
-  gem 'guard', '~> 2.6'
-  gem 'guard-foodcritic', '~> 1.0'
-  gem 'guard-rubocop', '~> 1.1'
-  gem 'guard-rspec', '~> 4.3'
-  gem 'guard-kitchen', '~> 0.0'
+  gem 'guard', '~> 2.12'
+  gem 'guard-foodcritic', '~> 1.1'
+  gem 'guard-rubocop', '~> 1.2'
+  gem 'guard-rspec', '~> 4.6'
+  # Temporary disabled: Error is: cannot load such file -- guard/kitchen
+  # gem 'guard-kitchen', '~> 0.0.0'
 end
 
 group :travis do

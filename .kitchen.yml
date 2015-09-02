@@ -54,6 +54,7 @@ suites:
   - centos-5.11
   - freebsd-10.0
   # TLS 1.2 not supported (modern compatibility)
+  - debian-6
   - ubuntu-10.04
   - ubuntu-12.04
   data_bags_path: "test/data_bags"
@@ -64,9 +65,11 @@ suites:
   excludes:
   # no TLSv1.1 support
   - centos-5.11
+  - debian-6
   - ubuntu-10.04
   # nginx cookbook not compatible
   - freebsd-10.0 # https://github.com/miketheman/nginx/issues/274
+  - scientific-6.6
   data_bags_path: "test/data_bags"
   encrypted_data_bag_secret_key_path: "test/encrypted_data_bag_secret"
   run_list:
