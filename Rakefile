@@ -70,8 +70,12 @@ task :unit do
 end
 
 namespace :integration do
+  def kitchen_cmd
+    travis? ? 'verify' : 'test'
+  end
+
   def run_kitchen
-    sh "kitchen test #{ENV['KITCHEN_ARGS']} #{ENV['KITCHEN_REGEXP']}"
+    sh "kitchen #{kitchen_cmd} #{ENV['KITCHEN_REGEXP']}"
   end
 
   desc 'Run Test Kitchen integration tests using vagrant'
