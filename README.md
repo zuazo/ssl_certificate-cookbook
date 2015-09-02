@@ -66,6 +66,7 @@ This cookbook has been tested on the following platforms:
 * RedHat
 * Scientific Linux
 * Ubuntu
+* Windows
 
 Please, [let us know](https://github.com/zuazo/ssl_certificate-cookbook/issues/new?title=I%20have%20used%20it%20successfully%20on%20...) if you use it successfully on any other platform.
 

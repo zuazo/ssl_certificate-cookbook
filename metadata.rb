@@ -41,6 +41,7 @@ supports 'oracle'
 supports 'redhat'
 supports 'scientific'
 supports 'ubuntu'
+supports 'windows'
 
 provides 'ssl_certificate'
 
