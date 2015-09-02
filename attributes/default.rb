@@ -19,12 +19,20 @@
 # limitations under the License.
 #
 
-default['ssl_certificate']['user'] = 'root'
+case node['platform']
+when 'windows'
+  default['ssl_certificate']['user'] = 'SYSTEM'
+else
+  default['ssl_certificate']['user'] = 'root'
+end
+
 default['ssl_certificate']['items'] = []
 
 case node['platform']
 when 'openbsd', 'freebsd', 'mac_os_x'
   default['ssl_certificate']['group'] = 'wheel'
+when 'windows'
+  default['ssl_certificate']['group'] = 'Administrators'
 else
   default['ssl_certificate']['group'] = 'root'
 end
@@ -39,6 +47,9 @@ when 'redhat', 'centos', 'fedora', 'scientific', 'amazon'
 when 'openbsd', 'freebsd', 'mac_os_x'
   default['ssl_certificate']['key_dir'] = '/etc/ssl'
   default['ssl_certificate']['cert_dir'] = '/etc/ssl'
+when 'windows'
+  default['ssl_certificate']['key_dir'] = Chef::Config[:file_cache_path]
+  default['ssl_certificate']['cert_dir'] = Chef::Config[:file_cache_path]
 else
   default['ssl_certificate']['key_dir'] = '/etc'
   default['ssl_certificate']['cert_dir'] = '/etc'
