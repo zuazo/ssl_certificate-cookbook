@@ -916,6 +916,7 @@ License and Author
 | **Contributor:**     | [Stanislav Bogatyrev](https://github.com/realloc)
 | **Contributor:**     | [Karl Svec](https://github.com/karlsvec)
 | **Contributor:**     | [Nikita Borzykh](https://github.com/sample)
+| **Contributor:**     | [Baptiste Courtois](https://github.com/Annih)
 | **Copyright:**       | Copyright (c) 2015, Xabier de Zuazo
 | **Copyright:**       | Copyright (c) 2014-2015, Onddo Labs, SL.
 | **License:**         | Apache License, Version 2.0
