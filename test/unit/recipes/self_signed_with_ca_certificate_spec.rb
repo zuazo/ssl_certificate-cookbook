@@ -183,6 +183,24 @@ describe 'ssl_certificate_test::self_signed_with_ca_certificate',
         .with_sensitive(true)
     end
 
+    it 'creates secured.test.com key' do
+      expect(chef_run).to create_file('test.com SSL certificate key')
+        .with_path(::File.join(key_dir, 'secured.test.com.key'))
+        .with_owner('root')
+        .with_group('root')
+        .with_mode(00600)
+        .with_sensitive(true)
+    end
+
+    it 'creates test.com certificate' do
+      expect(chef_run).to create_file('secured.test.com SSL public certificate')
+        .with_path(::File.join(cert_dir, 'secured.test.com.pem'))
+        .with_owner('root')
+        .with_group('root')
+        .with_mode(00644)
+        .with_sensitive(true)
+    end
+
     it 'creates ca.example.org CA certificate key' do
       expect(chef_run).to create_file('ca.example.org SSL certificate key')
         .with_path(::File.join(key_dir, 'ca.example.org.key'))
