@@ -17,7 +17,7 @@
 # limitations under the License.
 #
 
-require 'spec_helper'
+require_relative '../spec_helper'
 require 'chef/mixin/template'
 
 # Emulates the Chef template render engine.
@@ -27,11 +27,13 @@ class TemplateRender
   end
 
   def attributes_dir
-    File.join(::File.dirname(__FILE__), '..', '..', 'attributes')
+    File.join(::File.dirname(__FILE__), '..', '..', '..', 'attributes')
   end
 
   def template_dir
-    File.join(::File.dirname(__FILE__), '..', '..', 'templates', 'default')
+    File.join(
+      ::File.dirname(__FILE__), '..', '..', '..', 'templates', 'default'
+    )
   end
 
   def file(arg)

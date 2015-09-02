@@ -1,7 +1,7 @@
 # encoding: UTF-8
 #
 # Author:: Xabier de Zuazo (<xabier@zuazo.org>)
-# Copyright:: Copyright (c) 2014 Onddo Labs, SL.
+# Copyright:: Copyright (c) 2015 Xabier de Zuazo
 # License:: Apache License, Version 2.0
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -25,11 +25,11 @@ else
   SimpleCov.start do
     add_group 'Libraries', '/libraries'
     add_group 'ChefSpec' do |src|
-      %r{/spec/(recipes|resources|providers)}.match(src.filename)
+      %r{/test/unit/(recipes|resources|providers|templates)}.match(src.filename)
     end
     add_group 'RSpec' do |src|
-      %r{/spec/(unit|functional|integration|libraries)}.match(src.filename)
+      %r{/test/unit/(unit|functional|integration|libraries)}.match(src.filename)
     end
-    add_group 'RSpec Support', '/spec/support'
+    add_group 'RSpec Support', '/test/unit/support'
   end
 end

@@ -17,13 +17,13 @@
 # limitations under the License.
 #
 
-$LOAD_PATH.unshift(File.join(File.dirname(__FILE__), '..', 'libraries'))
+$LOAD_PATH.unshift(File.join(File.dirname(__FILE__), '..', '..', 'libraries'))
 
 require 'chefspec'
 require 'chefspec/berkshelf'
 require 'should_not/rspec'
 
-# require 'support/coverage'
+# require_relative 'support/coverage'
 
 RSpec.configure do |config|
   # Prohibit using the should syntax
