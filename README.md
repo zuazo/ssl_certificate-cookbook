@@ -405,6 +405,8 @@ When a namespace is set in the resource, it will try to read the following attri
 | `namespace['ssl_chain']['encrypted']`              | Whether the Data Bag where the intermediate certificate chain is stored is encrypted.
 | `namespace['ssl_chain']['secret_file']`            | Secret file used to decrypt the Data Bag where the intermediate certificate chain is stored.
 | `namespace['ssl_chain']['content']`                | Intermediate certificate chain content used when reading from attributes.
+| `namespace['ca_cert_path']`                        | Certificate Authority full path.
+| `namespace['ca_key_path']`                         | Key Authority full path.
 
 ## Examples
 
