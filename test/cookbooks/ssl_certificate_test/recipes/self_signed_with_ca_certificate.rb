@@ -33,8 +33,6 @@ node.default['test.com']['department'] = 'Titi'
 node.default['test.com']['email'] = 'titi@test.com'
 node.default['test.com']['ssl_key']['source'] = 'self-signed'
 node.default['test.com']['ssl_cert']['source'] = 'with_ca'
-node.default['test.com']['ca_cert_path'] = ca_cert
-node.default['test.com']['ca_cert_key'] = ca_key
 
 node.default['ca-certificate']['common_name'] = 'ca.test.com'
 node.default['ca-certificate']['country'] = 'FR'
