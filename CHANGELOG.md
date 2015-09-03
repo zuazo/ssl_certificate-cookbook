@@ -3,6 +3,27 @@ ssl_certificate CHANGELOG
 
 This file is used to list changes made in each version of the `ssl_certificate` cookbook.
 
+## v1.8.0 (2015-09-03)
+
+* Fix Chef Supermarket cookbook links.
+* Add Windows support ([issue #15](https://github.com/zuazo/ssl_certificate-cookbook/pull/15), thanks [Baptiste Courtois](https://github.com/Annih)).
+* Add Oracle Linux and Scientific Linux support.
+* Improve platforms support using `node['platform_family']` attribute.
+
+* Documentation:
+ * README:
+  * Add ca path documentation to the namespace attributes.
+  * Improve description.
+ * TESTING: Add Docker and EC2 documentation.
+
+* Testing:
+ * Use `SoloRunner` to run unit tests faster.
+ * Move ChefSpec tests to *test/unit*.
+ * Add *.kitchen.docker.yml* file.
+ * Travis CI: Run against Ruby `2.2`.
+ * Gemfile: kichen-docker ~> `2.1`.
+ * Rakfile: Add clean task.
+
 ## v1.7.0 (2015-08-12)
 
 * Fix README tables.
