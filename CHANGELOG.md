@@ -3,6 +3,10 @@ ssl_certificate CHANGELOG
 
 This file is used to list changes made in each version of the `ssl_certificate` cookbook.
 
+## v1.8.1 (2015-09-03)
+
+* README: Fix title.
+
 ## v1.8.0 (2015-09-03)
 
 * Fix Chef Supermarket cookbook links.
