@@ -1,4 +1,4 @@
-SSL Certitificate Cookbook
+SSL Certificate Cookbook
 ==========================
 [![Cookbook Version](https://img.shields.io/cookbook/v/ssl_certificate.svg?style=flat)](https://supermarket.chef.io/cookbooks/ssl_certificate)
 [![GitHub Source](https://img.shields.io/badge/source-GitHub-blue.svg?style=flat)](https://github.com/zuazo/ssl_certificate-cookbook)
