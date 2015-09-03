@@ -6,15 +6,13 @@
 # Available Rake tasks:
 #
 # $ rake -T
+# rake clean                    # Clean some generated files
 # rake default                  # Run doc, style, unit and integration tests
 # rake doc                      # Generate Ruby documentation
 # rake integration              # Run Test Kitchen integration tests
-# rake integration:cloud        # Run Test Kitchen integration tests in the
-#                                 cloud
-# rake integration:docker       # Run Test Kitchen integration tests using
-#                                 docker
-# rake integration:vagrant      # Run Test Kitchen integration tests using
-#                                 vagrant
+# rake integration:cloud        # Run Test Kitchen tests in the cloud
+# rake integration:docker       # Run Test Kitchen tests using docker
+# rake integration:vagrant      # Run Test Kitchen tests using vagrant
 # rake style                    # Run all style checks
 # rake style:chef               # Run Chef style checks using foodcritic
 # rake style:ruby               # Run Ruby style checks using rubocop
@@ -34,6 +32,18 @@ require 'bundler/setup'
 #   travis? #=> false
 def travis?
   ENV['TRAVIS'] == 'true'
+end
+
+desc 'Clean some generated files'
+task :clean do
+  %w(
+    Berksfile.lock
+    .bundle
+    .cache
+    Gemfile.lock
+    .kitchen
+    metadata.json
+  ).each { |f| FileUtils.rm_rf(Dir.glob(f)) }
 end
 
 desc 'Generate Ruby documentation using yard'
