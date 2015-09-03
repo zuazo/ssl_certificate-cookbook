@@ -178,6 +178,8 @@ By default the resource will create a self-signed certificate, but a custom one 
 | chain_combined_path     | *calculated*                   | Intermediate certificate chain combined file full path (for **nginx**).
 | ca_cert_path            | *nil*                          | Certificate Authority full path.
 | ca_key_path             | *nil*                          | Key Authority full path.
+| pkcs12_path             | *nil*                          | Optional PKCS12 full path.
+| pkcs12_passphrase       | *nil*                          | Optional PKCS12 passphrase.
 
 Templates
 =========
@@ -407,6 +409,8 @@ When a namespace is set in the resource, it will try to read the following attri
 | `namespace['ssl_chain']['content']`                | Intermediate certificate chain content used when reading from attributes.
 | `namespace['ca_cert_path']`                        | Certificate Authority full path.
 | `namespace['ca_key_path']`                         | Key Authority full path.
+| `namespace['pkcs12_path']`                         | Optional PKCS12 full path.
+| `namespace['pkcs12_passphrase']`                   | Optional PKCS12 passphrase.
 
 ## Examples
 
@@ -781,6 +785,18 @@ node.default[cert_name]['ssl_chain']['item_key'] = 'content'
 
 ssl_certificate 'chain-data-bag' do
   namespace cert_name
+end
+```
+### Creating a PKCS12 containing both Certificate and private Key
+
+```ruby
+ssl_certificate 'mysite' do
+  common_name 'cloud.mysite.com'
+  source 'self-signed'
+  key_path '/etc/key/my.key'
+  cert_path '/etc/cert/my.pem'
+  pkcs12_path '/home/me/my.p12'
+  pkcs12_passphrase 'I_Want_To_Secure_My_P12'
 end
 ```
 

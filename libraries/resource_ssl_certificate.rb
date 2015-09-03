@@ -31,6 +31,7 @@ require_relative 'resource_ssl_certificate_keycert'
 require_relative 'resource_ssl_certificate_chain'
 require_relative 'resource_ssl_certificate_generators'
 require_relative 'resource_ssl_certificate_readers'
+require_relative 'resource_ssl_certificate_pkcs12'
 
 # Chef configuration management tool main class.
 class Chef
@@ -53,6 +54,8 @@ class Chef
       include ::Chef::Resource::SslCertificate::Generators
       # Include helper methods to read from differente sources.
       include ::Chef::Resource::SslCertificate::Readers
+      # Include methods related to PKCS12 attributes.
+      include ::Chef::Resource::SslCertificate::PKCS12
 
       def initialize(name, run_context = nil)
         super

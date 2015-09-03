@@ -86,3 +86,15 @@ setup() {
 @test "creates dummy6 certificate key from node attributes" {
   openssl rsa -in "${KEY_PATH}/dummy6-attributes.key" -text -noout
 }
+
+@test "creates dummy8 certificate" {
+  openssl x509 -in "${CERT_PATH}/dummy8.pem" -text -noout
+}
+
+@test "creates dummy8 certificate key" {
+  openssl rsa -in "${KEY_PATH}/dummy8.key" -text -noout
+}
+
+@test "creates dummy8 PKCS12 file" {
+  openssl pkcs12 -in "${CERT_PATH}/dummy8.p12" -noout -passin pass:
+}
