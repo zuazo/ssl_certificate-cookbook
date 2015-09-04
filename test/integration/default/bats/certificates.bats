@@ -98,3 +98,16 @@ setup() {
 @test "creates dummy8 PKCS12 file" {
   openssl pkcs12 -in "${CERT_PATH}/dummy8.p12" -noout -passin pass:
 }
+
+@test "creates dummy9 certificate" {
+  openssl x509 -in "${CERT_PATH}/dummy9.pem" -text -noout
+}
+
+@test "creates dummy9 certificate key" {
+  openssl rsa -in "${KEY_PATH}/dummy9.key" -text -noout
+}
+
+@test "creates dummy9 PKCS12 file" {
+  openssl pkcs12 -in "${CERT_PATH}/dummy9.p12" -noout \
+    -passin pass:DcpdHp6Xr8LM73cFdhdc
+}

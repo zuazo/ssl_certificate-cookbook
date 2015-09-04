@@ -787,7 +787,7 @@ ssl_certificate 'chain-data-bag' do
   namespace cert_name
 end
 ```
-### Creating a PKCS12 containing both Certificate and private Key
+### Creating a PKCS12 Containing Both the Certificate and the Private Key
 
 ```ruby
 ssl_certificate 'mysite' do
@@ -796,7 +796,7 @@ ssl_certificate 'mysite' do
   key_path '/etc/key/my.key'
   cert_path '/etc/cert/my.pem'
   pkcs12_path '/home/me/my.p12'
-  pkcs12_passphrase 'I_Want_To_Secure_My_P12'
+  pkcs12_passphrase 'I_Want_To_Secure_My_P12' # optional
 end
 ```
 

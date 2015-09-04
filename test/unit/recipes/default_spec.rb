@@ -82,6 +82,14 @@ describe 'ssl_certificate_test::default', order: :random do
     expect(chef_run).to create_ssl_certificate('dummy7')
   end
 
+  it 'creates dummy8 certificate' do
+    expect(chef_run).to create_ssl_certificate('dummy8')
+  end
+
+  it 'creates dummy9 certificate' do
+    expect(chef_run).to create_ssl_certificate('dummy9')
+  end
+
   it 'creates FQDN certificate' do
     expect(chef_run).to create_ssl_certificate(fqdn)
   end
@@ -239,6 +247,49 @@ describe 'ssl_certificate_test::default', order: :random do
         .with_mode(00644)
         .with_sensitive(true)
     end
+
+    %w(8 9).each do |i|
+      it "creates dummy#{i} key" do
+        expect(chef_run).to create_file("dummy#{i} SSL certificate key")
+          .with_path("/etc/ssl/private/dummy#{i}.key")
+          .with_owner('root')
+          .with_group('root')
+          .with_mode(00600)
+          .with_sensitive(true)
+      end
+
+      it "creates dummy#{i} certificate" do
+        expect(chef_run)
+          .to create_file("dummy#{i} SSL public certificate")
+          .with_path("/etc/ssl/certs/dummy#{i}.pem")
+          .with_owner('root')
+          .with_group('root')
+          .with_mode(00644)
+          .with_sensitive(true)
+      end
+
+      it "creates dummy#{i} combined certificate" do
+        expect(chef_run)
+          .to create_file(
+            "dummy#{i} SSL intermediary chain combined certificate"
+          )
+          .with_path("/etc/ssl/certs/dummy#{i}.pem.chained.pem")
+          .with_owner('root')
+          .with_group('root')
+          .with_mode(00644)
+          .with_sensitive(true)
+      end
+
+      it "creates dummy#{i} PKCS12 certificate" do
+        expect(chef_run)
+          .to create_file("dummy#{i} SSL PKCS12 certificate")
+          .with_path("/etc/ssl/certs/dummy#{i}.p12")
+          .with_owner('root')
+          .with_group('root')
+          .with_mode(00600)
+          .with_sensitive(true)
+      end
+    end # 8 9 each
 
     it 'creates FQDN key' do
       expect(chef_run).to create_file("#{fqdn} SSL certificate key")

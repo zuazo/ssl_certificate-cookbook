@@ -116,10 +116,17 @@ ssl_certificate cert7_name do
   namespace node[cert7_name]
 end
 
-p12_path = ::File.join node['ssl_certificate']['cert_dir'], 'dummy8.p12'
+p12_path = ::File.join(node['ssl_certificate']['cert_dir'], 'dummy8.p12')
 ssl_certificate 'dummy8' do
   source 'self-signed'
   pkcs12_path p12_path
+end
+
+p12_path = ::File.join(node['ssl_certificate']['cert_dir'], 'dummy9.p12')
+ssl_certificate 'dummy9' do
+  source 'self-signed'
+  pkcs12_path p12_path
+  pkcs12_passphrase 'DcpdHp6Xr8LM73cFdhdc'
 end
 
 # Apache2 test

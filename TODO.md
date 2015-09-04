@@ -1,6 +1,7 @@
 TODO
 ====
 
+* [ ] Add `key_passphrase` parameter.
 * [ ] Add implementation example links.
 * [ ] Fix CentOS `7` support.
 * [ ] Generate a CSR.

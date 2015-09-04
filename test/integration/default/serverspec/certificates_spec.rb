@@ -108,7 +108,28 @@ end
 
 describe file("#{cert_dir}/dummy8.p12") do
   it { should be_file }
+  it { should be_mode 600 }
+  it { should be_owned_by 'root' }
+  it { should be_grouped_into group }
+end
+
+describe file("#{key_dir}/dummy9.key") do
+  it { should be_file }
+  it { should be_mode 600 }
+  it { should be_owned_by 'root' }
+  it { should be_grouped_into group }
+end
+
+describe file("#{cert_dir}/dummy9.pem") do
+  it { should be_file }
   it { should be_mode 644 }
+  it { should be_owned_by 'root' }
+  it { should be_grouped_into group }
+end
+
+describe file("#{cert_dir}/dummy9.p12") do
+  it { should be_file }
+  it { should be_mode 600 }
   it { should be_owned_by 'root' }
   it { should be_grouped_into group }
 end

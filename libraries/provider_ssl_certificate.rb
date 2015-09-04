@@ -81,18 +81,13 @@ class Chef
       end
 
       def create_pkcs12?
-        current_p12 = @current_resource.pkcs12
-        new_p12 = new_resource.pkcs12
-
-        current_p12.nil? ||
-          new_p12.key.to_s != current_p12.key.to_s ||
-          new_p12.certificate.to_s != current_p12.certificate.to_s
+        !new_resource.pkcs12_path.nil?
       end
 
       def create_pkcs12
         file_create(
-          'SSL public PKCS12',
-          new_resource.pkcs12_path, new_resource.pkcs12.to_der
+          'SSL PKCS12 certificate',
+          new_resource.pkcs12_path, new_resource.pkcs12_content, 00600
         )
       end
 
@@ -128,7 +123,7 @@ class Chef
         return if current_resource_updated?(new_resource_updated)
         create_key
         create_cert
-        create_pkcs12 if new_resource.pkcs12_path && create_pkcs12?
+        create_pkcs12 if create_pkcs12?
         create_chain_combined
         create_chain if create_chain?
       end

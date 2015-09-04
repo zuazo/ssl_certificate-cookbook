@@ -3,6 +3,7 @@
 # Cookbook Name:: ssl_certificate
 # Library:: resource_ssl_certificate_pkcs12
 # Author:: Baptiste Courtois (<b.courtois@criteo.com>)
+# Author:: Xabier de Zuazo (<xabier@zuazo.org>)
 # Copyright:: Copyright (c) 2015 Criteo
 # License:: Apache License, Version 2.0
 #
@@ -46,16 +47,29 @@ class Chef
 
         # PKCS12 public methods
 
-        def generate_pkcs12(name, key_content, cert_content,
-          pkcs12_passphrase = nil, key_passphrase = nil)
-          key = OpenSSL::PKey.read key_content, key_passphrase
-          crt = OpenSSL::X509::Certificate.new cert_content
-          OpenSSL::PKCS12.create(pkcs12_passphrase, name, key, crt)
+        def verify_pkcs12(content)
+          return false if content.nil?
+          p12 = OpenSSL::PKCS12.new(content, pkcs12_passphrase)
+          p12.certificate.to_s == cert_content &&
+            p12.key.to_s == key_content
         end
 
-        def pkcs12
-          @pkcs12 ||= generate_pkcs12 name, key_content, cert_content,
-                                      pkcs12_passphrase
+        def generate_pkcs12
+          key = OpenSSL::PKey.read(key_content)
+          crt = OpenSSL::X509::Certificate.new(cert_content)
+          OpenSSL::PKCS12.create(pkcs12_passphrase, name, key, crt).to_der
+        end
+
+        def pkcs12_content
+          lazy_cached_variable(:pkcs12_content) do
+            content = read_from_path(pkcs12_path)
+            Chef::Log.debug("Generating the PKCS12 file for #{name}.")
+            unless verify_pkcs12(content)
+              content = generate_pkcs12
+              updated_by_last_action(true)
+            end
+            content
+          end
         end
 
         def pkcs12_path(arg = nil)
