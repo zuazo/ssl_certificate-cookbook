@@ -9,10 +9,10 @@
 # rake clean                    # Clean some generated files
 # rake default                  # Run doc, style, unit and integration tests
 # rake doc                      # Generate Ruby documentation
-# rake integration              # Run Test Kitchen integration tests
-# rake integration:cloud        # Run Test Kitchen tests in the cloud
-# rake integration:docker       # Run Test Kitchen tests using docker
-# rake integration:vagrant      # Run Test Kitchen tests using vagrant
+# rake integration                         # Run Test Kitchen integration tests
+# rake integration:cloud[regexp,action]    # Run Kitchen tests in the cloud
+# rake integration:docker[regexp,action]   # Run Kitchen tests using docker
+# rake integration:vagrant[regexp,action]  # Run Kitchen tests using vagrant
 # rake style                    # Run all style checks
 # rake style:chef               # Run Chef style checks using foodcritic
 # rake style:ruby               # Run Ruby style checks using rubocop
@@ -79,7 +79,12 @@ task :unit do
   end
 end
 
+desc 'Run Test Kitchen integration tests'
 namespace :integration do
+  # Generates the `Kitchen::Config` class configuration values.
+  #
+  # @param loader_config [Hash] loader configuration options.
+  # @return [Hash] configuration values for the `Kitchen::Config` class.
   def kitchen_config(loader_config = {})
     {}.tap do |config|
       unless loader_config.empty?
@@ -89,26 +94,44 @@ namespace :integration do
     end
   end
 
-  def run_kitchen(loader_config = {})
+  # Gets a collection of instances.
+  #
+  # @param regexp [String] regular expression to match against instance names.
+  # @param config [Hash] configuration values for the `Kitchen::Config` class.
+  # @return [Collection<Instance>] all instances.
+  def kitchen_instances(regexp, config)
+    instances = Kitchen::Config.new(config).instances
+    return instances if regexp.nil? || regexp == 'all'
+    instances.get_all(Regexp.new(regexp))
+  end
+
+  # Runs a test kitchen action against some instances.
+  #
+  # @param action [String] kitchen action to run (defaults to `'test'`).
+  # @param regexp [String] regular expression to match against instance names.
+  # @param loader_config [Hash] loader configuration options.
+  # @return void
+  def run_kitchen(action, regexp, loader_config = {})
+    action = 'test' if action.nil?
     require 'kitchen'
     Kitchen.logger = Kitchen.default_file_logger
     config = kitchen_config(loader_config)
-    Kitchen::Config.new(config).instances.each { |i| i.test(:always) }
+    kitchen_instances(regexp, config).each { |i| i.send(action) }
   end
 
   desc 'Run Test Kitchen integration tests using vagrant'
-  task :vagrant do
-    run_kitchen
+  task :vagrant, [:regexp, :action] do |_t, args|
+    run_kitchen(args.action, args.regexp)
   end
 
   desc 'Run Test Kitchen integration tests using docker'
-  task :docker do
-    run_kitchen(local_config: '.kitchen.docker.yml')
+  task :docker, [:regexp, :action] do |_t, args|
+    run_kitchen(args.action, args.regexp, local_config: '.kitchen.docker.yml')
   end
 
   desc 'Run Test Kitchen integration tests in the cloud'
-  task :cloud do
-    run_kitchen(local_config: '.kitchen.cloud.yml')
+  task :cloud, [:regexp, :action] do |_t, args|
+    run_kitchen(args.action, args.regexp, local_config: '.kitchen.cloud.yml')
   end
 end
 
