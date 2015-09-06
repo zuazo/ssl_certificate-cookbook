@@ -256,7 +256,7 @@ end
 
 ```ruby
 cert = ssl_certificate 'my-webapp-ssl'
-template File.join(node['apache']['dir'], 'sites-available', 'my-webapp-ssl') do
+template ::File.join(node['apache']['dir'], 'sites-available', 'my-webapp-ssl') do
   source 'apache_vhost.erb'
   # [...]
   variables(
@@ -287,7 +287,7 @@ If you are using nginx template, we recommended to use the `SslCertificate#chain
 
 ```ruby
 cert = ssl_certificate 'my-webapp-ssl'
-template File.join(node['nginx']['dir'], 'sites-available', 'my-webapp-ssl') do
+template ::File.join(node['nginx']['dir'], 'sites-available', 'my-webapp-ssl') do
   source 'nginx_vhost.erb'
   # [...]
   variables(
@@ -483,7 +483,7 @@ cert = ssl_certificate 'my-webapp' do
 end
 
 # Create a virtualhost for nginx
-template File.join(node['nginx']['dir'], 'sites-available', 'my-webapp-ssl') do
+template ::File.join(node['nginx']['dir'], 'sites-available', 'my-webapp-ssl') do
   # You need to create a template for nginx to enable SSL support and read the
   # keys from ssl_key and ssl_chain_combined attributes.
   # You can use the *nginx.erb* partial template as shown below.
