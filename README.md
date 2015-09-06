@@ -901,7 +901,7 @@ Some cookbooks that use the `ssl_certificate` resource to implement SSL/TLS:
  * [*apache_vhost.erb* template](https://github.com/zuazo/boxbilling-cookbook/blob/1.0.0/templates/default/apache_vhost.erb#L60-L62)
  * [`boxbilling::_nginx` recipe](https://github.com/zuazo/boxbilling-cookbook/blob/1.0.0/recipes/_nginx.rb#L59-L86)
  * [*nginx_vhost.erb* template](https://github.com/zuazo/boxbilling-cookbook/blob/1.0.0/templates/default/nginx_vhost.erb#L9-L11)
- * [*README.md* section](https://github.com/zuazo/boxbilling-cookbook/blob/1.0.0/README.md#the-https-certificate))
+ * [*README.md* section](https://github.com/zuazo/boxbilling-cookbook/blob/1.0.0/README.md#the-https-certificate)
 
 * [`kong`](https://github.com/zuazo/kong-cookbook) cookbook: Uses the certificate for the embedded nginx server.
  * [`kong::_configuration` recipe](https://github.com/zuazo/kong-cookbook/blob/0.1.0/recipes/_configuration.rb#L25-L34)
