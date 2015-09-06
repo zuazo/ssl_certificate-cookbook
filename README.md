@@ -17,15 +17,6 @@ Table of Contents
 * [Requirements](#requirements)
   * [Supported Platforms](#supported-platforms)
   * [Required Applications](#required-applications)
-* [Attributes](#attributes)
-  * [Service Attributes](#service-attributes)
-* [Resources](#resources)
-  * [ssl_certificate](#ssl_certificate)
-    * [ssl_certificate Actions](#ssl_certificate-actions)
-    * [ssl_certificate Parameters](#ssl_certificate-parameters)
-* [Templates](#templates)
-  * [Partial Templates](#partial-templates)
-  * [Securing Server Side TLS](#securing-server-side-tls)
 * [Usage](#usage)
   * [Including the Cookbook](#including-the-cookbook)
   * [A Short Example](#a-short-example)
@@ -45,6 +36,15 @@ Table of Contents
     * [Reading the CA Certificate from a Chef Vault Bag](#reading-the-ca-certificate-from-a-chef-vault-bag)
     * [Managing Certificates Via Attributes](#managing-certificates-via-attributes)
     * [Real-world Examples](#real-world-examples)
+* [Attributes](#attributes)
+  * [Service Attributes](#service-attributes)
+* [Resources](#resources)
+  * [ssl_certificate](#ssl_certificate)
+    * [ssl_certificate Actions](#ssl_certificate-actions)
+    * [ssl_certificate Parameters](#ssl_certificate-parameters)
+* [Templates](#templates)
+  * [Partial Templates](#partial-templates)
+  * [Securing Server Side TLS](#securing-server-side-tls)
 * [Testing](#testing)
   * [ChefSpec Matchers](#chefspec-matchers)
     * [ssl_certificate(name)](#ssl_certificatename)
@@ -77,254 +77,6 @@ Please, [let us know](https://github.com/zuazo/ssl_certificate-cookbook/issues/n
 
 * Chef `>= 11.14.2`.
 * Ruby `1.9.3` or higher.
-
-Attributes
-==========
-
-| Attribute                                             | Default      | Description                        |
-|:------------------------------------------------------|:-------------|:-----------------------------------|
-| `node['ssl_certificate']['user']`                     | *calculated* | Default SSL files owner user.
-| `node['ssl_certificate']['group']`                    | *calculated* | Default SSL files owner group.
-| `node['ssl_certificate']['key_dir']`                  | *calculated* | Default SSL key directory.
-| `node['ssl_certificate']['cert_dir']`                 | *calculated* | Default SSL certificate directory.
-
-## Service Attributes
-
-The following attributes are used to integrate SSL specific configurations with different services (Apache, nginx, ...). They are used internally by [the apache and nginx templates](#templates).
-
-| Attribute                                             | Default      | Description                        |
-|:------------------------------------------------------|:-------------|:-----------------------------------|
-| `node['ssl_certificate']['service']['cipher_suite']`  | `nil`        | Service default SSL cipher suite.
-| `node['ssl_certificate']['service']['protocols']`     | `nil`        | Service default SSL protocols.
-| `node['ssl_certificate']['service']['apache']`        | *calculated* | Apache web service httpd specific SSL attributes.
-| `node['ssl_certificate']['service']['nginx']`         | *calculated* | nginx web service specific SSL attributes.
-| `node['ssl_certificate']['service']['compatibility']` | `nil`        | Service SSL compatibility level (See [below](#securing-server-side-tls)).
-| `node['ssl_certificate']['service']['use_hsts']`      | `true`       | Whether to enable [HSTS](http://en.wikipedia.org/wiki/HTTP_Strict_Transport_Security) in the service.
-| `node['ssl_certificate']['service']['use_stapling']`  | *calculated* | Whether to enable [OCSP stapling](http://en.wikipedia.org/wiki/OCSP_stapling) in the service (nginx only, use `node['apache']['mod_ssl']['use_stapling']` for apache).
-
-See the [`ServiceHelpers` class documentation](http://www.rubydoc.info/github/zuazo/ssl_certificate-cookbook/master/Chef/SslCertificateCookbook/ServiceHelpers) to learn how to integrate them with new services.
-
-Resources
-=========
-
-## ssl_certificate
-
-Creates a SSL certificate.
-
-By default the resource will create a self-signed certificate, but a custom one can also be used. The custom certificate can be read from several sources:
-
-* Attribute
-* Data Bag
-* Encrypted Data Bag
-* Chef Vault
-* File
-
-### ssl_certificate Actions
-
-* `create`: Creates the SSL certificate.
-
-### ssl_certificate Parameters
-
-| Parameter               | Default                        | Description                    |
-|:------------------------|:-------------------------------|:-------------------------------|
-| namespace               | `{}`                           | Node namespace to read the default values from, something like `node['myapp']`. See the documentation below for more information on how to use the namespace.
-| common_name             | `namespace['common_name']`     | Server name or *Common Name*, used for self-signed certificates.
-| domain                  | `namespace['common_name']`     | `common_name` method alias.
-| country                 | `namespace['country']`         | *Country*, used for self-signed certificates.
-| city                    | `namespace['city']`            | *City*, used for self-signed certificates.
-| state                   | `namespace['state']`           | *State* or *Province* name, used for self-signed certificates.
-| organization            | `namespace['city']`            | *Organization* or *Company* name, used for self-signed certificates.
-| department              | `namespace['city']`            | Department or *Organizational Unit*, used for self-signed certificates.
-| email                   | `namespace['email']`           | *Email* address, used for self-signed certificates.
-| time                    | `10 * 365 * 24 * 60 * 60`      | Attribute for setting self-signed certificate validity time in seconds or `Time` object instance.
-| years                   | `10`                           | Write only attribute for setting self-signed certificate validity period in years.
-| owner                   | *calculated*                   | Certificate files owner user.
-| group                   | *calculated*                   | Certificate files owner group.
-| dir                     | `nil`                          | Write only attribute for setting certificate path and key path (both) to a directory (`key_dir` and `cert_dir`).
-| source                  | `nil`                          | Write only attribute for setting certificate source and key source (both) to a value (`key_source` and `cert_source`). Can be `'self-signed'`, `'attribute'`, `'data-bag'`, `'chef-vault'` or `'file'`.
-| bag                     | `nil`                          | Write only attribute for setting certificate bag and key bag (both) to a value (`key_bag` and `cert_bag`).
-| item                    | `nil`                          | Write only attribute for setting certificate item name and key bag item name (both) to a value (`key_item` and `cert_item`).
-| encrypted               | `nil`                          | Write only attribute for setting certificate encryption and key encryption (both) to a value (`key_encrypted` and `cert_encrypted`).
-| secret_file             | `nil`                          | Write only attribute for setting certificate chef secret file and key chef secret file (both) to a value (`key_secret_file` and `cert_secret_file`).
-| key_path                | *calculated*                   | Private key full path.
-| key_name                | `"#{name}.key"`                | Private key file name.
-| key_dir                 | *calculated*                   | Private key directory path.
-| key_source              | `'self-signed'`                | Source type to get the SSL key from. Can be `'self-signed'`, `'attribute'`, `'data-bag'`, `'chef-vault'` or `'file'`.
-| key_bag                 | `namespace['ssl_key']['bag']`  | Name of the Data Bag where the SSL key is stored.
-| key_item                | `namespace['ssl_key']['item']` | Name of the Data Bag Item where the SSL key is stored.
-| key_item_key            | *calculated*                   | Key of the Data Bag Item where the SSL key is stored.
-| key_encrypted           | `false`                        | Whether the Data Bag where the SSL key is stored is encrypted.
-| key_secret_file         | `nil`                          | Secret file used to decrypt the Data Bag where the SSL key is stored.
-| key_content             | *calculated*                   | SSL key file content in clear. **Be careful when using it.******
-| cert_path               | *calculated*                   | Public certificate full path.
-| cert_name               | `"#{name}.pem"`                | Public certiticate file name.
-| cert_dir                | *calculated*                   | Public certificate directory path.
-| cert_source             | `'self-signed'`                | Source type to get the SSL cert from. Can be `'self-signed'`, `'with_ca'`, `'attribute'`, `'data-bag'`, `'chef-vault'` or `'file'`.
-| cert_bag                | `namespace['ssl_cert']['bag']` | Name of the Data Bag where the SSL cert is stored.
-| cert_item               | *calculated*                   | Name of the Data Bag Item where the SSL cert is stored.
-| cert_item_key           | *calculated*                   | Key of the Data Bag Item where the SSL cert is stored.
-| cert_encrypted          | `false`                        | Whether the Data Bag where the SSL cert is stored is encrypted.
-| cert_secret_file        | `nil`                          | Secret file used to decrypt the Data Bag where the SSL cert is stored.
-| cert_content            | *calculated*                   | SSL cert file content in clear.
-| subject_alternate_names | `nil`                          | Subject Alternate Names for the cert.
-| chain_path              | *calculated*                   | Intermediate certificate chain full path.
-| chain_name              | `nil`                          | File name of intermediate certificate chain file.
-| chain_dir               | *calculated*                   | Intermediate certificate chain directory path.
-| chain_source            | `nil`                          | Source type to get the intermediate certificate chain from. Can be `'attribute'`, `'data-bag'`, `'chef-vault'` or `'file'`.
-| chain_bag               | *calculated*                   | Name of the Data Bag where the intermediate certificate chain is stored.
-| chain_item              | *calculated*                   | Name of the Data Bag Item where the intermediate certificate chain is stored.
-| chain_item_key          | *calculated*                   | Key of the Data Bag Item where the intermediate certificate chain is stored.
-| chain_encrypted         | `false`                        | Whether the Data Bag where the intermediate certificate chain is stored is encrypted.
-| chain_secret_file       | `nil`                          | Secret file used to decrypt the Data Bag where the intermediate certificate chain is stored.
-| chain_content           | *calculated*                   | Intermediate certificate chain file content in clear.
-| chain_combined_name     | *calculated*                   | File name of intermediate certificate chain combined file (for **nginx**).
-| chain_combined_path     | *calculated*                   | Intermediate certificate chain combined file full path (for **nginx**).
-| ca_cert_path            | *nil*                          | Certificate Authority full path.
-| ca_key_path             | *nil*                          | Key Authority full path.
-| pkcs12_path             | *nil*                          | Optional PKCS12 full path.
-| pkcs12_passphrase       | *nil*                          | Optional PKCS12 passphrase.
-
-Templates
-=========
-
-This cookbook includes a simple VirtualHost template which can be used by the `web_app` definition from the [apache2](https://supermarket.chef.io/cookbooks/apache2) cookbook:
-
-```ruby
-cert = ssl_certificate 'my-webapp' do
-  namespace node['my-webapp']
-  notifies :restart, 'service[apache2]'
-end
-
-include_recipe 'apache2'
-include_recipe 'apache2::mod_ssl'
-web_app 'my-webapp' do
-  cookbook 'ssl_certificate'
-  server_name cert.common_name
-  docroot # [...]
-  # [...]
-  ssl_key cert.key_path
-  ssl_cert cert.cert_path
-  ssl_chain cert.chain_path
-end
-```
-
-## Partial Templates
-
-This cookbook contains [partial templates](http://docs.chef.io/templates.html#partial-templates) that you can include in your virtualhost templates to enable and configure the SSL protocol. These partial templates are available:
-
-* *apache.erb*: For Apache httpd web server.
-* *nginx.erb*: For nginx web server.
-
-### Partial Templates Parameters
-
-| Parameter          | Default          | Description                        |
-|:-------------------|:-----------------|:-----------------------------------|
-| ssl_cert           | `nil`            | Public SSL certificate full path.
-| ssl_key            | `nil`            | Private SSL key full path.
-| ssl_chain          | `nil`            | Intermediate SSL certificate chain full path (**apache** only) *(optional)*.
-| ssl_compatibility  | *node attribute* | SSL compatibility level (See [below](#securing-server-side-tls)).
-
-### Apache Partial Template
-
-#### Using `web_app` Definition
-
-If you are using the `web_app` definition, you should pass the `@params` variables to the partial template:
-
-```ruby
-web_app 'my-webapp-ssl' do
-  docroot node['apache']['docroot_dir']
-  server_name cert.common_name
-  # [...]
-  ssl_key cert.key_path
-  ssl_cert cert.cert_path
-  ssl_chain cert.chain_path
-end
-```
-
-```erb
-<%# included by web_app definition %>
-<VirtualHost *:443>
-  ServerName <%= @params[:server_name] %>
-  DocumentRoot <%= @params[:docroot] %>
-  <%# [...] %>
-
-  <%= render 'apache.erb', cookbook: 'ssl_certificate', variables: @params.merge(node: node) %>
-</VirtualHost>
-```
-
-#### Using `template` Resource
-
-```ruby
-cert = ssl_certificate 'my-webapp-ssl'
-template ::File.join(node['apache']['dir'], 'sites-available', 'my-webapp-ssl') do
-  source 'apache_vhost.erb'
-  # [...]
-  variables(
-    # [...]
-    ssl_key: cert.key_path,
-    ssl_cert: cert.chain_combined_path,
-    ssl_chain: cert.chain_path
-  )
-end
-```
-
-You can include the partial template as follows:
-
-```erb
-<%# included by template resource %>
-<VirtualHost *:443>
-  ServerName <%= @server_name %>
-  DocumentRoot <%= @docroot %>
-  <%# [...] %>
-
-  <%= render 'apache.erb', cookbook: 'ssl_certificate' %>
-</VirtualHost>
-```
-
-### Nginx Partial Template
-
-If you are using nginx template, we recommended to use the `SslCertificate#chain_combined_path` path value to set the `ssl_cert` variable instead of `SslCertificate#cert_path`. That's to ensure we [always include the chained certificate](http://nginx.org/en/docs/http/configuring_https_servers.html#chains) if there is one. This will also work when there is no chained certificate.
-
-```ruby
-cert = ssl_certificate 'my-webapp-ssl'
-template ::File.join(node['nginx']['dir'], 'sites-available', 'my-webapp-ssl') do
-  source 'nginx_vhost.erb'
-  # [...]
-  variables(
-    # [...]
-    ssl_key: cert.key_path,
-    ssl_cert: cert.chain_combined_path
-  )
-end
-```
-
-See [examples below](#examples).
-
-## Securing Server Side TLS
-
-You can change the SSL compatibility level based on [the TLS recommendations in the Mozilla wiki](https://wiki.mozilla.org/Security/Server_Side_TLS#Recommended_configurations) using the `ssl_compatibility` template parameter:
-
-```ruby
-cert = ssl_certificate 'my-webapp' do
-  namespace node['my-webapp']
-  notifies :restart, 'service[apache2]'
-end
-
-include_recipe 'apache2'
-include_recipe 'apache2::mod_ssl'
-web_app 'my-webapp' do
-  cookbook 'ssl_certificate'
-  server_name cert.common_name
-  docroot # [...]
-  # [...]
-  ssl_key cert.key_path
-  ssl_cert cert.cert_path
-  ssl_chain cert.chain_path
-  ssl_compatibility :modern # :modern | :intermediate | :old
-end
-```
-
-You can also use the `node['ssl_certificate']['service']['compatibility']` node attribute to change the compatibility level used by default.
 
 Usage
 =====
@@ -366,7 +118,7 @@ log "WebApp1 private key is here: #{cert.key_path}"
 
 ## Namespaces
 
-The `ssl_certificate` **namespace** attribute is a node attribute path, like for example `node['example.com']`, used to configure SSL certificate defaults. This will make easier to *integrate the node attributes* with the certificate creation matters. This means you can configure the certificate creation through node attributes.
+The `ssl_certificate` resource **namespace** parameter is a node attribute path, like for example `node['example.com']`, used to configure SSL certificate defaults. This will make easier to *integrate the node attributes* with the certificate creation matters. This means you can configure the certificate creation through node attributes.
 
 When a namespace is set in the resource, it will try to read the following attributes below the namespace (all attributes are **optional**):
 
@@ -913,6 +665,254 @@ Some cookbooks that use the `ssl_certificate` resource to implement SSL/TLS:
  * [`postfix-dovecot::dovecot` recipe](https://github.com/zuazo/postfix-dovecot-cookbook/blob/2.0.1/recipes/dovecot.rb#L178-L188)
  * [`postfix-dovecot::ssl_certificate` attributes](https://github.com/zuazo/postfix-dovecot-cookbook/blob/2.0.1/attributes/ssl_certificate.rb#L22-L31) to set the *protocols* in the correct format for each service.
  * [*README.md* section](https://github.com/zuazo/postfix-dovecot-cookbook/blob/2.0.1/README.md#the-ssl-certificate)
+
+Attributes
+==========
+
+| Attribute                                             | Default      | Description                        |
+|:------------------------------------------------------|:-------------|:-----------------------------------|
+| `node['ssl_certificate']['user']`                     | *calculated* | Default SSL files owner user.
+| `node['ssl_certificate']['group']`                    | *calculated* | Default SSL files owner group.
+| `node['ssl_certificate']['key_dir']`                  | *calculated* | Default SSL key directory.
+| `node['ssl_certificate']['cert_dir']`                 | *calculated* | Default SSL certificate directory.
+
+## Service Attributes
+
+The following attributes are used to integrate SSL specific configurations with different services (Apache, nginx, ...). They are used internally by [the apache and nginx templates](#templates).
+
+| Attribute                                             | Default      | Description                        |
+|:------------------------------------------------------|:-------------|:-----------------------------------|
+| `node['ssl_certificate']['service']['cipher_suite']`  | `nil`        | Service default SSL cipher suite.
+| `node['ssl_certificate']['service']['protocols']`     | `nil`        | Service default SSL protocols.
+| `node['ssl_certificate']['service']['apache']`        | *calculated* | Apache web service httpd specific SSL attributes.
+| `node['ssl_certificate']['service']['nginx']`         | *calculated* | nginx web service specific SSL attributes.
+| `node['ssl_certificate']['service']['compatibility']` | `nil`        | Service SSL compatibility level (See [below](#securing-server-side-tls)).
+| `node['ssl_certificate']['service']['use_hsts']`      | `true`       | Whether to enable [HSTS](http://en.wikipedia.org/wiki/HTTP_Strict_Transport_Security) in the service.
+| `node['ssl_certificate']['service']['use_stapling']`  | *calculated* | Whether to enable [OCSP stapling](http://en.wikipedia.org/wiki/OCSP_stapling) in the service (nginx only, use `node['apache']['mod_ssl']['use_stapling']` for apache).
+
+See the [`ServiceHelpers` class documentation](http://www.rubydoc.info/github/zuazo/ssl_certificate-cookbook/master/Chef/SslCertificateCookbook/ServiceHelpers) to learn how to integrate them with new services.
+
+Resources
+=========
+
+## ssl_certificate
+
+Creates a SSL certificate.
+
+By default the resource will create a self-signed certificate, but a custom one can also be used. The custom certificate can be read from several sources:
+
+* Attribute
+* Data Bag
+* Encrypted Data Bag
+* Chef Vault
+* File
+
+### ssl_certificate Actions
+
+* `create`: Creates the SSL certificate.
+
+### ssl_certificate Parameters
+
+| Parameter               | Default                        | Description                    |
+|:------------------------|:-------------------------------|:-------------------------------|
+| namespace               | `{}`                           | Node namespace to read the default values from, something like `node['myapp']`. See the documentation above for more information on how to use the namespace.
+| common_name             | `namespace['common_name']`     | Server name or *Common Name*, used for self-signed certificates.
+| domain                  | `namespace['common_name']`     | `common_name` method alias.
+| country                 | `namespace['country']`         | *Country*, used for self-signed certificates.
+| city                    | `namespace['city']`            | *City*, used for self-signed certificates.
+| state                   | `namespace['state']`           | *State* or *Province* name, used for self-signed certificates.
+| organization            | `namespace['city']`            | *Organization* or *Company* name, used for self-signed certificates.
+| department              | `namespace['city']`            | Department or *Organizational Unit*, used for self-signed certificates.
+| email                   | `namespace['email']`           | *Email* address, used for self-signed certificates.
+| time                    | `10 * 365 * 24 * 60 * 60`      | Attribute for setting self-signed certificate validity time in seconds or `Time` object instance.
+| years                   | `10`                           | Write only attribute for setting self-signed certificate validity period in years.
+| owner                   | *calculated*                   | Certificate files owner user.
+| group                   | *calculated*                   | Certificate files owner group.
+| dir                     | `nil`                          | Write only attribute for setting certificate path and key path (both) to a directory (`key_dir` and `cert_dir`).
+| source                  | `nil`                          | Write only attribute for setting certificate source and key source (both) to a value (`key_source` and `cert_source`). Can be `'self-signed'`, `'attribute'`, `'data-bag'`, `'chef-vault'` or `'file'`.
+| bag                     | `nil`                          | Write only attribute for setting certificate bag and key bag (both) to a value (`key_bag` and `cert_bag`).
+| item                    | `nil`                          | Write only attribute for setting certificate item name and key bag item name (both) to a value (`key_item` and `cert_item`).
+| encrypted               | `nil`                          | Write only attribute for setting certificate encryption and key encryption (both) to a value (`key_encrypted` and `cert_encrypted`).
+| secret_file             | `nil`                          | Write only attribute for setting certificate chef secret file and key chef secret file (both) to a value (`key_secret_file` and `cert_secret_file`).
+| key_path                | *calculated*                   | Private key full path.
+| key_name                | `"#{name}.key"`                | Private key file name.
+| key_dir                 | *calculated*                   | Private key directory path.
+| key_source              | `'self-signed'`                | Source type to get the SSL key from. Can be `'self-signed'`, `'attribute'`, `'data-bag'`, `'chef-vault'` or `'file'`.
+| key_bag                 | `namespace['ssl_key']['bag']`  | Name of the Data Bag where the SSL key is stored.
+| key_item                | `namespace['ssl_key']['item']` | Name of the Data Bag Item where the SSL key is stored.
+| key_item_key            | *calculated*                   | Key of the Data Bag Item where the SSL key is stored.
+| key_encrypted           | `false`                        | Whether the Data Bag where the SSL key is stored is encrypted.
+| key_secret_file         | `nil`                          | Secret file used to decrypt the Data Bag where the SSL key is stored.
+| key_content             | *calculated*                   | SSL key file content in clear. **Be careful when using it.******
+| cert_path               | *calculated*                   | Public certificate full path.
+| cert_name               | `"#{name}.pem"`                | Public certiticate file name.
+| cert_dir                | *calculated*                   | Public certificate directory path.
+| cert_source             | `'self-signed'`                | Source type to get the SSL cert from. Can be `'self-signed'`, `'with_ca'`, `'attribute'`, `'data-bag'`, `'chef-vault'` or `'file'`.
+| cert_bag                | `namespace['ssl_cert']['bag']` | Name of the Data Bag where the SSL cert is stored.
+| cert_item               | *calculated*                   | Name of the Data Bag Item where the SSL cert is stored.
+| cert_item_key           | *calculated*                   | Key of the Data Bag Item where the SSL cert is stored.
+| cert_encrypted          | `false`                        | Whether the Data Bag where the SSL cert is stored is encrypted.
+| cert_secret_file        | `nil`                          | Secret file used to decrypt the Data Bag where the SSL cert is stored.
+| cert_content            | *calculated*                   | SSL cert file content in clear.
+| subject_alternate_names | `nil`                          | Subject Alternate Names for the cert.
+| chain_path              | *calculated*                   | Intermediate certificate chain full path.
+| chain_name              | `nil`                          | File name of intermediate certificate chain file.
+| chain_dir               | *calculated*                   | Intermediate certificate chain directory path.
+| chain_source            | `nil`                          | Source type to get the intermediate certificate chain from. Can be `'attribute'`, `'data-bag'`, `'chef-vault'` or `'file'`.
+| chain_bag               | *calculated*                   | Name of the Data Bag where the intermediate certificate chain is stored.
+| chain_item              | *calculated*                   | Name of the Data Bag Item where the intermediate certificate chain is stored.
+| chain_item_key          | *calculated*                   | Key of the Data Bag Item where the intermediate certificate chain is stored.
+| chain_encrypted         | `false`                        | Whether the Data Bag where the intermediate certificate chain is stored is encrypted.
+| chain_secret_file       | `nil`                          | Secret file used to decrypt the Data Bag where the intermediate certificate chain is stored.
+| chain_content           | *calculated*                   | Intermediate certificate chain file content in clear.
+| chain_combined_name     | *calculated*                   | File name of intermediate certificate chain combined file (for **nginx**).
+| chain_combined_path     | *calculated*                   | Intermediate certificate chain combined file full path (for **nginx**).
+| ca_cert_path            | *nil*                          | Certificate Authority full path.
+| ca_key_path             | *nil*                          | Key Authority full path.
+| pkcs12_path             | *nil*                          | Optional PKCS12 full path.
+| pkcs12_passphrase       | *nil*                          | Optional PKCS12 passphrase.
+
+Templates
+=========
+
+This cookbook includes a simple VirtualHost template which can be used by the `web_app` definition from the [apache2](https://supermarket.chef.io/cookbooks/apache2) cookbook:
+
+```ruby
+cert = ssl_certificate 'my-webapp' do
+  namespace node['my-webapp']
+  notifies :restart, 'service[apache2]'
+end
+
+include_recipe 'apache2'
+include_recipe 'apache2::mod_ssl'
+web_app 'my-webapp' do
+  cookbook 'ssl_certificate'
+  server_name cert.common_name
+  docroot # [...]
+  # [...]
+  ssl_key cert.key_path
+  ssl_cert cert.cert_path
+  ssl_chain cert.chain_path
+end
+```
+
+## Partial Templates
+
+This cookbook contains [partial templates](http://docs.chef.io/templates.html#partial-templates) that you can include in your virtualhost templates to enable and configure the SSL protocol. These partial templates are available:
+
+* *apache.erb*: For Apache httpd web server.
+* *nginx.erb*: For nginx web server.
+
+### Partial Templates Parameters
+
+| Parameter          | Default          | Description                        |
+|:-------------------|:-----------------|:-----------------------------------|
+| ssl_cert           | `nil`            | Public SSL certificate full path.
+| ssl_key            | `nil`            | Private SSL key full path.
+| ssl_chain          | `nil`            | Intermediate SSL certificate chain full path (**apache** only) *(optional)*.
+| ssl_compatibility  | *node attribute* | SSL compatibility level (See [below](#securing-server-side-tls)).
+
+### Apache Partial Template
+
+#### Using `web_app` Definition
+
+If you are using the `web_app` definition, you should pass the `@params` variables to the partial template:
+
+```ruby
+web_app 'my-webapp-ssl' do
+  docroot node['apache']['docroot_dir']
+  server_name cert.common_name
+  # [...]
+  ssl_key cert.key_path
+  ssl_cert cert.cert_path
+  ssl_chain cert.chain_path
+end
+```
+
+```erb
+<%# included by web_app definition %>
+<VirtualHost *:443>
+  ServerName <%= @params[:server_name] %>
+  DocumentRoot <%= @params[:docroot] %>
+  <%# [...] %>
+
+  <%= render 'apache.erb', cookbook: 'ssl_certificate', variables: @params.merge(node: node) %>
+</VirtualHost>
+```
+
+#### Using `template` Resource
+
+```ruby
+cert = ssl_certificate 'my-webapp-ssl'
+template ::File.join(node['apache']['dir'], 'sites-available', 'my-webapp-ssl') do
+  source 'apache_vhost.erb'
+  # [...]
+  variables(
+    # [...]
+    ssl_key: cert.key_path,
+    ssl_cert: cert.chain_combined_path,
+    ssl_chain: cert.chain_path
+  )
+end
+```
+
+You can include the partial template as follows:
+
+```erb
+<%# included by template resource %>
+<VirtualHost *:443>
+  ServerName <%= @server_name %>
+  DocumentRoot <%= @docroot %>
+  <%# [...] %>
+
+  <%= render 'apache.erb', cookbook: 'ssl_certificate' %>
+</VirtualHost>
+```
+
+### Nginx Partial Template
+
+If you are using nginx template, we recommended to use the `SslCertificate#chain_combined_path` path value to set the `ssl_cert` variable instead of `SslCertificate#cert_path`. That's to ensure we [always include the chained certificate](http://nginx.org/en/docs/http/configuring_https_servers.html#chains) if there is one. This will also work when there is no chained certificate.
+
+```ruby
+cert = ssl_certificate 'my-webapp-ssl'
+template ::File.join(node['nginx']['dir'], 'sites-available', 'my-webapp-ssl') do
+  source 'nginx_vhost.erb'
+  # [...]
+  variables(
+    # [...]
+    ssl_key: cert.key_path,
+    ssl_cert: cert.chain_combined_path
+  )
+end
+```
+
+See [the examples above](#examples).
+
+## Securing Server Side TLS
+
+You can change the SSL compatibility level based on [the TLS recommendations in the Mozilla wiki](https://wiki.mozilla.org/Security/Server_Side_TLS#Recommended_configurations) using the `ssl_compatibility` template parameter:
+
+```ruby
+cert = ssl_certificate 'my-webapp' do
+  namespace node['my-webapp']
+  notifies :restart, 'service[apache2]'
+end
+
+include_recipe 'apache2'
+include_recipe 'apache2::mod_ssl'
+web_app 'my-webapp' do
+  cookbook 'ssl_certificate'
+  server_name cert.common_name
+  docroot # [...]
+  # [...]
+  ssl_key cert.key_path
+  ssl_cert cert.cert_path
+  ssl_chain cert.chain_path
+  ssl_compatibility :modern # :modern | :intermediate | :old
+end
+```
+
+You can also use the `node['ssl_certificate']['service']['compatibility']` node attribute to change the compatibility level used by default.
 
 Testing
 =======
