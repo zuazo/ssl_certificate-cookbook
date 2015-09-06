@@ -40,9 +40,11 @@ task :clean do
     Berksfile.lock
     .bundle
     .cache
+    coverage
     Gemfile.lock
     .kitchen
     metadata.json
+    vendor
   ).each { |f| FileUtils.rm_rf(Dir.glob(f)) }
 end
 
