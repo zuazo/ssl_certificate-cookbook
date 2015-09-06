@@ -40,9 +40,11 @@ Table of Contents
     * [Reading the Certificate from Different Places](#reading-the-certificate-from-different-places)
     * [Creating a Certificate with Subject Alternate Names](#creating-a-certificate-with-subject-alternate-names)
     * [Reading Key, Certificate and Intermediary from a Data Bag](#reading-key-certificate-and-intermediary-from-a-data-bag)
+    * [Creating a PKCS12 Containing Both the Certificate and the Private Key](#creating-a-pkcs12-containing-both-the-certificate-and-the-private-key)
     * [Creating a Certificate from a Certificate Authority](#creating-a-certificate-from-a-certificate-authority)
     * [Reading the CA Certificate from a Chef Vault Bag](#reading-the-ca-certificate-from-a-chef-vault-bag)
     * [Managing Certificates Via Attributes](#managing-certificates-via-attributes)
+    * [Real-world Examples](#real-world-examples)
 * [Testing](#testing)
   * [ChefSpec Matchers](#chefspec-matchers)
     * [ssl_certificate(name)](#ssl_certificatename)
@@ -882,6 +884,34 @@ override_attributes(
   }
 )
 ```
+
+## Real-world Examples
+
+Some cookbooks that use the `ssl_certificate` resource to implement SSL/TLS:
+
+* [`postfixadmin`](https://github.com/zuazo/postfixadmin-cookbook) cookbook: Uses the certificate for Apache httpd and nginx.
+ * [`postfixadmin::apache` recipe](https://github.com/zuazo/postfixadmin-cookbook/blob/2.1.0/recipes/apache.rb#L39-L65)
+ * [*apache_vhost.erb* template](https://github.com/zuazo/postfixadmin-cookbook/blob/2.1.0/templates/default/apache_vhost.erb#L52-L54)
+ * [`postfixadmin::nginx` recipe](https://github.com/zuazo/postfixadmin-cookbook/blob/2.1.0/recipes/nginx.rb#L50-L71)
+ * [*nginx_vhost.erb* template](https://github.com/zuazo/postfixadmin-cookbook/blob/2.1.0/templates/default/nginx_vhost.erb#L11-L13)
+ * [*README.md* section](https://github.com/zuazo/postfixadmin-cookbook/blob/2.1.0/README.md#the-https-certificate)
+
+* [`boxbilling`](https://github.com/zuazo/boxbilling-cookbook) cookbook: Uses the certificate for Apache httpd and nginx.
+ * [`boxbilling::_apache` recipe](https://github.com/zuazo/boxbilling-cookbook/blob/1.0.0/recipes/_apache.rb#L86-L111)
+ * [*apache_vhost.erb* template](https://github.com/zuazo/boxbilling-cookbook/blob/1.0.0/templates/default/apache_vhost.erb#L60-L62)
+ * [`boxbilling::_nginx` recipe](https://github.com/zuazo/boxbilling-cookbook/blob/1.0.0/recipes/_nginx.rb#L59-L86)
+ * [*nginx_vhost.erb* template](https://github.com/zuazo/boxbilling-cookbook/blob/1.0.0/templates/default/nginx_vhost.erb#L9-L11)
+ * [*README.md* section](https://github.com/zuazo/boxbilling-cookbook/blob/1.0.0/README.md#the-https-certificate))
+
+* [`kong`](https://github.com/zuazo/kong-cookbook) cookbook: Uses the certificate for the embedded nginx server.
+ * [`kong::_configuration` recipe](https://github.com/zuazo/kong-cookbook/blob/0.1.0/recipes/_configuration.rb#L25-L34)
+ * [*kong.yml.erb* template](https://github.com/zuazo/kong-cookbook/blob/0.1.0/templates/default/kong.yml.erb#L87-L96), which includes the nginx server configuration.
+ * [*README.md* section](https://github.com/zuazo/kong-cookbook/blob/0.1.0/README.md#the-https-certificate)
+
+* [`postfix-dovecot`](https://github.com/zuazo/postfix-dovecot-cookbook) cookbook: Creates one certificate for Postfix and another for Dovecot. Uses the [`SslCertificateCookbook::ServiceHelpers#ssl_config_for_service`](http://www.rubydoc.info/github/zuazo/ssl_certificate-cookbook/master/Chef%2FSslCertificateCookbook%2FServiceHelpers%3Assl_config_for_service) helper to set each service SSL configuration (cipher suites, supported protocols, ...).
+ * [`postfix-dovecot::postfix` recipe](https://github.com/zuazo/postfix-dovecot-cookbook/blob/2.0.1/recipes/postfix.rb#L151-L170)
+ * [`postfix-dovecot::dovecot` recipe](https://github.com/zuazo/postfix-dovecot-cookbook/blob/2.0.1/recipes/dovecot.rb#L178-L188)
+ * [*README.md* section](https://github.com/zuazo/postfix-dovecot-cookbook/blob/2.0.1/README.md#the-ssl-certificate)
 
 Testing
 =======
