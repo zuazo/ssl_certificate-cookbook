@@ -32,6 +32,13 @@ EOS
 long_description IO.read(File.join(File.dirname(__FILE__), 'README.md'))
 version '1.9.0' # WiP
 
+if respond_to?(:source_url)
+  source_url "https://github.com/zuazo/#{name}-cookbook"
+end
+if respond_to?(:issues_url)
+  issues_url "https://github.com/zuazo/#{name}-cookbook/issues"
+end
+
 supports 'amazon'
 supports 'debian'
 supports 'centos'
