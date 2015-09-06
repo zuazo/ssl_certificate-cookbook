@@ -6,6 +6,8 @@ rvm:
 
 sudo: false
 
+cache: bundler
+
 env:
 - CHEF_VERSION="~> 11.0"
 - CHEF_VERSION="~> 12.0"
@@ -19,7 +21,7 @@ matrix:
   - rvm: 2.2
     env: CHEF_VERSION="~> 11.0"
 
-bundler_args: --without doc integration integration_docker integration_vagrant integration_cloud guard
+bundler_args: --jobs=3 --retry=3 --without='doc integration integration_docker integration_vagrant integration_cloud guard'
 
 script:
 - travis_retry bundle exec rake style unit
