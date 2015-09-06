@@ -3,6 +3,20 @@ ssl_certificate CHANGELOG
 
 This file is used to list changes made in each version of the `ssl_certificate` cookbook.
 
+## v1.9.0 (2015-09-06)
+
+* Add support for [PKCS12](https://en.wikipedia.org/wiki/PKCS_12) ([issue #17](https://github.com/zuazo/ssl_certificate-cookbook/pull/17), thanks [Baptiste Courtois](https://github.com/Annih)).
+* metadata: Add `source_url` and `issues_url` links.
+
+* Documentation:
+ * README: Add *Real-world Examples* section.
+
+* Testing:
+ * Run kitchen tests on CircleCI.
+ * Travis CI: Use bundle cache.
+ * Gemfile: Update RuboCop to `0.34.0`.
+ * Rakfile: Use `Kitchen` ruby class instead of `sh`.
+
 ## v1.8.1 (2015-09-03)
 
 * README: Fix title.
