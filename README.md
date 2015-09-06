@@ -911,6 +911,7 @@ Some cookbooks that use the `ssl_certificate` resource to implement SSL/TLS:
 * [`postfix-dovecot`](https://github.com/zuazo/postfix-dovecot-cookbook) cookbook: Creates one certificate for Postfix and another for Dovecot. Uses the [`SslCertificateCookbook::ServiceHelpers#ssl_config_for_service`](http://www.rubydoc.info/github/zuazo/ssl_certificate-cookbook/master/Chef%2FSslCertificateCookbook%2FServiceHelpers%3Assl_config_for_service) helper to set each service SSL configuration (cipher suites, supported protocols, ...).
  * [`postfix-dovecot::postfix` recipe](https://github.com/zuazo/postfix-dovecot-cookbook/blob/2.0.1/recipes/postfix.rb#L151-L170)
  * [`postfix-dovecot::dovecot` recipe](https://github.com/zuazo/postfix-dovecot-cookbook/blob/2.0.1/recipes/dovecot.rb#L178-L188)
+ * [`postfix-dovecot::ssl_certificate` attributes](https://github.com/zuazo/postfix-dovecot-cookbook/blob/2.0.1/attributes/ssl_certificate.rb#L22-L31) to set the *protocols* in the correct format for each service.
  * [*README.md* section](https://github.com/zuazo/postfix-dovecot-cookbook/blob/2.0.1/README.md#the-ssl-certificate)
 
 Testing
