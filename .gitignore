@@ -17,4 +17,5 @@ metadata.json
 test/kitchen/.kitchen/
 *.un~
 .vagrant
+vendor
 .yardoc
