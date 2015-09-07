@@ -666,6 +666,10 @@ Some cookbooks that use the `ssl_certificate` resource to implement SSL/TLS:
  * [`postfix-dovecot::ssl_certificate` attributes](https://github.com/zuazo/postfix-dovecot-cookbook/blob/2.0.1/attributes/ssl_certificate.rb#L22-L31) to set the *protocols* in the correct format for each service.
  * [*README.md* section](https://github.com/zuazo/postfix-dovecot-cookbook/blob/2.0.1/README.md#the-ssl-certificate)
 
+* [`onddo_proftpd`](https://github.com/zuazo/proftpd-cookbook) cookbook contains examples to enable TLS:
+ * [*README.md* documentation with a TLS example](https://github.com/zuazo/proftpd-cookbook/tree/2.0.0#enabling-ssltls)
+ * [`onddo_proftpd_test::attrs` recipe](https://github.com/zuazo/proftpd-cookbook/blob/2.0.0/test/cookbooks/onddo_proftpd_test/recipes/attrs.rb#L158-L187) used for `test-kitchen` integration tests.
+
 Attributes
 ==========
 
