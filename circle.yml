@@ -13,6 +13,6 @@ dependencies:
 
 test:
   override:
-  - TESTS=(${TESTS}) bundle exec rake "integration:docker[${TESTS[$CIRCLE_NODE_INDEX]}]":
+  - TESTS=(${TESTS// / }) ; bundle exec rake "integration:docker[${TESTS[$CIRCLE_NODE_INDEX]}]":
       parallel: true
       timeout: 900
