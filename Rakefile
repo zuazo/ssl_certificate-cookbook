@@ -9,7 +9,7 @@
 # rake clean                    # Clean some generated files
 # rake default                  # Run doc, style, unit and integration tests
 # rake doc                      # Generate Ruby documentation
-# rake integration                         # Run Test Kitchen integration tests
+# rake integration[regexp,action]          # Run Test Kitchen integration tests
 # rake integration:cloud[regexp,action]    # Run Kitchen tests in the cloud
 # rake integration:docker[regexp,action]   # Run Kitchen tests using docker
 # rake integration:vagrant[regexp,action]  # Run Kitchen tests using vagrant
@@ -138,7 +138,8 @@ namespace :integration do
 end
 
 desc 'Run Test Kitchen integration tests'
-task integration: travis? ? %w(integration:docker) : %w(integration:vagrant)
+task :integration, [:regexp, :action] =>
+  travis? ? %w(integration:docker) : %w(integration:vagrant)
 
 desc 'Run doc, style, unit and integration tests'
 task default: %w(doc style unit integration)
