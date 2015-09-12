@@ -25,13 +25,13 @@
 
 require 'bundler/setup'
 
-# Checks if we are inside Travis CI.
+# Checks if we are inside a Continuous Integration machine.
 #
-# @return [Boolean] whether we are inside Travis CI.
+# @return [Boolean] whether we are inside a CI.
 # @example
-#   travis? #=> false
-def travis?
-  ENV['TRAVIS'] == 'true'
+#   ci? #=> false
+def ci?
+  ENV['CI'] == 'true'
 end
 
 desc 'Clean some generated files'
@@ -139,7 +139,7 @@ end
 
 desc 'Run Test Kitchen integration tests'
 task :integration, [:regexp, :action] =>
-  travis? ? %w(integration:docker) : %w(integration:vagrant)
+  ci? ? %w(integration:docker) : %w(integration:vagrant)
 
 desc 'Run doc, style, unit and integration tests'
 task default: %w(doc style unit integration)
