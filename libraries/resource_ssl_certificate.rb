@@ -122,8 +122,7 @@ class Chef
 
       def owner(arg = nil)
         set_or_return(
-          :owner, arg,
-          kind_of: String, default: node['ssl_certificate']['user']
+          :owner, arg, kind_of: String, default: node['ssl_certificate']['user']
         )
       end
 
@@ -158,11 +157,12 @@ class Chef
       end
 
       def lazy_cached_variable(var, &block)
+        myself = self
         lazy do
-          value = instance_variable_get("@#{var}")
+          value = myself.instance_variable_get("@#{var}")
           if value.nil?
-            value = instance_eval(&block)
-            instance_variable_set("@#{var}", value)
+            value = myself.instance_eval(&block)
+            myself.instance_variable_set("@#{var}", value)
           else
             value
           end
