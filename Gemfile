@@ -28,7 +28,6 @@ group :unit do
   gem 'should_not', '~> 1.1'
   gem 'chefspec', '~> 4.1'
   gem 'chef-vault', '~> 2.4'
-  gem 'ohai', '~> 7.4' if RUBY_VERSION < '2'
 end
 
 group :integration do
