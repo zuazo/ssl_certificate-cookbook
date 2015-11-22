@@ -70,7 +70,8 @@ module CACertificate
   end
 
   def self.ca_cert_to_file(subject, key_file, cert_file, time)
-    key = File.read(key_file)
+    key = File.open(key_file, 'rb') { |io| io.read }
+
     key, cert = generate_generic_x509_key_cert(key, time)
 
     generate_self_signed_ca_cert(key, cert, subject)

@@ -69,7 +69,7 @@ class Chef
 
         def read_from_path(path)
           return nil unless ::File.exist?(path)
-          ::IO.read(path)
+          ::File.open(path, 'rb') { |io| io.read }
         end
 
         def safe_read_from_path(desc, path)
