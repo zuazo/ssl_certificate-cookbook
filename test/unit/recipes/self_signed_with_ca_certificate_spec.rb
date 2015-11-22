@@ -153,12 +153,13 @@ describe 'ssl_certificate_test::self_signed_with_ca_certificate',
         .with(::File.join(cert_dir, 'ca.example.org.pem')).and_return(true)
       allow(::File).to receive(:exist?)
         .with(::File.join(key_dir, 'ca.example.org.key')).and_return(true)
-      allow(::IO).to receive(:read).and_call_original
-      allow(::IO).to receive(:read)
-        .with(::File.join(cert_dir, 'ca.example.org.pem'))
+      allow(::File).to receive(:open).and_call_original
+      allow(::File).to receive(:open)
+        .with(::File.join(cert_dir, 'ca.example.org.pem'), 'rb')
         .and_return(db_ca_cert)
-      allow(::IO).to receive(:read)
-        .with(::File.join(key_dir, 'ca.example.org.key')).and_return(db_ca_key)
+      allow(::File).to receive(:open)
+        .with(::File.join(key_dir, 'ca.example.org.key'), 'rb')
+        .and_return(db_ca_key)
     end
 
     it 'runs without errors' do

@@ -39,11 +39,13 @@ describe 'ssl_certificate_test::default', order: :random do
       .with('/etc/ssl/certs/dummy6-attributes.pem').and_return(true)
     allow(::File).to receive(:exist?)
       .with('/etc/ssl/private/dummy6-attributes.key').and_return(true)
-    allow(::IO).to receive(:read).and_call_original
-    allow(::IO).to receive(:read)
-      .with('/etc/ssl/certs/dummy6-attributes.pem').and_return(dummy_cert)
-    allow(::IO).to receive(:read)
-      .with('/etc/ssl/private/dummy6-attributes.key').and_return(dummy_key)
+    allow(::File).to receive(:open).and_call_original
+    allow(::File).to receive(:open)
+      .with('/etc/ssl/certs/dummy6-attributes.pem', 'rb')
+      .and_return(dummy_cert)
+    allow(::File).to receive(:open)
+      .with('/etc/ssl/private/dummy6-attributes.key', 'rb')
+      .and_return(dummy_key)
   end
 
   it 'creates dummy1 certificate' do
@@ -322,10 +324,12 @@ describe 'ssl_certificate_test::default', order: :random do
           .with('/etc/ssl/dummy6-attributes.pem').and_return(true)
         allow(::File).to receive(:exist?)
           .with('/etc/ssl/dummy6-attributes.key').and_return(true)
-        allow(::IO).to receive(:read)
-          .with('/etc/ssl/dummy6-attributes.pem').and_return(dummy_cert)
-        allow(::IO).to receive(:read)
-          .with('/etc/ssl/dummy6-attributes.key').and_return(dummy_key)
+        allow(::File).to receive(:open)
+          .with('/etc/ssl/dummy6-attributes.pem', 'rb')
+          .and_return(dummy_cert)
+        allow(::File).to receive(:open)
+          .with('/etc/ssl/dummy6-attributes.key', 'rb')
+          .and_return(dummy_key)
       end
 
       it 'creates dummy1 key for wheel group' do
