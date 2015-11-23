@@ -30,7 +30,7 @@ reading them from attributes, data bags or chef-vaults. Exposing its
 configuration through node attributes.
 EOS
 long_description IO.read(File.join(File.dirname(__FILE__), 'README.md'))
-version '1.10.0'
+version '1.11.0' # WiP
 
 if respond_to?(:source_url)
   source_url "https://github.com/zuazo/#{name}-cookbook"
