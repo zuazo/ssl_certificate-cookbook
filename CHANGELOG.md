@@ -3,6 +3,24 @@ ssl_certificate CHANGELOG
 
 This file is used to list changes made in each version of the `ssl_certificate` cookbook.
 
+## v1.10.0 (2015-11-23)
+
+* Fix some certificate errors on Windows due to CRLF conversion ([issue #19](https://github.com/zuazo/ssl_certificate-cookbook/pull/19), thanks [Taliesin Sisson](https://github.com/taliesins)).
+* Fix *undefined method pkcs12_path for Chef::Resource::File* error.
+
+* Documentation:
+ * README: Some typos and improvements.
+
+* Testing:
+ * Gemfile updates:
+  * foodcritic `~> `5.0.0`
+  * RuboCop `~> `0.35.0`.
+  * Berkshelf `~> 4.0`.
+  * guard-foodcritic `~> 2.0`.
+ * Rakefile:
+  * Fix integration task to allow arguments.
+  * Check CI.
+
 ## v1.9.0 (2015-09-06)
 
 * Add support for [PKCS12](https://en.wikipedia.org/wiki/PKCS_12) ([issue #17](https://github.com/zuazo/ssl_certificate-cookbook/pull/17), thanks [Baptiste Courtois](https://github.com/Annih)).
