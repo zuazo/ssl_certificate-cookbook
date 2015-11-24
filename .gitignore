@@ -12,7 +12,6 @@ doc
 Gemfile.lock
 .kitchen
 .kitchen.local.yml
-metadata.json
 .*.sw[a-z]
 test/kitchen/.kitchen/
 *.un~
