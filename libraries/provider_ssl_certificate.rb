@@ -60,7 +60,7 @@ class Chef
           content f_content
           mode f_mode
         end
-        run_context.resource_collection << resource
+        run_context.resource_collection << resource if defined?(ChefSpec)
         resource.run_action(:create)
         new_resource.updated_by_last_action(resource.updated_by_last_action?)
         resource
