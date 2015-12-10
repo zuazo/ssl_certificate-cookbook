@@ -3,4 +3,4 @@ AllCops:
   - .kitchen
   - vendor/**/*
 Metrics/ModuleLength:
-  Max: 194
+  Max: 196

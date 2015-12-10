@@ -218,16 +218,18 @@ class Chef
           [ca_cert_content, ca_key_content]
         end
 
-        def verify_self_signed_cert_with_ca(key_content, cert_content,
-            cert_subject, ca_cert_content)
+        def verify_self_signed_cert_with_ca(
+          key_content, cert_content, cert_subject, ca_cert_content
+        )
           cert_content.is_a?(String) &&
             verify_self_signed_cert(
               key_content, cert_content, cert_subject, ca_cert_content
             )
         end
 
-        def generate_cert_with_ca(key_content, cert_subject, time,
-            ca_cert_content, ca_key_content)
+        def generate_cert_with_ca(
+          key_content, cert_subject, time, ca_cert_content, ca_key_content
+        )
           Chef::Log.debug(
             "Generating new certificate: #{name} from the given CA."
           )
