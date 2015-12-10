@@ -4,7 +4,7 @@ SSL Certificate Cookbook
 [![GitHub Source](https://img.shields.io/badge/source-GitHub-blue.svg?style=flat)](https://github.com/zuazo/ssl_certificate-cookbook)
 [![Dependency Status](http://img.shields.io/gemnasium/zuazo/ssl_certificate-cookbook.svg?style=flat)](https://gemnasium.com/zuazo/ssl_certificate-cookbook)
 [![Code Climate](http://img.shields.io/codeclimate/github/zuazo/ssl_certificate-cookbook.svg?style=flat)](https://codeclimate.com/github/zuazo/ssl_certificate-cookbook)
-[![Build Status](http://img.shields.io/travis/zuazo/ssl_certificate-cookbook/1.11.0.svg?style=flat)](https://travis-ci.org/zuazo/ssl_certificate-cookbook)
+[![Build Status](http://img.shields.io/travis/zuazo/ssl_certificate-cookbook.svg?style=flat)](https://travis-ci.org/zuazo/ssl_certificate-cookbook)
 [![Circle CI](https://circleci.com/gh/zuazo/ssl_certificate-cookbook/tree/master.svg?style=shield)](https://circleci.com/gh/zuazo/ssl_certificate-cookbook/tree/master)
 
 The main purpose of this [Chef](https://www.chef.io/) cookbook is to make it easy for other cookbooks to support SSL. With the resource included, you will be able to manage certificates reading them from attributes, data bags or chef-vaults. Exposing its configuration through node attributes.
