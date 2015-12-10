@@ -5,10 +5,10 @@ This file is used to list changes made in each version of the `ssl_certificate` 
 
 ## v1.11.0 (2015-12-10)
 
+* Fix some RuboCop offenses.
 * Only add internal file resources to the collection when running tests ([issue #23](https://github.com/zuazo/ssl_certificate-cookbook/pull/23), thanks [Karl Svec](https://github.com/karlsvec)).
 * Fix sending notifications from the `ssl_certificate` resource ([issue #21](https://github.com/zuazo/ssl_certificate-cookbook/pull/21), thanks [Karl Svec](https://github.com/karlsvec)).
 * .gitignore: remove metadata.json.
-
 
 ## v1.10.0 (2015-11-23)
 
