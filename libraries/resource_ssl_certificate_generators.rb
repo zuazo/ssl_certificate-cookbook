@@ -178,9 +178,8 @@ class Chef
           cert.issuer = ca_cert.subject
         end
 
-        def generate_self_signed_cert_with_ca(
-          key, cert, subject, ca_cert_cont, ca_key_cont
-        )
+        def generate_self_signed_cert_with_ca(key, cert, subject, ca_cert_cont,
+                                              ca_key_cont)
           ca_cert, ca_key = generate_ca_from_content(ca_cert_cont, ca_key_cont)
 
           generate_self_signed_cert_with_ca_csr(cert, key, ca_cert, subject)
