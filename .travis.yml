@@ -11,16 +11,9 @@ env:
 - CHEF_VERSION="~> 11.0"
 - CHEF_VERSION="~> 12.0"
 
-matrix:
-  exclude:
-# Chef 12 requires Ruby 2:
-  - rvm: 1.9.3
-    env: CHEF_VERSION="~> 12.0"
-# Chef 11 cannot resolve dependencies in Ruby 2.2 (mixlib-shellout):
-  - rvm: 2.2
-    env: CHEF_VERSION="~> 11.0"
+before_install: gem install bundler # Update bundler
 
 bundler_args: --jobs=3 --retry=3 --without='doc integration integration_docker integration_vagrant integration_cloud guard'
 
 script:
-- travis_retry bundle exec rake style unit
+- bundle exec rake style unit

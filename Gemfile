@@ -9,7 +9,7 @@ source 'https://rubygems.org'
 chef_version = ENV.key?('CHEF_VERSION') ? ENV['CHEF_VERSION'] : nil
 
 group :doc do
-  gem 'yard', '~> 0.8'
+  gem 'yard', '~> 0.8.7'
 end
 
 group :test do
@@ -23,7 +23,7 @@ group :style do
 end
 
 group :unit do
-  gem 'chef', chef_version unless chef_version.nil? # Ruby 1.9.3 support
+  gem 'chef', chef_version unless chef_version.nil?
   gem 'simplecov', '~> 0.9'
   gem 'should_not', '~> 1.1'
   gem 'chefspec', '~> 4.1'
@@ -31,7 +31,7 @@ group :unit do
 end
 
 group :integration do
-  gem 'test-kitchen', '~> 1.4'
+  gem 'test-kitchen', '~> 1.4' # < 1.5 to test Chef 11
 end
 
 group :integration_docker do
@@ -44,7 +44,7 @@ group :integration_vagrant do
 end
 
 group :integration_cloud do
-  gem 'kitchen-ec2', '~> 0.8'
+  gem 'kitchen-ec2', '~> 1.0'
   gem 'kitchen-digitalocean', '~> 0.8'
 end
 
