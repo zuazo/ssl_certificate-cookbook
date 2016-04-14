@@ -1,0 +1,71 @@
+---
+driver:
+  aws_ssh_key_id: <%= ENV['AWS_KEYPAIR_NAME'] %>
+
+platforms:
+- name: centos-5-8-x64
+  driver_plugin: digitalocean
+  driver_config:
+    flavor: 512MB
+
+- name: centos-6-5-x64
+  driver_plugin: digitalocean
+  driver_config:
+    flavor: 512MB
+
+- name: centos-7-0-x64
+  driver_plugin: digitalocean
+  driver_config:
+    flavor: 512MB
+
+- name: debian-6-0-x64
+  driver_plugin: digitalocean
+  driver_config:
+    flavor: 512MB
+  run_list: recipe[apt]
+
+- name: debian-7-0-x64
+  driver_plugin: digitalocean
+  driver_config:
+    flavor: 512MB
+  run_list: recipe[apt]
+
+- name: ubuntu-10-04-x64
+  driver_plugin: digitalocean
+  driver_config:
+    flavor: 512MB
+  run_list: recipe[apt]
+
+- name: ubuntu-12-04-x64
+  driver_plugin: digitalocean
+  driver_config:
+    flavor: 512MB
+  run_list: recipe[apt]
+
+- name: ubuntu-14-04-x64
+  driver_plugin: digitalocean
+  driver_config:
+    flavor: 512MB
+  run_list: recipe[apt]
+
+- name: amazon-2015.09.2
+  driver_plugin: ec2
+  driver_config:
+    image_id: ami-d4f7ddbe
+    instance_type: m3.medium
+  transport:
+    username: ec2-user
+<% if ENV['SSH_AGENT_PID'].nil? %>
+    ssh_key: <%= ENV['EC2_SSH_KEY_PATH'] %>
+<% end %>
+
+- name: amazon-2016.03.0
+  driver_plugin: ec2
+  driver_config:
+    image_id: ami-22111148
+    instance_type: m3.medium
+  transport:
+    username: ec2-user
+<% if ENV['SSH_AGENT_PID'].nil? %>
+    ssh_key: <%= ENV['EC2_SSH_KEY_PATH'] %>
+<% end %>
