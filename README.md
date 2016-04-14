@@ -153,7 +153,7 @@ When a namespace is set in the resource, it will try to read the following attri
 | `namespace['ssl_cert']['secret_file']`             | Secret file used to decrypt the Data Bag where the SSL cert is stored.
 | `namespace['ssl_cert']['content']`                 | SSL cert content used when reading from attributes.
 | `namespace['ssl_cert']['subject_alternate_names']` | An array of Subject Alternate Names for the SSL cert. Needed if your site has multiple domain names on the same cert.
-| `namespace['ssl_chain']['name']`                   | File name to be used for the intermediate certificate chain file. *If this is not present, no chain file will be written.*
+| `namespace['ssl_chain']['name']`                   | File name to be used for the intermediate certificate chain file. **If this is not present, no chain file will be written.**
 | `namespace['ssl_chain']['source']`                 | Source type to get the intermediate certificate chain from. Can be `'attribute'`, `'data-bag'`, `'chef-vault'` or `'file'`.
 | `namespace['ssl_chain']['path']`                   | File path of the intermediate SSL certificate chain.
 | `namespace['ssl_chain']['bag']`                    | Name of the Data Bag where the intermediate certificate chain is stored.
@@ -760,7 +760,7 @@ By default the resource will create a self-signed certificate, but a custom one 
 | cert_content            | *calculated*                   | SSL cert file content in clear.
 | subject_alternate_names | `nil`                          | Subject Alternate Names for the cert.
 | chain_path              | *calculated*                   | Intermediate certificate chain full path.
-| chain_name              | `nil`                          | File name of intermediate certificate chain file.
+| chain_name              | `nil`                          | File name of intermediate certificate chain file. **If this is not present, no chain file will be written.**
 | chain_dir               | *calculated*                   | Intermediate certificate chain directory path.
 | chain_source            | `nil`                          | Source type to get the intermediate certificate chain from. Can be `'attribute'`, `'data-bag'`, `'chef-vault'` or `'file'`.
 | chain_bag               | *calculated*                   | Name of the Data Bag where the intermediate certificate chain is stored.
