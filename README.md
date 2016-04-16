@@ -138,6 +138,7 @@ When a namespace is set in the resource, it will try to read the following attri
 | `namespace['secret_file']`                         | Attribute for setting certificate chef secret file and key chef secret file (both) to a value (`key_secret_file` and `cert_secret_file`).
 | `namespace['ssl_key']['source']`                   | Source type to get the SSL key from. Can be `'self-signed'`, `'attribute'`, `'data-bag'`, `'chef-vault'` or `'file'`.
 | `namespace['ssl_key']['path']`                     | File path of the SSL key.
+| `namespace['ssl_key']['mode']`                     | File mode of the SSL key.
 | `namespace['ssl_key']['bag']`                      | Name of the Data Bag where the SSL key is stored.
 | `namespace['ssl_key']['item']`                     | Name of the Data Bag Item where the SSL key is stored.
 | `namespace['ssl_key']['item_key']`                 | Key of the Data Bag Item where the SSL key is stored.
@@ -210,6 +211,7 @@ my_cert_path = '/etc/certs/my-webapp.pem'
 # know the paths
 ssl_certificate 'my-webapp' do
   key_path my_key_path
+  key_mode 00640
   cert_path my_cert_path
 end
 
@@ -743,6 +745,7 @@ By default the resource will create a self-signed certificate, but a custom one 
 | encrypted               | `nil`                          | Write only attribute for setting certificate encryption and key encryption (both) to a value (`key_encrypted` and `cert_encrypted`).
 | secret_file             | `nil`                          | Write only attribute for setting certificate chef secret file and key chef secret file (both) to a value (`key_secret_file` and `cert_secret_file`).
 | key_path                | *calculated*                   | Private key full path.
+| key_mode                | `0600`                         | Private key file mode.
 | key_name                | `"#{name}.key"`                | Private key file name.
 | key_dir                 | *calculated*                   | Private key directory path.
 | key_source              | `'self-signed'`                | Source type to get the SSL key from. Can be `'self-signed'`, `'attribute'`, `'data-bag'`, `'chef-vault'` or `'file'`.

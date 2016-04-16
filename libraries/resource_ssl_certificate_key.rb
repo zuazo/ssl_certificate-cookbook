@@ -37,6 +37,7 @@ class Chef
             key_name
             key_dir
             key_path
+            key_mode
             key_source
             key_bag
             key_item
@@ -73,6 +74,10 @@ class Chef
 
         def key_path(arg = nil)
           set_or_return(:key_path, arg, kind_of: String, required: true)
+        end
+
+        def key_mode(arg = nil)
+          set_or_return(:key_mode, arg, kind_of: Integer)
         end
 
         def key_source(arg = nil)
@@ -116,6 +121,12 @@ class Chef
         def default_key_path
           lazy_cached_variable(:default_key_path) do
             read_namespace(%w(ssl_key path)) || ::File.join(key_dir, key_name)
+          end
+        end
+
+        def default_key_mode
+          lazy do
+            read_namespace(%w(ssl_key mode)) || read_namespace('mode') || 00600
           end
         end
 
