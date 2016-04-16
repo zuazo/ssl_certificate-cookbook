@@ -117,7 +117,7 @@ class Chef
                    elsif node['chef-vault']['databag_fallback']
                      Chef::DataBagItem.load(bag, item)
                    else
-                     raise "Trying to load a regular data bag item #{id} from #{bag}, and databag_fallback is disabled"
+                     raise "Trying to load a regular data bag item #{item} from #{bag}, and databag_fallback is disabled"
                    end
             data[key.to_s]
           end
