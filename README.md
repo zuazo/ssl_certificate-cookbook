@@ -402,6 +402,10 @@ ssl_certificate 'mysite' do
 end
 ```
 
+For testing you can enabled fall back to use unencrypted data bags if chef
+vault is not found by setting attribute ['chef-vault']['databag_fallback'] to
+true value
+
 ### Reading the Certificate from Files
 
 ```ruby
