@@ -115,3 +115,11 @@ attribute 'ssl_certificate/service/use_stapling',
           type: 'string',
           required: 'optional',
           calculated: true
+
+attribute 'chef-vault/databag_fallback',
+          display_name: 'fallback to unencrypted data bags',
+          description: 'Whether to fallback to unencrypted data bag if'\
+                       ' chef-vault not found.',
+          type: 'string',
+          required: 'optional',
+          default: 'false'
