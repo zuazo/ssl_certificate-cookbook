@@ -84,6 +84,10 @@ class Chef
           }.freeze
         end
 
+        def ca_key_passphrase(arg = nil)
+          set_or_return(:ca_key_passphrase, arg, kind_of: String)
+        end
+
         def generate_cert_subject_from_string(s)
           [['CN', s.to_s, OpenSSL::ASN1::UTF8STRING]]
         end
@@ -116,8 +120,8 @@ class Chef
           csr
         end
 
-        def generate_generic_x509_key_cert(key, time)
-          key = OpenSSL::PKey::RSA.new(key)
+        def generate_generic_x509_key_cert(key, time, key_pass = nil)
+          key = OpenSSL::PKey::RSA.new(key, key_pass)
           cert = OpenSSL::X509::Certificate.new
           cert.version = 2
           cert.serial = OpenSSL::BN.rand(160)
@@ -161,7 +165,7 @@ class Chef
 
         def generate_ca_from_content(cert_content, key_content)
           ca_cert = OpenSSL::X509::Certificate.new(cert_content)
-          ca_key = OpenSSL::PKey::RSA.new(key_content)
+          ca_key = OpenSSL::PKey::RSA.new(key_content, ca_key_passphrase)
           [ca_cert, ca_key]
         end
 
@@ -192,9 +196,9 @@ class Chef
         end
 
         # Based on https://gist.github.com/nickyp/886884
-        def generate_cert(
-          key, subject, time, ca_cert_content = nil, ca_key_content = nil
-        )
+        def generate_cert(key, subject, time, ca_cert_content = nil,
+                          ca_key_content = nil)
+
           key, cert = generate_generic_x509_key_cert(key, time)
           if ca_cert_content && ca_key_content
             generate_self_signed_cert_with_ca(
@@ -246,8 +250,9 @@ class Chef
             cert.issuer.cmp(cur_subject) == 0
         end
 
-        def verify_self_signed_cert(key, cert, _hostname, ca_cert_content = nil)
-          key = OpenSSL::PKey::RSA.new(key)
+        def verify_self_signed_cert(key, cert, _hostname,
+                                    ca_cert_content = nil, pass_phrase = nil)
+          key = OpenSSL::PKey::RSA.new(key, pass_phrase)
           cert = OpenSSL::X509::Certificate.new(cert)
           if ca_cert_content
             compare_self_signed_cert_with_ca(key, cert, ca_cert_content)

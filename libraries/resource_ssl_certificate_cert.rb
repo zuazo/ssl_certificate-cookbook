@@ -48,6 +48,7 @@ class Chef
             subject_alternate_names
             ca_cert_path
             ca_key_path
+            ca_key_passphrase
           ).freeze
         end
 
@@ -118,6 +119,10 @@ class Chef
 
         def ca_key_path(arg = nil)
           set_or_return(:ca_key_path, arg, kind_of: String)
+        end
+
+        def ca_key_passphrase(arg = nil)
+          set_or_return(:ca_key_passphrase, arg, kind_of: String)
         end
 
         protected
@@ -268,6 +273,10 @@ class Chef
 
         def default_ca_key_path
           lazy { read_namespace(%w(ca_key_path)) }
+        end
+
+        def default_ca_key_passphrase
+          lazy { read_namespace(%w(ca_key_passphrase)) }
         end
       end
     end
