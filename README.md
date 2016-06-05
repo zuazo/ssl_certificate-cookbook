@@ -979,6 +979,7 @@ License and Author
 | **Contributor:**     | [Nikita Borzykh](https://github.com/sample)
 | **Contributor:**     | [Baptiste Courtois](https://github.com/Annih)
 | **Contributor:**     | [Taliesin Sisson](https://github.com/taliesins)
+| **Contributor:**     | [Alexey Demidov](https://github.com/AlexeyDemidov)
 | **Copyright:**       | Copyright (c) 2015, Xabier de Zuazo
 | **Copyright:**       | Copyright (c) 2014-2015, Onddo Labs, SL.
 | **License:**         | Apache License, Version 2.0
