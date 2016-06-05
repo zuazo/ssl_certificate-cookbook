@@ -33,8 +33,6 @@ node.default['test.com']['department'] = 'Titi'
 node.default['test.com']['email'] = 'titi@test.com'
 node.default['test.com']['ssl_key']['source'] = 'self-signed'
 node.default['test.com']['ssl_cert']['source'] = 'with_ca'
-node.default['test.com']['ca_cert_path'] = ca_cert
-node.default['test.com']['ca_cert_key'] = ca_key
 
 node.default['ca-certificate']['common_name'] = 'ca.test.com'
 node.default['ca-certificate']['country'] = 'FR'
@@ -67,6 +65,35 @@ web_app 'test.com' do
   ssl_cert cert.cert_path
   ssl_compatibility :modern
   extra_directives EnableSendfile: 'On'
+end
+
+# Create a certificate from a secured CA
+
+sec_ca_cert = ::File.join(node['ssl_certificate']['cert_dir'], 'sec_CA.crt')
+sec_ca_key = ::File.join(node['ssl_certificate']['key_dir'], 'sec_CA.key')
+sec_ca_pwd = 'mySecretPassPhrase'
+sec_ca_info = {
+  'common_name' => 'ca.secure.com',
+  'country' => 'FR',
+  'city' => 'Paris',
+  'state' => 'Ile de Paris',
+  'organization' => 'Toto',
+  'department' => 'Titi',
+  'email' => 'titi@secure.com',
+  'time' => 10 * 365
+}
+
+::CACertificate.key_to_file(sec_ca_key, sec_ca_pwd)
+::CACertificate.ca_cert_to_file(
+  sec_ca_info, sec_ca_key, sec_ca_cert, sec_ca_info['time'], sec_ca_pwd
+)
+
+ssl_certificate 'secured.test.com' do
+  namespace node['test.com']
+  common_name 'secured.test.com'
+  ca_cert_path sec_ca_cert
+  ca_key_path sec_ca_key
+  ca_key_passphrase sec_ca_pwd
 end
 
 # Create the CA from an encrypted data bag
