@@ -129,6 +129,10 @@ ssl_certificate 'dummy9' do
   pkcs12_passphrase 'DcpdHp6Xr8LM73cFdhdc'
 end
 
+ssl_certificate 'dummy10' do
+  key_mode 00640
+end
+
 # Apache2 test
 
 node.default[node['fqdn']]['organization'] =

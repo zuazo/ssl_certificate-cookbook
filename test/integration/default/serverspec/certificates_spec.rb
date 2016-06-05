@@ -133,3 +133,17 @@ describe file("#{cert_dir}/dummy9.p12") do
   it { should be_owned_by 'root' }
   it { should be_grouped_into group }
 end
+
+describe file("#{key_dir}/dummy10.key") do
+  it { should be_file }
+  it { should be_mode 640 }
+  it { should be_owned_by 'root' }
+  it { should be_grouped_into group }
+end
+
+describe file("#{cert_dir}/dummy10.pem") do
+  it { should be_file }
+  it { should be_mode 644 }
+  it { should be_owned_by 'root' }
+  it { should be_grouped_into group }
+end

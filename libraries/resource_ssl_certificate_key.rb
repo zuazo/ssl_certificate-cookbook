@@ -77,7 +77,7 @@ class Chef
         end
 
         def key_mode(arg = nil)
-          set_or_return(:key_mode, arg, kind_of: Integer)
+          set_or_return(:key_mode, arg, kind_of: [Integer, String])
         end
 
         def key_source(arg = nil)

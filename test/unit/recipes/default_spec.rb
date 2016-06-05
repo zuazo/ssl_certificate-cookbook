@@ -92,6 +92,10 @@ describe 'ssl_certificate_test::default', order: :random do
     expect(chef_run).to create_ssl_certificate('dummy9')
   end
 
+  it 'creates dummy10 certificate' do
+    expect(chef_run).to create_ssl_certificate('dummy10')
+  end
+
   it 'creates FQDN certificate' do
     expect(chef_run).to create_ssl_certificate(fqdn)
   end
@@ -292,6 +296,24 @@ describe 'ssl_certificate_test::default', order: :random do
           .with_sensitive(true)
       end
     end # 8 9 each
+
+    it 'creates dummy10 key' do
+      expect(chef_run).to create_file('dummy10 SSL certificate key')
+        .with_path('/etc/ssl/private/dummy10.key')
+        .with_owner('root')
+        .with_group('root')
+        .with_mode(00640)
+        .with_sensitive(true)
+    end
+
+    it 'creates dummy10 certificate' do
+      expect(chef_run).to create_file('dummy10 SSL public certificate')
+        .with_path('/etc/ssl/certs/dummy10.pem')
+        .with_owner('root')
+        .with_group('root')
+        .with_mode(00644)
+        .with_sensitive(true)
+    end
 
     it 'creates FQDN key' do
       expect(chef_run).to create_file("#{fqdn} SSL certificate key")
