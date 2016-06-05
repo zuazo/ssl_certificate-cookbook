@@ -65,7 +65,7 @@ class Chef
               field: 'emailAddress',
               type: OpenSSL::ASN1::UTF8STRING
             }
-          }
+          }.freeze
         end
 
         unless defined?(::Chef::Resource::SslCertificate::Generators::
@@ -81,7 +81,7 @@ class Chef
               %w(subjectKeyIdentifier hash),
               %w(keyUsage keyEncipherment,dataEncipherment,digitalSignature)
             ]
-          }
+          }.freeze
         end
 
         def generate_cert_subject_from_string(s)
@@ -209,7 +209,7 @@ class Chef
         # https://github.com/cchandler/certificate_authority/blob/master/lib
         # /certificate_authority/signing_request.rb
         def handle_subject_alternative_names(cert, factory, alt_names)
-          fail 'alt_names must be an Array' unless alt_names.is_a?(Array)
+          raise 'alt_names must be an Array' unless alt_names.is_a?(Array)
 
           name_list =
             alt_names.map { |m| m.include?(':') ? m : "DNS:#{m}" }.join(',')

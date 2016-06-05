@@ -42,7 +42,7 @@ class Chef
             organization
             department
             email
-          )
+          ).freeze
         end
 
         def initialize_subject_defaults
@@ -53,7 +53,7 @@ class Chef
           set_or_return(:common_name, arg, kind_of: String, required: true)
         end
 
-        alias_method :domain, :common_name
+        alias domain common_name
 
         def country(arg = nil)
           set_or_return(:country, arg, kind_of: [String])

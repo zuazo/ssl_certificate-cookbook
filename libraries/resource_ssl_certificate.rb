@@ -67,8 +67,6 @@ class Chef
         initialize_defaults
       end
 
-      public
-
       def initialize_attribute_defaults(attributes)
         attributes.each do |var|
           instance_variable_set("@#{var}".to_sym, send("default_#{var}"))
@@ -100,7 +98,7 @@ class Chef
           key_eql?(other) && cert_eql?(other) && name_eql?(other)
       end
 
-      alias_method :===,  :==
+      alias === ==
 
       def namespace(arg = nil)
         unless arg.nil? || arg.is_a?(Chef::Node) ||

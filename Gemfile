@@ -18,8 +18,8 @@ group :test do
 end
 
 group :style do
-  gem 'foodcritic', '~> 5.0.0'
-  gem 'rubocop', '~> 0.35.0'
+  gem 'foodcritic', '~> 6.3.0'
+  gem 'rubocop', '~> 0.40.0'
 end
 
 group :unit do
@@ -50,7 +50,7 @@ end
 
 group :guard do
   gem 'guard', '~> 2.12'
-  gem 'guard-foodcritic', '~> 2.0'
+  gem 'guard-foodcritic', '~> 2.1'
   gem 'guard-rubocop', '~> 1.2'
   gem 'guard-rspec', '~> 4.6'
   # Temporary disabled: Error is: cannot load such file -- guard/kitchen

@@ -62,7 +62,7 @@ class Chef
         def safe_read_namespace(desc, ary)
           data = read_namespace(ary)
           unless data.is_a?(String)
-            fail "Cannot read #{desc} from node attributes"
+            raise "Cannot read #{desc} from node attributes"
           end
           data
         end
@@ -75,13 +75,13 @@ class Chef
         def safe_read_from_path(desc, path)
           data = read_from_path(path)
           unless data.is_a?(String)
-            fail "Cannot read #{desc} from path: #{path}"
+            raise "Cannot read #{desc} from path: #{path}"
           end
           data
         end
 
         def data_bag_read_fail(desc, db, type = 'data bag')
-          fail "Cannot read #{desc} from #{type}: "\
+          raise "Cannot read #{desc} from #{type}: "\
             "#{db[:bag]}.#{db[:item]}[#{db[:key]}]"
         end
 
@@ -115,7 +115,7 @@ class Chef
           elsif node['chef-vault']['databag_fallback']
             Chef::DataBagItem.load(bag, item)
           else
-            fail "Trying to load a regular data bag item #{item}"\
+            raise "Trying to load a regular data bag item #{item}"\
               " from #{bag}, and databag_fallback is disabled"
           end
         end

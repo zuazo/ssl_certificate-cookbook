@@ -36,10 +36,8 @@ class Chef
           ATTRS = %w(
             pkcs12_path
             pkcs12_passphrase
-          )
+          ).freeze
         end
-
-        public
 
         def initialize_pkcs12_defaults
           initialize_attribute_defaults(PKCS12::ATTRS)

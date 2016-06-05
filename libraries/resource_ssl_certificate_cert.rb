@@ -48,7 +48,7 @@ class Chef
             subject_alternate_names
             ca_cert_path
             ca_key_path
-          )
+          ).freeze
         end
 
         unless defined?(::Chef::Resource::SslCertificate::Cert::SOURCES)
@@ -59,10 +59,8 @@ class Chef
             file
             self_signed
             with_ca
-          )
+          ).freeze
         end
-
-        public
 
         def initialize_cert_defaults
           initialize_attribute_defaults(Cert::ATTRS)

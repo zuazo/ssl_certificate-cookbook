@@ -47,7 +47,7 @@ class Chef
             chain_content
             chain_combined_path
             chain_combined_name
-          )
+          ).freeze
         end
 
         unless defined?(::Chef::Resource::SslCertificate::Chain::SOURCES)
@@ -56,10 +56,8 @@ class Chef
             data_bag
             chef_vault
             file
-          )
+          ).freeze
         end
-
-        public
 
         def initialize_chain_defaults
           initialize_attribute_defaults(Chain::ATTRS)

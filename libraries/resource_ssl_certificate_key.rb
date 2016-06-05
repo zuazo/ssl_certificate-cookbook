@@ -45,7 +45,7 @@ class Chef
             key_encrypted
             key_secret_file
             key_content
-          )
+          ).freeze
         end
 
         unless defined?(::Chef::Resource::SslCertificate::Key::SOURCES)
@@ -55,10 +55,8 @@ class Chef
             chef_vault
             file
             self_signed
-          )
+          ).freeze
         end
-
-        public
 
         def initialize_key_defaults
           initialize_attribute_defaults(Key::ATTRS)

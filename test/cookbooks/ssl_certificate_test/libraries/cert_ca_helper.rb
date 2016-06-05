@@ -31,7 +31,7 @@ module CACertificate
       %w(subjectKeyIdentifier hash),
       ['basicConstraints', 'CA:TRUE', true],
       ['keyUsage', 'cRLSign,keyCertSign', true]
-    ]
+    ].freeze
   end
 
   def self.key_with_pass_phrase(key, pass_phrase)

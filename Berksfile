@@ -20,7 +20,7 @@ end
 # "This resource is written with Chef 12.5 custom resources" error:
 if ENV.key?('CHEF_VERSION') &&
    Gem::Requirement.new(ENV['CHEF_VERSION'])
-   .satisfied_by?(Gem::Version.new('11.0.0'))
+                   .satisfied_by?(Gem::Version.new('11.0.0'))
   cookbook 'rsyslog', '~> 2.0'
 end
 

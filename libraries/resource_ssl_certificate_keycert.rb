@@ -34,9 +34,9 @@ class Chef
         def years(arg = nil)
           return (time.to_i / 31_536_000).round if arg.nil?
           unless [Fixnum, String].inject(false) { |a, e| a || arg.is_a?(e) }
-            fail Exceptions::ValidationFailed,
-                 "Option years must be a kind of #{to_be}! You passed "\
-                 "#{arg.inspect}."
+            raise Exceptions::ValidationFailed,
+                  "Option years must be a kind of #{to_be}! You passed "\
+                  "#{arg.inspect}."
           end
           time(arg.to_i * 31_536_000)
         end
@@ -91,7 +91,7 @@ class Chef
 
         def assert_source!(desc, source, valid_sources)
           return if valid_sources.include?(source)
-          fail "Cannot read #{desc}, unknown source: #{source}"
+          raise "Cannot read #{desc}, unknown source: #{source}"
         end
 
         def filter_source(desc, source, valid_sources)
