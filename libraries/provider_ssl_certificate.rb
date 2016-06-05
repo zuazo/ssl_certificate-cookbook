@@ -70,7 +70,7 @@ class Chef
       def create_key
         file_create(
           'SSL certificate key',
-          new_resource.key_path, new_resource.key_content, 00600
+          new_resource.key_path, new_resource.key_content, new_resource.key_mode
         )
       end
 
