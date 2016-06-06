@@ -985,7 +985,7 @@ License and Author
 | **Contributor:**     | [Baptiste Courtois](https://github.com/Annih)
 | **Contributor:**     | [Taliesin Sisson](https://github.com/taliesins)
 | **Contributor:**     | [Alexey Demidov](https://github.com/AlexeyDemidov)
-| **Copyright:**       | Copyright (c) 2015, Xabier de Zuazo
+| **Copyright:**       | Copyright (c) 2015-2016, Xabier de Zuazo
 | **Copyright:**       | Copyright (c) 2014-2015, Onddo Labs, SL.
 | **License:**         | Apache License, Version 2.0
 

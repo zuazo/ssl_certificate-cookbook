@@ -4,6 +4,7 @@
 # Library:: resource_ssl_certificate_pkcs12
 # Author:: Baptiste Courtois (<b.courtois@criteo.com>)
 # Author:: Xabier de Zuazo (<xabier@zuazo.org>)
+# Copyright:: Copyright (c) 2016 Xabier de Zuazo
 # Copyright:: Copyright (c) 2015 Criteo
 # License:: Apache License, Version 2.0
 #
