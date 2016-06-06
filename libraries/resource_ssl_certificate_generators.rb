@@ -84,10 +84,6 @@ class Chef
           }.freeze
         end
 
-        def ca_key_passphrase(arg = nil)
-          set_or_return(:ca_key_passphrase, arg, kind_of: String)
-        end
-
         def generate_cert_subject_from_string(s)
           [['CN', s.to_s, OpenSSL::ASN1::UTF8STRING]]
         end
