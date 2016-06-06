@@ -10,21 +10,21 @@ This file is used to list changes made in each version of the `ssl_certificate` 
 * Add custom file mode for key file ([issue #26](https://github.com/zuazo/ssl_certificate-cookbook/pull/26), thanks [Alexey Demidov](https://github.com/AlexeyDemidov)).
 * Update RuboCop to `0.40`.
 
-Documentation:
-* Improve `chain_name` parameter requirement documentation ([issue #24](https://github.com/zuazo/ssl_certificate-cookbook/issues/24), thanks [Alexey Demidov](https://github.com/AlexeyDemidov)).
-* Improve TESTING documentation.
-* README: Add license badge.
+* Documentation:
+ * Improve `chain_name` parameter requirement documentation ([issue #24](https://github.com/zuazo/ssl_certificate-cookbook/issues/24), thanks [Alexey Demidov](https://github.com/AlexeyDemidov)).
+ * Improve TESTING documentation.
+ * README: Add license badge.
 
-Testing:
-* Remove useless test attributes ([issue #16](https://github.com/zuazo/ssl_certificate-cookbook/pull/16), thanks [Baptiste Courtois](https://github.com/Annih)).
-* Add a *.kitchen.cloud.yml* file.
-* Fix unit tests.
-* Disable some broken integration tests.
-* CircleCI update: Use Ruby `2.3`.
-* Berksfile: Add info link and avoid calculating the cookbook name.
-* Gemfile:
- * Update kitchen-ec2 to version 1.
- * Update foodcritic to `6.3`.
+* Testing:
+ * Remove useless test attributes ([issue #16](https://github.com/zuazo/ssl_certificate-cookbook/pull/16), thanks [Baptiste Courtois](https://github.com/Annih)).
+ * Add a *.kitchen.cloud.yml* file.
+ * Fix unit tests.
+ * Disable some broken integration tests.
+ * CircleCI update: Use Ruby `2.3`.
+ * Berksfile: Add info link and avoid calculating the cookbook name.
+ * Gemfile:
+  * Update kitchen-ec2 to version 1.
+  * Update foodcritic to `6.3`.
 
 ## v1.11.0 (2015-12-10)
 
