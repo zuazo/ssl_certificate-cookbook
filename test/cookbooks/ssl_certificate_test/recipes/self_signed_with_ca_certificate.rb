@@ -88,9 +88,9 @@ sec_ca_info = {
   sec_ca_info, sec_ca_key, sec_ca_cert, sec_ca_info['time'], sec_ca_pwd
 )
 
-ssl_certificate 'secured.test.com' do
+ssl_certificate 'securedca.test.com' do
   namespace node['test.com']
-  common_name 'secured.test.com'
+  common_name 'securedca.test.com'
   ca_cert_path sec_ca_cert
   ca_key_path sec_ca_key
   ca_key_passphrase sec_ca_pwd

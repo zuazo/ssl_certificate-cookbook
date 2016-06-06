@@ -37,6 +37,8 @@ describe 'ssl_certificate_test::self_signed_with_ca_certificate',
     node.set['ssl_certificate']['key_dir'] = Chef::Config[:file_cache_path]
     node.set['ssl_certificate']['cert_dir'] = Chef::Config[:file_cache_path]
     stub_command('/usr/sbin/apache2 -t').and_return(true)
+    allow(CACertificate).to receive(:key_to_file)
+    allow(CACertificate).to receive(:ca_cert_to_file)
   end
 
   it 'creates test.com certificate' do
@@ -58,6 +60,11 @@ describe 'ssl_certificate_test::self_signed_with_ca_certificate',
       expect(chef_run)
         .to create_template(%r{/sites-available/test\.com\.conf$})
     end
+  end
+
+  it 'creates securedca.test.com CA certificate with a passphrase' do
+    expect(chef_run).to create_ssl_certificate('securedca.test.com')
+      .with_common_name('securedca.test.com')
   end
 
   it 'creates ca.example.org CA certificate from a data bag' do
@@ -184,18 +191,19 @@ describe 'ssl_certificate_test::self_signed_with_ca_certificate',
         .with_sensitive(true)
     end
 
-    it 'creates secured.test.com key' do
-      expect(chef_run).to create_file('secured.test.com SSL certificate key')
-        .with_path(::File.join(key_dir, 'secured.test.com.key'))
+    it 'creates securedca.test.com key' do
+      expect(chef_run).to create_file('securedca.test.com SSL certificate key')
+        .with_path(::File.join(key_dir, 'securedca.test.com.key'))
         .with_owner('root')
         .with_group('root')
         .with_mode(00600)
         .with_sensitive(true)
     end
 
-    it 'creates secured.test.com certificate' do
-      expect(chef_run).to create_file('secured.test.com SSL public certificate')
-        .with_path(::File.join(cert_dir, 'secured.test.com.pem'))
+    it 'creates securedca.test.com certificate' do
+      expect(chef_run)
+        .to create_file('securedca.test.com SSL public certificate')
+        .with_path(::File.join(cert_dir, 'securedca.test.com.pem'))
         .with_owner('root')
         .with_group('root')
         .with_mode(00644)

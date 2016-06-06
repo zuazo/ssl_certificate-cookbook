@@ -55,21 +55,21 @@ setup() {
 }
 
 @test "creates a certificate with a secured CA" {
-  [ -f "${CERT_PATH}/secured.test.com.pem" ]
+  [ -f "${CERT_PATH}/securedca.test.com.pem" ]
 }
 
 @test "the certificate with a secured CA has the correct issuer" {
-  openssl x509 -in "${CERT_PATH}/secured.test.com.pem" -noout -text \
+  openssl x509 -in "${CERT_PATH}/securedca.test.com.pem" -noout -text \
     | grep -F 'Issuer: C=FR, ST=Ile de Paris, L=Paris, O=Toto, OU=Titi, CN=ca.secure.com/emailAddress=titi@secure.com'
 }
 
 @test "the certificate with a CA has the correct subject" {
-  openssl x509 -in "${CERT_PATH}/secured.test.com.pem" -noout -text \
-    | grep -F 'Subject: C=FR, ST=Ile de Paris, L=Paris, O=Toto, OU=Titi, CN=secured.test.com/emailAddress=titi@test.com'
+  openssl x509 -in "${CERT_PATH}/securedca.test.com.pem" -noout -text \
+    | grep -F 'Subject: C=FR, ST=Ile de Paris, L=Paris, O=Toto, OU=Titi, CN=securedca.test.com/emailAddress=titi@test.com'
 }
 
 @test "creates the certificate key with a secured CA" {
-  openssl rsa -in "${KEY_PATH}/secured.test.com.key" -text -noout
+  openssl rsa -in "${KEY_PATH}/securedca.test.com.key" -text -noout
 }
 
 @test "creates a CA certificate from a data bag" {

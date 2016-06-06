@@ -47,14 +47,14 @@ describe file("#{cert_dir}/test.com.pem") do
   it { should be_grouped_into group }
 end
 
-describe file("#{key_dir}/secured.test.com.key") do
+describe file("#{key_dir}/securedca.test.com.key") do
   it { should be_file }
   it { should be_mode 600 }
   it { should be_owned_by 'root' }
   it { should be_grouped_into group }
 end
 
-describe file("#{cert_dir}/secured.test.com.pem") do
+describe file("#{cert_dir}/securedca.test.com.pem") do
   it { should be_file }
   it { should be_mode 644 }
   it { should be_owned_by 'root' }
