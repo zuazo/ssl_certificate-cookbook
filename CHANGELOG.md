@@ -3,6 +3,29 @@ ssl_certificate CHANGELOG
 
 This file is used to list changes made in each version of the `ssl_certificate` cookbook.
 
+## v1.12.0 (2016-06-06)
+
+* Add support for CA with passphrase ([issue #16](https://github.com/zuazo/ssl_certificate-cookbook/pull/16), thanks [Baptiste Courtois](https://github.com/Annih)).
+* Fallback to unencrypted data bag with `node['chef-vault']['databag_fallback']` ([issue #25](https://github.com/zuazo/ssl_certificate-cookbook/pull/25), thanks [Alexey Demidov](https://github.com/AlexeyDemidov)).
+* Add custom file mode for key file ([issue #26](https://github.com/zuazo/ssl_certificate-cookbook/pull/26), thanks [Alexey Demidov](https://github.com/AlexeyDemidov)).
+* Update RuboCop to `0.40`.
+
+Documentation:
+* Improve `chain_name` parameter requirement documentation ([issue #24](https://github.com/zuazo/ssl_certificate-cookbook/issues/24), thanks [Alexey Demidov](https://github.com/AlexeyDemidov)).
+* Improve TESTING documentation.
+* README: Add license badge.
+
+Testing:
+* Remove useless test attributes ([issue #16](https://github.com/zuazo/ssl_certificate-cookbook/pull/16), thanks [Baptiste Courtois](https://github.com/Annih)).
+* Add a *.kitchen.cloud.yml* file.
+* Fix unit tests.
+* Disable some broken integration tests.
+* CircleCI update: Use Ruby `2.3`.
+* Berksfile: Add info link and avoid calculating the cookbook name.
+* Gemfile:
+ * Update kitchen-ec2 to version 1.
+ * Update foodcritic to `6.3`.
+
 ## v1.11.0 (2015-12-10)
 
 * Fix some RuboCop offenses.
