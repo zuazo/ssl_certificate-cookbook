@@ -32,8 +32,8 @@ class Chef
     class SslCertificate < Chef::Resource
       # ssl_certificate Chef Resource cert generator helpers.
       module Generators
-        def generate_key
-          OpenSSL::PKey::RSA.new(2048).to_pem
+        def generate_key(length=2048)
+          OpenSSL::PKey::RSA.new(length).to_pem
         end
 
         unless defined?(::Chef::Resource::SslCertificate::Generators::FIELDS)
@@ -157,6 +157,11 @@ class Chef
           if subject_alternate_names
             handle_subject_alternative_names(cert, ef, subject_alternate_names)
           end
+          
+          if extended_key_usage
+            handle_extended_key_usage(cert, ef, extended_key_usage)
+          end
+
           cert.sign(key, OpenSSL::Digest::SHA256.new)
         end
 
@@ -189,6 +194,11 @@ class Chef
           if subject_alternate_names
             handle_subject_alternative_names(cert, ef, subject_alternate_names)
           end
+
+          if extended_key_usage
+            handle_extended_key_usage(cert, ef, extended_key_usage)
+          end
+
           cert.sign(ca_key, OpenSSL::Digest::SHA256.new)
         end
 
@@ -215,6 +225,14 @@ class Chef
           name_list =
             alt_names.map { |m| m.include?(':') ? m : "DNS:#{m}" }.join(',')
           ext = factory.create_ext('subjectAltName', name_list, false)
+          cert.add_extension(ext)
+        end
+
+        def handle_extended_key_usage(cert, factory, usage)
+          raise 'extended_key_usage must be an Array' unless usage.is_a?(Array)
+
+          usage_list = usage.join(',')
+          ext = factory.create_ext('extendedKeyUsage', usage_list, false)
           cert.add_extension(ext)
         end
 

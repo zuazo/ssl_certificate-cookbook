@@ -46,6 +46,7 @@ class Chef
             key_encrypted
             key_secret_file
             key_content
+            key_length
           ).freeze
         end
 
@@ -107,6 +108,10 @@ class Chef
           set_or_return(:key_content, arg, kind_of: String)
         end
 
+        def key_length(arg = nil)
+          set_or_return(:key_length, arg, kind_of: Integer)
+        end
+
         protected
 
         def default_key_name
@@ -126,6 +131,12 @@ class Chef
         def default_key_mode
           lazy do
             read_namespace(%w(ssl_key mode)) || read_namespace('mode') || 00600
+          end
+        end
+
+        def default_key_length
+          lazy do
+            read_namespace(%w(ssl_key length)) || read_namespace('length') || 2048
           end
         end
 
@@ -187,7 +198,7 @@ class Chef
         def default_key_content_from_self_signed
           content = read_from_path(key_path)
           unless content.is_a?(String)
-            content = generate_key
+            content = generate_key(key_length)
             updated_by_last_action(true)
           end
           content

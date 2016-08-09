@@ -47,6 +47,7 @@ class Chef
             cert_secret_file
             cert_content
             subject_alternate_names
+            extended_key_usage
             ca_cert_path
             ca_key_path
             ca_key_passphrase
@@ -110,6 +111,10 @@ class Chef
 
         def subject_alternate_names(arg = nil)
           set_or_return(:subject_alternate_names, arg, kind_of: Array)
+        end
+
+        def extended_key_usage(arg = nil)
+          set_or_return(:extended_key_usage, arg, kind_of: Array)
         end
 
         # CA cert public methods
@@ -178,6 +183,10 @@ class Chef
 
         def default_subject_alternate_names
           lazy { read_namespace(%w(ssl_cert subject_alternate_names)) }
+        end
+
+        def default_extended_key_usage
+          lazy { read_namespace(%w(ssl_cert extended_key_usage)) }
         end
 
         def default_cert_content_from_attribute
