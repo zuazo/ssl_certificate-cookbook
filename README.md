@@ -147,6 +147,7 @@ When a namespace is set in the resource, it will try to read the following attri
 | `namespace['ssl_key']['encrypted']`                | Whether the Data Bag where the SSL key is stored is encrypted.
 | `namespace['ssl_key']['secret_file']`              | Secret file used to decrypt the Data Bag where the SSL key is stored.
 | `namespace['ssl_key']['content']`                  | SSL key content used when reading from attributes.
+| `namespace['ssl_key']['length']`                   | RSA key length used when generating a new key.
 | `namespace['ssl_cert']['source']`                  | Source type to get the SSL cert from. Can be `'self-signed'`, `'attribute'`, `'data-bag'`, `'chef-vault'` or `'file'`.
 | `namespace['ssl_cert']['path']`                    | File path of the SSL certificate.
 | `namespace['ssl_cert']['bag']`                     | Name of the Data Bag where the SSL cert is stored.
@@ -156,6 +157,7 @@ When a namespace is set in the resource, it will try to read the following attri
 | `namespace['ssl_cert']['secret_file']`             | Secret file used to decrypt the Data Bag where the SSL cert is stored.
 | `namespace['ssl_cert']['content']`                 | SSL cert content used when reading from attributes.
 | `namespace['ssl_cert']['subject_alternate_names']` | An array of Subject Alternate Names for the SSL cert. Needed if your site has multiple domain names on the same cert.
+| `namespace['ssl_cert']['extended_key_usage']`      | An array of extended key usage attributes.
 | `namespace['ssl_chain']['name']`                   | File name to be used for the intermediate certificate chain file. **If this is not present, no chain file will be written.**
 | `namespace['ssl_chain']['source']`                 | Source type to get the intermediate certificate chain from. Can be `'attribute'`, `'data-bag'`, `'chef-vault'` or `'file'`.
 | `namespace['ssl_chain']['path']`                   | File path of the intermediate SSL certificate chain.
@@ -757,6 +759,7 @@ By default the resource will create a self-signed certificate, but a custom one 
 | key_item                | `namespace['ssl_key']['item']` | Name of the Data Bag Item where the SSL key is stored.
 | key_item_key            | *calculated*                   | Key of the Data Bag Item where the SSL key is stored.
 | key_encrypted           | `false`                        | Whether the Data Bag where the SSL key is stored is encrypted.
+| key_length              | `2048`                         | Integer that must be a power of 2, with a reasonable maximum of 4096. This defines the length of a generated RSA key. 
 | key_secret_file         | `nil`                          | Secret file used to decrypt the Data Bag where the SSL key is stored.
 | key_content             | *calculated*                   | SSL key file content in clear. **Be careful when using it.******
 | cert_path               | *calculated*                   | Public certificate full path.
@@ -770,6 +773,7 @@ By default the resource will create a self-signed certificate, but a custom one 
 | cert_secret_file        | `nil`                          | Secret file used to decrypt the Data Bag where the SSL cert is stored.
 | cert_content            | *calculated*                   | SSL cert file content in clear.
 | subject_alternate_names | `nil`                          | Subject Alternate Names for the cert.
+| extended_key_usage      | `nil`                          | Extended keyUsage flags array
 | chain_path              | *calculated*                   | Intermediate certificate chain full path.
 | chain_name              | `nil`                          | File name of intermediate certificate chain file. **If this is not present, no chain file will be written.**
 | chain_dir               | *calculated*                   | Intermediate certificate chain directory path.
