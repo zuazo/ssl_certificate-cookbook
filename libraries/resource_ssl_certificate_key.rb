@@ -136,7 +136,8 @@ class Chef
 
         def default_key_length
           lazy do
-            read_namespace(%w(ssl_key length)) || read_namespace('length') || 2048
+            read_namespace(%w(ssl_key length)) || read_namespace('length') ||
+              2048
           end
         end
 
