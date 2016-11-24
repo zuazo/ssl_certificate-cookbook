@@ -32,7 +32,7 @@ class Chef
     class SslCertificate < Chef::Resource
       # ssl_certificate Chef Resource cert generator helpers.
       module Generators
-        def generate_key(length=2048)
+        def generate_key(length = 2048)
           OpenSSL::PKey::RSA.new(length).to_pem
         end
 
@@ -157,7 +157,7 @@ class Chef
           if subject_alternate_names
             handle_subject_alternative_names(cert, ef, subject_alternate_names)
           end
-          
+
           if extended_key_usage
             handle_extended_key_usage(cert, ef, extended_key_usage)
           end
