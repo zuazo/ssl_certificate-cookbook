@@ -40,6 +40,8 @@ if respond_to?(:issues_url)
   issues_url "https://github.com/zuazo/#{name}-cookbook/issues"
 end
 
+chef_version '>= 12' if respond_to?(:chef_version)
+
 supports 'amazon'
 supports 'debian'
 supports 'centos'

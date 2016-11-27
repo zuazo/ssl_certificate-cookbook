@@ -1,14 +1,10 @@
 rvm:
-- 2.0.0
-- 2.1
 - 2.2
 - 2.3
-- 2.4
 
 sudo: required
 
 env:
-- CHEF_VERSION="~> 11.0"
 - CHEF_VERSION="~> 12.0"
 
 matrix:

@@ -77,8 +77,8 @@ Please, [let us know](https://github.com/zuazo/ssl_certificate-cookbook/issues/n
 
 ## Required Applications
 
-* Chef `>= 11.14.2`.
-* Ruby `2` or higher.
+* Chef `12` or higher.
+* Ruby `2.2` or higher.
 
 Usage
 =====
