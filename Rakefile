@@ -66,7 +66,12 @@ namespace :style do
 
   require 'foodcritic'
   desc 'Run Chef style checks using foodcritic'
-  FoodCritic::Rake::LintTask.new(:chef)
+  FoodCritic::Rake::LintTask.new(:chef) do |t|
+    t.options = {
+      fail_tags: ['any'],
+      progress: true
+    }
+  end
 end
 
 desc 'Run all style checks'
