@@ -134,6 +134,14 @@ ssl_certificate 'dummy10' do
   key_mode 00640
 end
 
+ssl_certificate 'dummy11' do
+  key_length 4096
+end
+
+ssl_certificate 'dummy12' do
+  extended_key_usage %w(clientAuth)
+end
+
 # Apache2 test
 
 node.default[node['fqdn']]['organization'] =

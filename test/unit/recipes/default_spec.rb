@@ -97,6 +97,16 @@ describe 'ssl_certificate_test::default', order: :random do
     expect(chef_run).to create_ssl_certificate('dummy10')
   end
 
+  it 'creates dummy11 certificate' do
+    expect(chef_run).to create_ssl_certificate('dummy11')
+      .with_key_length(4096)
+  end
+
+  it 'creates dummy12 certificate' do
+    expect(chef_run).to create_ssl_certificate('dummy12')
+      .with_extended_key_usage(%w(clientAuth))
+  end
+
   it 'creates FQDN certificate' do
     expect(chef_run).to create_ssl_certificate(fqdn)
   end
@@ -137,7 +147,7 @@ describe 'ssl_certificate_test::default', order: :random do
       expect { chef_run }.to_not raise_error
     end
 
-    (1..4).each do |i|
+    ((1..4).to_a | (11..12).to_a).each do |i|
       it "creates dummy#{i} key" do
         expect(chef_run).to create_file("dummy#{i} SSL certificate key")
           .with_path("/etc/ssl/private/dummy#{i}.key")
