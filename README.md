@@ -696,15 +696,16 @@ Attributes
 
 The following attributes are used to integrate SSL specific configurations with different services (Apache, nginx, ...). They are used internally by [the apache and nginx templates](#templates).
 
-| Attribute                                             | Default      | Description                        |
-|:------------------------------------------------------|:-------------|:-----------------------------------|
-| `node['ssl_certificate']['service']['cipher_suite']`  | `nil`        | Service default SSL cipher suite.
-| `node['ssl_certificate']['service']['protocols']`     | `nil`        | Service default SSL protocols.
-| `node['ssl_certificate']['service']['apache']`        | *calculated* | Apache web service httpd specific SSL attributes.
-| `node['ssl_certificate']['service']['nginx']`         | *calculated* | nginx web service specific SSL attributes.
-| `node['ssl_certificate']['service']['compatibility']` | `nil`        | Service SSL compatibility level (See [below](#securing-server-side-tls)).
-| `node['ssl_certificate']['service']['use_hsts']`      | `true`       | Whether to enable [HSTS](http://en.wikipedia.org/wiki/HTTP_Strict_Transport_Security) in the service.
-| `node['ssl_certificate']['service']['use_stapling']`  | *calculated* | Whether to enable [OCSP stapling](http://en.wikipedia.org/wiki/OCSP_stapling) in the service (nginx only, use `node['apache']['mod_ssl']['use_stapling']` for apache).
+| Attribute                                                  | Default      | Description                        |
+|:-----------------------------------------------------------|:-------------|:-----------------------------------|
+| `node['ssl_certificate']['service']['cipher_suite']`       | `nil`        | Service default SSL cipher suite.
+| `node['ssl_certificate']['service']['protocols']`          | `nil`        | Service default SSL protocols.
+| `node['ssl_certificate']['service']['apache']`             | *calculated* | Apache web service httpd specific SSL attributes.
+| `node['ssl_certificate']['service']['nginx']`              | *calculated* | nginx web service specific SSL attributes.
+| `node['ssl_certificate']['service']['compatibility']`      | `nil`        | Service SSL compatibility level (See [below](#securing-server-side-tls)).
+| `node['ssl_certificate']['service']['use_hsts']`           | `true`       | Whether to enable [HSTS](http://en.wikipedia.org/wiki/HTTP_Strict_Transport_Security) in the service.
+| `node['ssl_certificate']['service']['use_stapling']`       | *calculated* | Whether to enable [OCSP stapling](http://en.wikipedia.org/wiki/OCSP_stapling) in the service (nginx only, use `node['apache']['mod_ssl']['use_stapling']` for apache).
+| `node['ssl_certificate']['service']['stapling_resolver']`  | *calculated* | DNS resolver to use for OCSP. Only with Nginx.
 
 See the [`ServiceHelpers` class documentation](http://www.rubydoc.info/github/zuazo/ssl_certificate-cookbook/master/Chef/SslCertificateCookbook/ServiceHelpers) to learn how to integrate them with new services.
 

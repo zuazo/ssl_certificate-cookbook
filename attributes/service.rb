@@ -24,6 +24,8 @@ default['ssl_certificate']['web'] = Mash.new # for backwards compat
 default['ssl_certificate']['service']['compatibility'] = nil
 default['ssl_certificate']['service']['use_hsts'] = true
 default['ssl_certificate']['service']['use_stapling'] = true
+default['ssl_certificate']['service']['stapling_resolver'] =
+  Chef::SslCertificateCookbook::AttributeHelpers.resolvers || '8.8.8.8'
 
 # SSL Recommended configurations from
 # https://wiki.mozilla.org/Security/Server_Side_TLS#Recommended_configurations

@@ -119,6 +119,13 @@ attribute 'ssl_certificate/service/use_stapling',
           required: 'optional',
           calculated: true
 
+attribute 'ssl_certificate/service/stapling_resolver',
+          display_name: 'ssl_certificate stapling resolver',
+          description: 'DNS resolver to use for OCSP. Only with Nginx.',
+          type: 'string',
+          required: 'optional',
+          calculated: true
+
 attribute 'chef-vault/databag_fallback',
           display_name: 'fallback to unencrypted data bags',
           description: 'Whether to fallback to unencrypted data bag if'\

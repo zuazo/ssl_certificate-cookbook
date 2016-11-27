@@ -57,6 +57,11 @@ describe 'ssl_certificate nginx partial template', order: :random do
       expect(template.render(variables))
         .to match(/^\s*ssl_stapling on;/)
     end
+
+    it 'sets DNS resolver' do
+      expect(template.render(variables))
+        .to match(/^\s*resolver( [a-zA-Z0-9.:-]+)+;/)
+    end
   end
 
   context 'with nginx < 1.3.7' do
