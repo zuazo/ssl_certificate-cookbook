@@ -3,6 +3,17 @@ ssl_certificate CHANGELOG
 
 This file is used to list changes made in each version of the `ssl_certificate` cookbook.
 
+## v2.0.0 (2016-11-28)
+
+* Require Chef `12` and Ruby `2.2` or higher (**breaking change**).
+* Support for extendedKeyUsage and RSA key length ([issue #28](https://github.com/zuazo/ssl_certificate-cookbook/pull/28), thanks [Ali Ardestani](https://github.com/alisade) and [HawkAndBaby](https://github.com/hawkandbaby)).
+* Make resolver changeable on Nginx ([issue #29](https://github.com/zuazo/ssl_certificate-cookbook/pull/29), thanks [@runningman84](https://github.com/runningman84) for reporting).
+
+* Testing:
+ * *.rubocop.yml*: increase some limits.
+ * Fix unit tests on Travis.
+ * Gemfile updated.
+
 ## v1.12.0 (2016-06-06)
 
 * Add support for CA with passphrase ([issue #16](https://github.com/zuazo/ssl_certificate-cookbook/pull/16), thanks [Baptiste Courtois](https://github.com/Annih)).

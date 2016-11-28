@@ -6,7 +6,7 @@ SSL Certificate Cookbook
 
 [![Dependency Status](http://img.shields.io/gemnasium/zuazo/ssl_certificate-cookbook.svg?style=flat)](https://gemnasium.com/zuazo/ssl_certificate-cookbook)
 [![Code Climate](http://img.shields.io/codeclimate/github/zuazo/ssl_certificate-cookbook.svg?style=flat)](https://codeclimate.com/github/zuazo/ssl_certificate-cookbook)
-[![Build Status](http://img.shields.io/travis/zuazo/ssl_certificate-cookbook.svg?style=flat)](https://travis-ci.org/zuazo/ssl_certificate-cookbook)
+[![Build Status](http://img.shields.io/travis/zuazo/ssl_certificate-cookbook/2.0.0.svg?style=flat)](https://travis-ci.org/zuazo/ssl_certificate-cookbook)
 [![Circle CI](https://circleci.com/gh/zuazo/ssl_certificate-cookbook/tree/master.svg?style=shield)](https://circleci.com/gh/zuazo/ssl_certificate-cookbook/tree/master)
 
 The main purpose of this [Chef](https://www.chef.io/) cookbook is to make it easy for other cookbooks to support SSL. With the resource included, you will be able to manage certificates reading them from attributes, data bags or chef-vaults. Exposing its configuration through node attributes.
@@ -990,6 +990,8 @@ License and Author
 | **Contributor:**     | [Baptiste Courtois](https://github.com/Annih)
 | **Contributor:**     | [Taliesin Sisson](https://github.com/taliesins)
 | **Contributor:**     | [Alexey Demidov](https://github.com/AlexeyDemidov)
+| **Contributor:**     | [Ali Ardestani](https://github.com/alisade)
+| **Contributor:**     | [HawkAndBaby](https://github.com/hawkandbaby)
 | **Copyright:**       | Copyright (c) 2015-2016, Xabier de Zuazo
 | **Copyright:**       | Copyright (c) 2014-2015, Onddo Labs, SL.
 | **License:**         | Apache License, Version 2.0
