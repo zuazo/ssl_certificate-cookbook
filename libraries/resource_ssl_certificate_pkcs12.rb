@@ -56,7 +56,11 @@ class Chef
         def generate_pkcs12
           key = OpenSSL::PKey.read(key_content)
           crt = OpenSSL::X509::Certificate.new(cert_content)
-          OpenSSL::PKCS12.create(pkcs12_passphrase, name, key, crt).to_der
+          chain = if chain_content
+                    [crt, OpenSSL::X509::Certificate.new(chain_content)]
+                  end
+          OpenSSL::PKCS12.create(pkcs12_passphrase,
+                                 name, key, crt, chain).to_der
         end
 
         def pkcs12_content
