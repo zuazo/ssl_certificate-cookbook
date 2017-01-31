@@ -19,5 +19,4 @@ before_install:
 
 bundler_args: --jobs=3 --retry=3 --without='doc integration integration_docker integration_vagrant integration_cloud guard'
 
-script:
-- bundle exec rake style unit
+script: travis_retry bundle exec rake style unit
