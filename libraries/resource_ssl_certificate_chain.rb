@@ -57,6 +57,7 @@ class Chef
             data_bag
             chef_vault
             file
+            self_signed
           ).freeze
         end
 
@@ -191,6 +192,10 @@ class Chef
 
         def default_chain_content_from_file
           safe_read_from_path('SSL intermediary chain', chain_path)
+        end
+
+        def default_chain_content_from_self_signed
+          nil
         end
 
         def default_chain_content
