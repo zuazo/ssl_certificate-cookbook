@@ -8,6 +8,11 @@ driver:
 provisioner:
   name: chef_solo
 
+# Preparing for Chef 13
+client_rb:
+  treat_deprecation_warnings_as_errors: true
+  resource_cloning: false
+
 platforms:
 - name: centos-5.11
 - name: centos-6.7
