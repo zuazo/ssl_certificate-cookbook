@@ -3,6 +3,11 @@ ssl_certificate CHANGELOG
 
 This file is used to list changes made in each version of the `ssl_certificate` cookbook.
 
+## v2.1.0 (2017-02-10)
+
+* Adds certificate chain to PKCS12 file ([issue #32](https://github.com/zuazo/ssl_certificate-cookbook/pull/32), thanks [Andrew J. Brown](https://github.com/andrewjamesbrown)).
+* Metadata: Remove grouping ([RFC-85](https://github.com/chef/chef-rfc/blob/master/rfc085-remove-unused-metadata.md)).
+
 ## v2.0.0 (2016-11-28)
 
 * Require Chef `12` and Ruby `2.2` or higher (**breaking change**).
