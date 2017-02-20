@@ -171,7 +171,7 @@ class Chef
         end
 
         def default_chain_content_from_attribute
-          safe_read_namespace('SSL ntermediary chain', %w(ssl_chain content))
+          read_namespace(%w(ssl_chain content))
         end
 
         def default_chain_content_from_data_bag
