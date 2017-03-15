@@ -1,9 +1,9 @@
 SSL Certificate Cookbook
 ==========================
-[![Cookbook Version](https://img.shields.io/cookbook/v/ssl_certificate.svg?style=flat)](https://supermarket.chef.io/cookbooks/ssl_certificate)
 [![GitHub](http://img.shields.io/badge/github-zuazo/ssl__certificate--cookbook-blue.svg?style=flat)](https://github.com/zuazo/ssl_certificate-cookbook)
 [![License](https://img.shields.io/github/license/zuazo/ssl_certificate-cookbook.svg?style=flat)](#license-and-author)
 
+[![Cookbook Version](https://img.shields.io/cookbook/v/ssl_certificate.svg?style=flat)](https://supermarket.chef.io/cookbooks/ssl_certificate)
 [![Dependency Status](http://img.shields.io/gemnasium/zuazo/ssl_certificate-cookbook.svg?style=flat)](https://gemnasium.com/zuazo/ssl_certificate-cookbook)
 [![Code Climate](http://img.shields.io/codeclimate/github/zuazo/ssl_certificate-cookbook.svg?style=flat)](https://codeclimate.com/github/zuazo/ssl_certificate-cookbook)
 [![Build Status](http://img.shields.io/travis/zuazo/ssl_certificate-cookbook.svg?style=flat)](https://travis-ci.org/zuazo/ssl_certificate-cookbook)
