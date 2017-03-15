@@ -3,12 +3,13 @@ All notable changes to the `ssl_certificate` cookbook will be documented in this
 
 The format is based on [Keep a Changelog](http://keepachangelog.com/) and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## [Unreleased]
+### Changed
+- CHANGELOG: Follow "Keep a CHANGELOG".
+
 ## [2.1.0] - 2017-02-10
 ### Added
 - Adds certificate chain to PKCS12 file ([issue #32](https://github.com/zuazo/ssl_certificate-cookbook/pull/32), thanks [Andrew J. Brown](https://github.com/andrewjamesbrown)).
-
-### Changed
-- CHANGELOG: Follow "Keep a CHANGELOG".
 
 ### Removed
 - Metadata: Remove grouping ([RFC-85](https://github.com/chef/chef-rfc/blob/master/rfc085-remove-unused-metadata.md)).
