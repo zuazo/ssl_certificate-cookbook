@@ -161,6 +161,7 @@ When a namespace is set in the resource, it will try to read the following attri
 | `namespace['ssl_chain']['name']`                   | File name to be used for the intermediate certificate chain file. **If this is not present, no chain file will be written.**
 | `namespace['ssl_chain']['source']`                 | Source type to get the intermediate certificate chain from. Can be `'attribute'`, `'data-bag'`, `'chef-vault'` or `'file'`.
 | `namespace['ssl_chain']['path']`                   | File path of the intermediate SSL certificate chain.
+| `namespace['ssl_chain']['combined_path']`          | File path of the combined certificates (intermediate chain + domain certificate).
 | `namespace['ssl_chain']['bag']`                    | Name of the Data Bag where the intermediate certificate chain is stored.
 | `namespace['ssl_chain']['item']`                   | Name of the Data Bag Item where the intermediate certificate chain is stored.
 | `namespace['ssl_chain']['item_key']`               | Key of the Data Bag Item where the intermediate certificate chain is stored.
