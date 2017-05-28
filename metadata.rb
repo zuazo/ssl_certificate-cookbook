@@ -31,7 +31,7 @@ reading them from attributes, data bags or chef-vaults. Exposing its
 configuration through node attributes.
 EOS
 long_description IO.read(File.join(File.dirname(__FILE__), 'README.md'))
-version '2.1.0' # WiP
+version '2.2.0' # WiP
 
 if respond_to?(:source_url)
   source_url "https://github.com/zuazo/#{name}-cookbook"
@@ -69,20 +69,12 @@ attribute 'ssl_certificate/cert_dir',
           required: 'optional',
           calculated: true
 
-grouping 'ssl_certificate/service',
-         title: 'ssl_certificate service',
-         description: 'ssl_certificate service defaults.'
-
 attribute 'ssl_certificate/service/cipher_suite',
           display_name: 'ssl_certificate service cipher suite',
           description: 'Service default SSL cipher suite.',
           type: 'string',
           required: 'optional',
           default: nil
-
-grouping 'ssl_certificate/service/protocols',
-         title: 'ssl_certificate service protocol',
-         description: 'ssl_certificate service SSL protocols.'
 
 attribute 'ssl_certificate/service/protocols/nginx',
           display_name: 'ssl_certificate service protocol',

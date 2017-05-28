@@ -1,9 +1,9 @@
 SSL Certificate Cookbook
 ==========================
-[![Cookbook Version](https://img.shields.io/cookbook/v/ssl_certificate.svg?style=flat)](https://supermarket.chef.io/cookbooks/ssl_certificate)
 [![GitHub](http://img.shields.io/badge/github-zuazo/ssl__certificate--cookbook-blue.svg?style=flat)](https://github.com/zuazo/ssl_certificate-cookbook)
 [![License](https://img.shields.io/github/license/zuazo/ssl_certificate-cookbook.svg?style=flat)](#license-and-author)
 
+[![Cookbook Version](https://img.shields.io/cookbook/v/ssl_certificate.svg?style=flat)](https://supermarket.chef.io/cookbooks/ssl_certificate)
 [![Dependency Status](http://img.shields.io/gemnasium/zuazo/ssl_certificate-cookbook.svg?style=flat)](https://gemnasium.com/zuazo/ssl_certificate-cookbook)
 [![Code Climate](http://img.shields.io/codeclimate/github/zuazo/ssl_certificate-cookbook.svg?style=flat)](https://codeclimate.com/github/zuazo/ssl_certificate-cookbook)
 [![Build Status](http://img.shields.io/travis/zuazo/ssl_certificate-cookbook.svg?style=flat)](https://travis-ci.org/zuazo/ssl_certificate-cookbook)
@@ -161,6 +161,7 @@ When a namespace is set in the resource, it will try to read the following attri
 | `namespace['ssl_chain']['name']`                   | File name to be used for the intermediate certificate chain file. **If this is not present, no chain file will be written.**
 | `namespace['ssl_chain']['source']`                 | Source type to get the intermediate certificate chain from. Can be `'attribute'`, `'data-bag'`, `'chef-vault'` or `'file'`.
 | `namespace['ssl_chain']['path']`                   | File path of the intermediate SSL certificate chain.
+| `namespace['ssl_chain']['combined_path']`          | File path of the combined certificates (intermediate chain + domain certificate).
 | `namespace['ssl_chain']['bag']`                    | Name of the Data Bag where the intermediate certificate chain is stored.
 | `namespace['ssl_chain']['item']`                   | Name of the Data Bag Item where the intermediate certificate chain is stored.
 | `namespace['ssl_chain']['item_key']`               | Key of the Data Bag Item where the intermediate certificate chain is stored.
@@ -992,7 +993,8 @@ License and Author
 | **Contributor:**     | [Alexey Demidov](https://github.com/AlexeyDemidov)
 | **Contributor:**     | [Ali Ardestani](https://github.com/alisade)
 | **Contributor:**     | [HawkAndBaby](https://github.com/hawkandbaby)
-| **Copyright:**       | Copyright (c) 2015-2016, Xabier de Zuazo
+| **Contributor:**     | [Andrew J. Brown](https://github.com/andrewjamesbrown)
+| **Copyright:**       | Copyright (c) 2015-2017, Xabier de Zuazo
 | **Copyright:**       | Copyright (c) 2014-2015, Onddo Labs, SL.
 | **License:**         | Apache License, Version 2.0
 

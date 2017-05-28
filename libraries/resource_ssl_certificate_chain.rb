@@ -57,6 +57,7 @@ class Chef
             data_bag
             chef_vault
             file
+            self_signed
           ).freeze
         end
 
@@ -193,6 +194,10 @@ class Chef
           safe_read_from_path('SSL intermediary chain', chain_path)
         end
 
+        def default_chain_content_from_self_signed
+          nil
+        end
+
         def default_chain_content
           lazy_cached_variable(:default_chain_content) do
             source = filter_source(
@@ -203,8 +208,8 @@ class Chef
         end
 
         def default_chain_combined_path
-          lazy do
-            @default_chain_combined_path ||=
+          lazy_cached_variable(:default_chain_combined_path) do
+            read_namespace(%w(ssl_chain combined_path)) ||
               ::File.join(cert_dir, chain_combined_name)
           end
         end
