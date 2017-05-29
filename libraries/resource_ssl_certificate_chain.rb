@@ -208,8 +208,8 @@ class Chef
         end
 
         def default_chain_combined_path
-          lazy do
-            @default_chain_combined_path ||=
+          lazy_cached_variable(:default_chain_combined_path) do
+            read_namespace(%w(ssl_chain combined_path)) ||
               ::File.join(cert_dir, chain_combined_name)
           end
         end
