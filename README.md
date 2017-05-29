@@ -762,7 +762,7 @@ By default the resource will create a self-signed certificate, but a custom one 
 | key_encrypted           | `false`                        | Whether the Data Bag where the SSL key is stored is encrypted.
 | key_length              | `2048`                         | Integer that must be a power of 2, with a reasonable maximum of 4096. This defines the length of a generated RSA key. 
 | key_secret_file         | `nil`                          | Secret file used to decrypt the Data Bag where the SSL key is stored.
-| key_content             | *calculated*                   | SSL key file content in clear. **Be careful when using it.******
+| key_content             | *calculated*                   | SSL key file content in clear. **Be careful when using it.**
 | cert_path               | *calculated*                   | Public certificate full path.
 | cert_name               | `"#{name}.pem"`                | Public certiticate file name.
 | cert_dir                | *calculated*                   | Public certificate directory path.
