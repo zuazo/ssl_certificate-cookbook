@@ -7,6 +7,11 @@ driver:
 
 provisioner:
   name: chef_solo
+<% if ENV.key?('CHEF_VERSION') %>
+  require_chef_omnibus: <%= ENV['CHEF_VERSION'].sub(/^.*> (.*)[.][0-9]+$/, '\1') %>
+<% else %>
+  require_chef_omnibus: true
+<% end %>
 
 # Preparing for Chef 13
 client_rb:
