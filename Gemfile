@@ -17,7 +17,7 @@ end
 
 group :test do
   gem 'rake'
-  gem 'berkshelf', '~> 5.2'
+  gem 'berkshelf', '~> 6.0'
   gem 'thor', '0.19.1' # Fix: http://stackoverflow.com/a/40823637
 end
 
