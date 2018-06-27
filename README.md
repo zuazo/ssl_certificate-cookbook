@@ -85,26 +85,14 @@ Usage
 
 ## Including the Cookbook
 
-You need to include this recipe in your `run_list` before using the  `ssl_certificate` resource:
-
-```json
-{
-  "name": "example.com",
-  "[...]": "[...]",
-  "run_list": [
-    "recipe[ssl_certificate]"
-  ]
-}
-```
-
-You can also include the cookbook as a dependency in the metadata of your cookbook:
+You need to include the cookbook as a dependency in the metadata of your cookbook:
 
 ```ruby
 # metadata.rb
 depends 'ssl_certificate'
 ```
 
-One of the two is enough. No need to do anything else. Only use the `ssl_certificate` resource to create the certificates you need.
+No need to do anything else. Only use the `ssl_certificate` resource to create the certificates you need.
 
 ## A Short Example
 
