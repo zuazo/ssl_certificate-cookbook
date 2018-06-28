@@ -17,8 +17,6 @@ platforms:
 - name: oraclelinux-6
   driver_config:
     platform: rhel
-- name: ubuntu-12.04
-  run_list: recipe[apt]
 - name: ubuntu-14.04
   run_list: recipe[apt]
 - name: ubuntu-15.04
