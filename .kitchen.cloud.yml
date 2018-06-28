@@ -30,18 +30,6 @@ platforms:
     flavor: 512MB
   run_list: recipe[apt]
 
-- name: ubuntu-10-04-x64
-  driver_plugin: digitalocean
-  driver_config:
-    flavor: 512MB
-  run_list: recipe[apt]
-
-- name: ubuntu-12-04-x64
-  driver_plugin: digitalocean
-  driver_config:
-    flavor: 512MB
-  run_list: recipe[apt]
-
 - name: ubuntu-14-04-x64
   driver_plugin: digitalocean
   driver_config:
