@@ -19,8 +19,6 @@ platforms:
     platform: rhel
 - name: ubuntu-14.04
   run_list: recipe[apt]
-- name: ubuntu-15.04
-  run_list: recipe[apt]
 # Requires AUFS with CONFIG_AUFS_XATTR support.
 # Issue https://github.com/docker/docker/issues/6980:
 # error: unpacking of archive failed on file /usr/sbin/suexec: cpio:
