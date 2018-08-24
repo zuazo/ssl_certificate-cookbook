@@ -46,7 +46,7 @@ describe 'ssl_certificate_test::nginx', order: :random do
       .with_group('root')
   end
 
-  it 'enables nginx virtualhost' do
-    expect(chef_run).to run_execute('nxensite ssl_certificate')
+  it 'enables the nginx virtualhost' do
+    expect(chef_run).to enable_nginx_site('ssl_certificate')
   end
 end

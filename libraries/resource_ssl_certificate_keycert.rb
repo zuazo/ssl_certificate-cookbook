@@ -34,7 +34,7 @@ class Chef
       module KeyCert
         def years(arg = nil)
           return (time.to_i / 31_536_000).round if arg.nil?
-          unless [Fixnum, String].inject(false) { |a, e| a || arg.is_a?(e) }
+          unless [Integer, String].inject(false) { |a, e| a || arg.is_a?(e) }
             raise Exceptions::ValidationFailed,
                   "Option years must be a kind of #{to_be}! You passed "\
                   "#{arg.inspect}."
