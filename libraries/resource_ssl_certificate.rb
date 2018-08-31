@@ -115,7 +115,7 @@ class Chef
       def time(arg = nil)
         # ~ 10 years
         set_or_return(
-          :time, arg, kind_of: [Fixnum, String, Time], default: 315_360_000
+          :time, arg, kind_of: [Integer, String, Time], default: 315_360_000
         )
       end
 
