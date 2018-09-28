@@ -126,7 +126,7 @@ class Chef
         create_key
         create_cert
         create_pkcs12 if create_pkcs12?
-        create_chain_combined
+        create_chain_combined if create_chain?
         create_chain if create_chain?
       end
     end
