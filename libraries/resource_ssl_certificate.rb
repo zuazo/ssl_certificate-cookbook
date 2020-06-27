@@ -58,6 +58,8 @@ class Chef
       # Include methods related to PKCS12 attributes.
       include ::Chef::Resource::SslCertificate::PKCS12
 
+      provides :ssl_certificate
+
       def initialize(name, run_context = nil)
         super
         @resource_name = :ssl_certificate
